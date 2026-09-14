@@ -1,18 +1,21 @@
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import ContactoForm from "@/components/sections/ContactoForm";
+import Header from "@/components/Header";
 
-export const metadata = {
-  title: "Contacto | Buen Vivir",
-};
+// PENDIENTE — WhatsApp definitivo, email real, y si hay sistema de agenda
+// (Calendly/Cal.com) dependen de las preguntas 1, 2, 30 y 31 del cuestionario.
 
 export default function ContactoPage() {
   return (
-    <AnimatedSection className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-serif text-bv-verde-oscuro">Contacto</h1>
-      <p className="mt-4 text-bv-negro/80">
-        Sumate a la comunidad de Buen Vivir completando el formulario.
-      </p>
-      <ContactoForm />
-    </AnimatedSection>
+    <main>
+      <Header />
+      <section className="px-[8vw] py-16 max-w-xl text-center mx-auto">
+        <h1 className="font-display italic text-4xl mb-6">¿Conversamos?</h1>
+        <p className="text-[#c9c2a9] mb-10">
+          Reserva tu sesión y coordinamos una conversación inicial.
+        </p>
+        <div className="text-sm text-[#8a8470]">
+          [PENDIENTE — WhatsApp, email y agenda reales, a confirmar con Belén]
+        </div>
+      </section>
+    </main>
   );
 }

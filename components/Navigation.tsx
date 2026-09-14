@@ -25,13 +25,13 @@ export default function Navigation() {
 
   const linkClass = (href: string) =>
     pathname === href
-      ? "font-semibold text-bv-verde-oscuro"
-      : "text-bv-negro/70 hover:text-bv-verde-oscuro";
+      ? "text-parchment"
+      : "text-[#cfc7ae] hover:text-parchment";
 
   return (
     <>
       {/* Escritorio */}
-      <nav className="hidden gap-6 md:flex">
+      <nav className="hidden gap-6 text-sm md:flex">
         {NAV_LINKS.map((link) => (
           <Link key={link.href} href={link.href} className={linkClass(link.href)}>
             {link.label}
@@ -42,7 +42,7 @@ export default function Navigation() {
       {/* Móvil */}
       <button
         type="button"
-        className="-mr-2 p-2 text-bv-verde-oscuro md:hidden"
+        className="-mr-2 p-2 text-parchment md:hidden"
         aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
         aria-expanded={abierto}
         aria-controls="menu-movil"
@@ -60,7 +60,7 @@ export default function Navigation() {
       {abierto && (
         <nav
           id="menu-movil"
-          className="absolute inset-x-0 top-full z-50 flex flex-col border-b border-bv-verde/20 bg-bv-crema px-6 pb-4 md:hidden"
+          className="absolute inset-x-0 top-full z-50 flex flex-col border-b border-moss-soft/20 bg-forest-950 px-[8vw] pb-4 md:hidden"
         >
           {NAV_LINKS.map((link) => (
             <Link
