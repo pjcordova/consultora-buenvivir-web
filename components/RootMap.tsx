@@ -39,8 +39,11 @@ export default function RootMap() {
 
   return (
     <div>
-      <div className="relative max-w-3xl mx-auto aspect-[2/1]">
-        <svg viewBox="0 0 800 360" className="w-full h-full">
+      {/* mb-16 en móvil: el texto del nodo sobresale del contenedor cuando el mapa es angosto
+          (se colapsa con el mt-10 de la tarjeta, por eso tiene que ser mayor que 40px) */}
+      <div className="relative max-w-3xl mx-auto aspect-[2/1] mb-16 sm:mb-0">
+        {/* viewBox 2:1 igual que el contenedor, así x/y en % coinciden con el SVG (x*8, y*4) */}
+        <svg viewBox="0 0 800 400" className="w-full h-full">
           <text
             x="400"
             y="40"
@@ -54,7 +57,7 @@ export default function RootMap() {
               key={n.id}
               d={`M400 55 C ${380 + (n.x - 50)} 150, ${
                 n.x * 8
-              } 220, ${n.x * 8} 300`}
+              } 220, ${n.x * 8} ${n.y * 4}`}
               fill="none"
               stroke={seleccionado === n.id ? "#9db184" : "#3c4a30"}
               strokeWidth={seleccionado === n.id ? 3.5 : 2.5}
@@ -68,7 +71,8 @@ export default function RootMap() {
           <button
             key={n.id}
             onClick={() => setSeleccionado(n.id)}
-            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 w-32 text-center"
+            // -translate-y-2.5 = mitad del punto (20px): el centro del punto cae en (x, y) y el texto queda debajo de la raíz
+            className="absolute -translate-x-1/2 -translate-y-2.5 flex flex-col items-center gap-2 w-32 text-center"
             style={{ left: `${n.x}%`, top: `${n.y}%` }}
           >
             <span

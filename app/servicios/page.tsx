@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import { caminos, ctaServicios } from "@/content/servicios";
+
+export const metadata: Metadata = {
+  title: "Servicios | Buen Vivir",
+  description:
+    "Tres caminos de acompañamiento regenerativo: Revitaliza tu Equipo, Revitaliza tu Trabajo y Revitaliza tu Vida.",
+};
 
 export default function ServiciosPage() {
   return (

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 
 // PENDIENTE — WhatsApp definitivo, email real, y si hay sistema de agenda
 // (Calendly/Cal.com) dependen de las preguntas 1, 2, 30 y 31 del cuestionario.
+
+export const metadata: Metadata = {
+  title: "Contacto | Buen Vivir",
+  description: "Reserva tu sesión y coordinamos una conversación inicial.",
+};
 
 export default function ContactoPage() {
   return (

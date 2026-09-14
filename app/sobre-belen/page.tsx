@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 
 // PENDIENTE — esta página depende casi por completo de las respuestas del
@@ -5,6 +6,11 @@ import Header from "@/components/Header";
 // certificaciones, y cómo redactar la afiliación real con Presencing Institute /
 // U-Lab / Regenerative Network for Migrant and Refugee Communities.
 // Se deja la estructura lista para no perder tiempo una vez que lleguen los datos.
+
+// PENDIENTE: sumar `description` cuando esté la biografía confirmada.
+export const metadata: Metadata = {
+  title: "Sobre Belén | Buen Vivir",
+};
 
 export default function SobreBelenPage() {
   return (

@@ -1,41 +1,8 @@
-# Buen Vivir — sitio web
+# Buen Vivir — Web
 
-Sitio web de **Buen Vivir**, consultora regenerativa dirigida por Belén Vera.
+Sitio de Buen Vivir, consultora regenerativa (Argentina). Ver el stack completo y las decisiones de tecnología en `stack-tecnico-buen-vivir.md` (documento de referencia del proyecto, fuera de este repo).
 
-## Stack
-
-- Next.js 14 (App Router) + TypeScript
-- Tailwind CSS
-- Framer Motion (animaciones/transiciones)
-- Contenido en el propio repo como MDX/JSON (sin CMS en la v1)
-- Alta de comunidad vía Google Forms (link en `content/site.json`)
-- Deploy en Vercel
-
-## Estructura de carpetas
-
-```
-app/                    Rutas (App Router)
-  layout.tsx            Layout raíz (Header + Footer)
-  page.tsx               Home
-  servicios/page.tsx     Servicios
-  sobre-belen/page.tsx    Sobre Belén
-  contacto/page.tsx      Contacto
-components/
-  layout/                Header, Footer, Navigation
-  sections/              Bloques de página (Hero, ServiciosGrid, ContactoForm)
-  ui/                     Piezas reutilizables (AnimatedSection = wrapper Framer Motion)
-content/
-  servicios/*.mdx         Un archivo por servicio (frontmatter: titulo, resumen, orden)
-  site.json               Textos generales y datos de contacto
-lib/
-  content.ts              Helpers para leer content/ (MDX + JSON)
-  constants.ts            Constantes (nav, nombre del sitio)
-types/
-  content.ts              Tipos compartidos (Servicio, SiteContent)
-public/images/            Assets estáticos (fotos de naturaleza, logo, etc.)
-```
-
-## Cómo correrlo
+## Setup
 
 ```bash
 npm install
@@ -44,30 +11,24 @@ npm run dev
 
 Abrir http://localhost:3000
 
-## Pendientes marcados con TODO
+## Estado del contenido
 
-Todo el contenido de ejemplo (bio de Belén, datos de contacto, textos de
-servicios, link de Google Form) es **placeholder**. Antes de publicar,
-reemplazar cada `TODO` con la información real confirmada por Belén — no
-inventar credenciales, precios ni datos de contacto (ver notas del proyecto).
+Todo el contenido en `content/*.ts` está marcado explícitamente como `CONFIRMADO` (viene de publicaciones reales de Belén) o `PENDIENTE` (espera respuesta del cuestionario que se le envió). Antes de dar por terminada una página, revisar que no queden placeholders con `[PENDIENTE ...]`.
 
-También falta:
-- Reemplazar la paleta de colores en `tailwind.config.ts` por los hex exactos
-  del manual de marca (Canva).
-- Cargar tipografías reales del manual de marca.
-- Traer imágenes de naturaleza / diente de león a `public/images/`.
-- Portar el diseño de los mockups de Google Stitch (Home, Servicios, Sobre
-  Belén, Contacto) a los componentes de `components/`.
+Páginas ya armadas con contenido real:
+- `/` (Home) — hero, definición de regeneración organizacional, ecosistema
+- `/servicios` — los 3 caminos de acompañamiento completos
 
-## Subir esto a GitHub
+Páginas con placeholder, a la espera del cuestionario:
+- `/sobre-belen`
+- `/contacto`
 
-Este esqueleto todavía no es un repo git. Desde esta carpeta:
+## Componentes a revisar
 
-```bash
-git init
-git add .
-git commit -m "Esqueleto inicial Next.js (App Router + Tailwind + Framer Motion)"
-git branch -M main
-git remote add origin https://github.com/pjcordova/consultora-buenvivir-web.git
-git push -u origin main
-```
+- `components/RootMap.tsx` — hoy tiene un solo nodo activo ("Ecosistema Buen Vivir"), porque todo indica que "Casita del Árbol" / "Club de Conversaciones Regenerativas" / "Ecosistema Buen Vivir" son la misma iniciativa en evolución. Ajustar según la respuesta de la pregunta 13 del cuestionario.
+
+## Pendientes fuera de código
+
+- Fotos reales de Belén (pregunta 11 del cuestionario)
+- Logo definitivo (vector/SVG)
+- Dominio
