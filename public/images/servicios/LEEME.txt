@@ -1,0 +1,10 @@
+Imágenes de los servicios del Ecosistema (sección "Nuestros Servicios" de la Home).
+
+Nombres que espera la página:
+  casita-del-arbol.png          insignia de la Casita del Árbol (se muestra sola, sin texto encima)
+  regeneracion-personal.jpg     imagen del Grupo de Regeneración Personal (el texto va encima)
+  regeneracion-creatividad.jpg  imagen del Grupo de Regeneración y Creatividad (el texto va encima)
+
+Se ven mejor cuadradas (por ejemplo 800x800), porque el círculo recorta los bordes.
+Mientras falten, la página muestra un círculo punteado con el nombre del servicio.
+Más adelante estas imágenes se van a poder cambiar desde el panel de administración.

@@ -4,6 +4,14 @@
 
 html {
   scroll-behavior: smooth;
+  /* Alto del header fijo: evita que las anclas (#servicios, etc.) queden tapadas */
+  scroll-padding-top: 5rem;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
 }
 
 h1, h2, h3, .font-display {

@@ -25,13 +25,13 @@ export default function Navigation() {
 
   const linkClass = (href: string) =>
     pathname === href
-      ? "text-parchment"
-      : "text-[#cfc7ae] hover:text-parchment";
+      ? "font-bold text-forest-950"
+      : "text-forest-800/75 hover:text-forest-950";
 
   return (
     <>
       {/* Escritorio */}
-      <nav className="hidden gap-6 text-sm md:flex">
+      <nav className="hidden items-center gap-8 font-redonda text-[1.05rem] font-semibold md:flex lg:gap-10 lg:text-[1.15rem]">
         {NAV_LINKS.map((link) => (
           <Link key={link.href} href={link.href} className={linkClass(link.href)}>
             {link.label}
@@ -42,7 +42,7 @@ export default function Navigation() {
       {/* Móvil */}
       <button
         type="button"
-        className="-mr-2 p-2 text-parchment md:hidden"
+        className="-mr-2 p-2 text-forest-800 md:hidden"
         aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
         aria-expanded={abierto}
         aria-controls="menu-movil"
@@ -60,13 +60,13 @@ export default function Navigation() {
       {abierto && (
         <nav
           id="menu-movil"
-          className="absolute inset-x-0 top-full z-50 flex flex-col border-b border-moss-soft/20 bg-forest-950 px-[8vw] pb-4 md:hidden"
+          className="absolute inset-x-0 top-full z-50 flex flex-col border-b border-forest-800/10 bg-white px-[8vw] pb-4 shadow-sm md:hidden"
         >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`py-3 text-lg ${linkClass(link.href)}`}
+              className={`py-3 font-redonda text-xl font-semibold ${linkClass(link.href)}`}
             >
               {link.label}
             </Link>

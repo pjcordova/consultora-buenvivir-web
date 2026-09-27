@@ -1,0 +1,13 @@
+Video de fondo de la sección "Linajes de aprendizaje y práctica".
+
+Nombre que espera la página:
+  ballenas.mp4
+
+Recomendado:
+  - mp4 (H.264), sin audio, de 10 a 20 segundos en bucle.
+  - Peso máximo sugerido: 5 MB. Más pesado que eso tarda en cargar en celulares.
+  - Guardar además una foto de respaldo en public/images/ballenas.jpg (se ve mientras
+    carga el video y cuando el visitante pidió menos animaciones en su sistema).
+
+Si no hay video, alcanza con la foto de respaldo. Si no hay ninguno de los dos, la
+sección usa un degradado verde azulado y la chapita avisa "pendiente".
