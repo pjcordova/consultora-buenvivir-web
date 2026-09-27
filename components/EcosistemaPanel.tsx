@@ -39,9 +39,16 @@ export default function EcosistemaPanel({ foto, logo, nombre, espacios }: Ecosis
 
       <div className="relative flex flex-col items-center gap-10 px-6 py-12 sm:gap-14 sm:py-16">
         {/* Placa con el logo del ecosistema */}
-        <div className="rounded-2xl border border-white/15 bg-forest-950/35 px-8 py-6 backdrop-blur-md sm:px-14">
+        <div className="w-full max-w-[36rem] rounded-2xl border border-white/15 bg-forest-950/35 px-6 py-3 backdrop-blur-md sm:px-10 sm:py-4">
           {logoSrc ? (
-            <Image src={logoSrc} alt={nombre} width={540} height={165} className="h-14 w-auto sm:h-20" />
+            <Image
+              src={logoSrc}
+              alt={nombre}
+              width={540}
+              height={165}
+              // Se mide por el ancho para que se vea más largo, manteniendo la proporción
+              className="h-auto w-64 sm:w-96 md:w-[32rem]"
+            />
           ) : (
             <p className="text-center font-display text-lg tracking-[0.12em] text-white sm:text-2xl">
               {nombre}
@@ -124,7 +131,7 @@ export default function EcosistemaPanel({ foto, logo, nombre, espacios }: Ecosis
 
                 <Boton
                   href={espacio.cta.href}
-                  className="inline-flex items-center gap-2 rounded-full bg-leaf-olive px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-leaf-dark"
+                  className="inline-flex items-center gap-2 rounded-full bg-leaf-olive px-6 py-2.5 font-redonda text-base font-semibold text-white transition-colors hover:bg-leaf-dark sm:text-lg"
                 >
                   {espacio.cta.label}
                   {espacio.cta.label === "Iniciando…" && (
