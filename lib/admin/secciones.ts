@@ -190,7 +190,7 @@ export const SECCIONES: SeccionEditable[] = [
       { id: "statement", etiqueta: "Frase grande", tipo: "parrafo" },
       {
         id: "note",
-        etiqueta: "Nota entre corchetes",
+        etiqueta: "Texto debajo de la frase",
         tipo: "parrafo",
         ayuda: "Dejala vacía para que no aparezca.",
       },
@@ -198,7 +198,7 @@ export const SECCIONES: SeccionEditable[] = [
         id: "credito",
         etiqueta: "Chapita del video",
         tipo: "texto",
-        ayuda: "Qué se está viendo, arriba a la derecha.",
+        ayuda: "Qué se está viendo, arriba a la derecha. Dejala vacía para que no aparezca.",
       },
     ],
     slots: ["ballenas-foto", "ballenas-video"],
