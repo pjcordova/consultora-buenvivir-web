@@ -33,14 +33,14 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-cream px-6 py-16">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-cream px-6 py-16">
       <form
         onSubmit={entrar}
         className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-[0_20px_50px_-25px_rgba(18,23,15,0.4)]"
       >
         <h1 className="font-display text-2xl text-forest-950">Panel de Buen Vivir</h1>
         <p className="mt-2 text-sm text-forest-800/70">
-          Para cambiar las imágenes del sitio.
+          Para editar los textos, las imágenes, los testimonios y los talleres del sitio.
         </p>
 
         <label className="mt-7 block text-sm text-forest-800">
@@ -81,6 +81,14 @@ export default function LoginPage() {
           {enviando ? "Entrando…" : "Entrar"}
         </button>
       </form>
+
+      {/* Quien llegó desde el ícono del encabezado puede volver sin entrar */}
+      <a
+        href="/"
+        className="mt-6 inline-flex items-center gap-2 text-sm text-forest-800/70 transition-colors hover:text-forest-950"
+      >
+        <span aria-hidden="true">←</span> Volver al sitio
+      </a>
     </main>
   );
 }

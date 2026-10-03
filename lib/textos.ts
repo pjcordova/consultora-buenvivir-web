@@ -21,6 +21,7 @@ const ESPANOL = {
     abrir: "Abrir menú",
     cerrar: "Cerrar menú",
     idioma: "Idioma",
+    panel: "Ingresar al panel",
   },
   portada: { descender: "Descender" },
   carrusel: {
@@ -124,6 +125,7 @@ const INGLES: Textos = {
     abrir: "Open menu",
     cerrar: "Close menu",
     idioma: "Language",
+    panel: "Admin login",
   },
   portada: { descender: "Scroll down" },
   carrusel: {

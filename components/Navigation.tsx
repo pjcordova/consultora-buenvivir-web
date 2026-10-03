@@ -7,6 +7,15 @@ import SelectorIdioma from "@/components/SelectorIdioma";
 import { enlaceEnIdioma, rutaSinIdioma, type Idioma } from "@/lib/idioma";
 import { textosDe } from "@/lib/textos";
 
+/** Persona dentro de un círculo: el ícono del acceso al panel. */
+const IconoPanel = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9.5" />
+    <circle cx="12" cy="10" r="3" />
+    <path d="M6.5 18.6a6.5 6.5 0 0 1 11 0" />
+  </svg>
+);
+
 export default function Navigation({ idioma }: { idioma: Idioma }) {
   const pathname = usePathname();
   const [abierto, setAbierto] = useState(false);
@@ -47,11 +56,19 @@ export default function Navigation({ idioma }: { idioma: Idioma }) {
             {link.label}
           </Link>
         ))}
-        <SelectorIdioma
-          idioma={idioma}
-          etiqueta={menu.idioma}
-          className="border-l border-forest-800/15 pl-6 text-sm lg:pl-8"
-        />
+        <div className="flex items-center gap-3 border-l border-forest-800/15 pl-6 lg:pl-8">
+          <SelectorIdioma idioma={idioma} etiqueta={menu.idioma} className="text-sm" />
+          {/* Acceso al panel de Belén: si ya inició sesión entra directo; si no, le pide la clave.
+              Enlace común: el panel no tiene versión en inglés ni conviene precargarlo. */}
+          <a
+            href="/admin"
+            title={menu.panel}
+            aria-label={menu.panel}
+            className="flex h-9 w-9 items-center justify-center rounded-full text-forest-800/70 transition-colors hover:bg-cream hover:text-forest-950"
+          >
+            <IconoPanel />
+          </a>
+        </div>
       </nav>
 
       {/* Móvil */}
@@ -91,6 +108,13 @@ export default function Navigation({ idioma }: { idioma: Idioma }) {
             etiqueta={menu.idioma}
             className="mt-2 border-t border-forest-800/10 pt-4 font-redonda text-lg font-semibold"
           />
+          <a
+            href="/admin"
+            className="mt-3 flex items-center gap-2 py-2 font-redonda text-base font-semibold text-forest-800/60 transition-colors hover:text-forest-950"
+          >
+            <IconoPanel />
+            {menu.panel}
+          </a>
         </nav>
       )}
     </>
