@@ -1,10 +1,26 @@
 import type { Metadata } from "next";
+import {
+  DESCRIPCION_DEL_SITIO,
+  imagenParaCompartir,
+  NOMBRE_DEL_SITIO,
+  TITULO_DEL_SITIO,
+  URL_DEL_SITIO,
+} from "@/lib/metadatos";
 import "./globals.css";
 
+// Valores de base: cada página pone su título, descripción y dirección oficial
+// con metadatosDePagina() (lib/metadatos.ts).
 export const metadata: Metadata = {
-  title: "Buen Vivir — Consultora Regenerativa",
-  description:
-    "Acompañamos a organizaciones, equipos y personas en procesos de regeneración organizacional, inspirados en la cosmovisión del Buen Vivir.",
+  metadataBase: new URL(URL_DEL_SITIO),
+  title: TITULO_DEL_SITIO,
+  description: DESCRIPCION_DEL_SITIO,
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    siteName: NOMBRE_DEL_SITIO,
+    images: [imagenParaCompartir("inicio")],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

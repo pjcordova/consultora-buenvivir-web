@@ -4,12 +4,14 @@ import Header from "@/components/Header";
 import RedesSociales from "@/components/RedesSociales";
 import SectionHeader from "@/components/SectionHeader";
 import { obtenerContacto, obtenerPie, obtenerWhatsapp, urlWhatsapp } from "@/lib/contenido";
+import { metadatosDePagina } from "@/lib/metadatos";
 
-export const metadata: Metadata = {
-  title: "Contacto | Buen Vivir",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Contacto | Buen Vivir",
+  descripcion:
     "Agendá una conversación con Belén Vera, escribile por WhatsApp o sumate al Ecosistema Buen Vivir.",
-};
+  ruta: "/contacto",
+});
 
 const ICONOS = {
   calendario: (

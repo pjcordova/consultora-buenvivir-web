@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { obtenerEspacio } from "@/content/ecosistema";
 import { obtenerEspacioPagina } from "@/lib/contenido";
 import { rutaVersionada } from "@/lib/assets";
+import { metadatosDePagina } from "@/lib/metadatos";
 
 type Props = { params: { slug: string } };
 
@@ -14,10 +15,12 @@ export function generateMetadata({ params }: Props): Metadata {
   const espacio = obtenerEspacio(params.slug);
   if (!espacio) return {};
 
-  return {
-    title: `${espacio.titulo} | Buen Vivir`,
-    description: espacio.resumen,
-  };
+  return metadatosDePagina({
+    titulo: `${espacio.titulo} | Buen Vivir`,
+    descripcion: espacio.resumen,
+    ruta: `/ecosistema/${espacio.slug}`,
+    imagen: "ecosistema",
+  });
 }
 
 export default async function EspacioPage({ params }: Props) {

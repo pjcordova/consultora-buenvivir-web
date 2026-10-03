@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Carousel from "@/components/Carousel";
 import CtaSection from "@/components/CtaSection";
 import EcosistemaPanel from "@/components/EcosistemaPanel";
+import FichaOrganizacion from "@/components/FichaOrganizacion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import InfoCard from "@/components/InfoCard";
@@ -15,6 +17,13 @@ import {
   obtenerPortada,
   obtenerServicios,
 } from "@/lib/contenido";
+import { DESCRIPCION_DEL_SITIO, TITULO_DEL_SITIO, metadatosDePagina } from "@/lib/metadatos";
+
+export const metadata: Metadata = metadatosDePagina({
+  titulo: TITULO_DEL_SITIO,
+  descripcion: DESCRIPCION_DEL_SITIO,
+  ruta: "/",
+});
 
 export default async function HomePage() {
   const [hero, regeneracionOrganizacional, ecosistema, cosmovision, linajes, ctaFinal] =
@@ -29,6 +38,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <FichaOrganizacion />
       <Header />
       <Hero {...hero} />
 

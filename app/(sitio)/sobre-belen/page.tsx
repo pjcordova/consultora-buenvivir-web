@@ -6,12 +6,15 @@ import Parrafos from "@/components/Parrafos";
 import { ctaFinal } from "@/content/home";
 import { rutaVersionada } from "@/lib/assets";
 import { obtenerBelen } from "@/lib/contenido";
+import { metadatosDePagina } from "@/lib/metadatos";
 
-export const metadata: Metadata = {
-  title: "Sobre Belén | Buen Vivir",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Sobre Belén | Buen Vivir",
+  descripcion:
     "Belén Vera, facilitadora de procesos de Regeneración Organizacional y Personal: su camino desde el voluntariado ambiental hasta la Consultora Buen Vivir.",
-};
+  ruta: "/sobre-belen",
+  imagen: "belen",
+});
 
 export default async function SobreBelenPage() {
   const belen = await obtenerBelen();

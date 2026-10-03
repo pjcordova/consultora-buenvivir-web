@@ -8,12 +8,14 @@ import { ctaServicios } from "@/content/servicios";
 import { ctaFinal } from "@/content/home";
 import { rutaVersionada } from "@/lib/assets";
 import { obtenerCaminos, obtenerPaginaServicios } from "@/lib/contenido";
+import { metadatosDePagina } from "@/lib/metadatos";
 
-export const metadata: Metadata = {
-  title: "Servicios | Buen Vivir",
-  description:
+export const metadata: Metadata = metadatosDePagina({
+  titulo: "Servicios | Buen Vivir",
+  descripcion:
     "Tres caminos de acompañamiento regenerativo: Revitaliza tu Equipo, Revitaliza tu Trabajo y Revitaliza tu Vida.",
-};
+  ruta: "/servicios",
+});
 
 export default async function ServiciosPage() {
   const [paginaServicios, caminos] = await Promise.all([
