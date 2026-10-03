@@ -18,9 +18,9 @@ export default async function FichaOrganizacion() {
   const [pie, whatsapp] = await Promise.all([obtenerPie(idioma), obtenerWhatsapp(idioma)]);
   const enlace = (id: string) => pie.redes.find((red) => red.id === id)?.href || undefined;
 
-  // LinkedIn es el perfil personal de Belén: va en su ficha, no en la de la consultora.
+  // LinkedIn y Substack son perfiles personales de Belén: van en su ficha, no en la de la consultora.
   const redesDeLaConsultora = ["instagram", "tiktok", "youtube"].map(enlace).filter(Boolean);
-  const linkedin = enlace("linkedin");
+  const redesDeBelen = ["linkedin", "substack"].map(enlace).filter(Boolean);
 
   const ficha = {
     "@context": "https://schema.org",
@@ -34,7 +34,7 @@ export default async function FichaOrganizacion() {
       "@type": "Person",
       name: "Belén Vera",
       url: `${URL_DEL_SITIO}${enlaceEnIdioma("/sobre-belen", idioma)}`,
-      ...(linkedin ? { sameAs: [linkedin] } : {}),
+      ...(redesDeBelen.length ? { sameAs: redesDeBelen } : {}),
     },
     contactPoint: {
       "@type": "ContactPoint",

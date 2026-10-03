@@ -128,6 +128,7 @@ export const CAMPOS_COMPARTIDOS_DEL_PIE = [
   "linkedin",
   "tiktok",
   "youtube",
+  "substack",
 ];
 
 /* --- Lectores por sección --------------------------------------------------- */

@@ -75,6 +75,8 @@ export const footer = {
       label: "YouTube",
       href: "https://www.youtube.com/@ConsultoraRegenerativaBuenVivi",
     },
+    // Perfil personal de Belén, donde publica sus escritos
+    { id: "substack" as const, label: "Substack", href: "https://substack.com/@belenvera82" },
   ],
   lema: "Espacio de cultivo, pausa y transformación guiado por Belén Vera.",
   // PENDIENTE: estas páginas todavía no existen; se muestran como texto

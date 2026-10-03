@@ -292,6 +292,12 @@ export const SECCIONES: SeccionEditable[] = [
           tipo: "texto",
           ayuda: "Vacío deja el ícono apagado.",
         },
+        {
+          id: "substack",
+          etiqueta: "Substack (enlace)",
+          tipo: "texto",
+          ayuda: "Vacío deja el ícono apagado.",
+        },
       ] satisfies Campo[]
     ).map((campo): Campo => ({ ...campo, compartido: CAMPOS_COMPARTIDOS_DEL_PIE.includes(campo.id) })),
     slots: [],
@@ -310,6 +316,7 @@ export const SECCIONES: SeccionEditable[] = [
       linkedin: footer.redes.find((r) => r.id === "linkedin")?.href ?? "",
       tiktok: footer.redes.find((r) => r.id === "tiktok")?.href ?? "",
       youtube: footer.redes.find((r) => r.id === "youtube")?.href ?? "",
+      substack: footer.redes.find((r) => r.id === "substack")?.href ?? "",
     }),
   },
   {

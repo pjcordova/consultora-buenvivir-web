@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Idioma } from "@/lib/idioma";
 import { textosDe } from "@/lib/textos";
 
-export type RedId = "instagram" | "linkedin" | "tiktok" | "youtube";
+export type RedId = "instagram" | "linkedin" | "tiktok" | "youtube" | "substack";
 
 export type Red = { id: RedId; label: string; href: string };
 
@@ -31,6 +31,14 @@ export const LOGOS_REDES: Record<RedId, ReactNode> = {
     <path
       fill="currentColor"
       d="M16.6 3h-2.85v12.06a2.57 2.57 0 1 1-2.57-2.57c.24 0 .47.04.69.1v-2.9a5.6 5.6 0 0 0-.69-.05 5.47 5.47 0 1 0 5.47 5.47V9.4a6.55 6.55 0 0 0 3.85 1.24V7.75A3.78 3.78 0 0 1 16.6 3Z"
+    />
+  ),
+  // Dos barras y el marcador de página de Substack, achicado para ir parejo con los demás
+  substack: (
+    <path
+      fill="currentColor"
+      transform="translate(2.4 2.4) scale(0.8)"
+      d="M22.54 8.24H1.46V5.41h21.08v2.83ZM1.46 10.81V24L12 18.11 22.54 24V10.81H1.46ZM22.54 0H1.46v2.84h21.08V0Z"
     />
   ),
 };
