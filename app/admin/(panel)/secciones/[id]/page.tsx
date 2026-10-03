@@ -20,8 +20,21 @@ type Props = {
   searchParams: { idioma?: string };
 };
 
+/**
+ * Next 14 entrega el parámetro tal como viene en la dirección, sin decodificar:
+ * "espacio%3Acasita-del-arbol" en vez de "espacio:casita-del-arbol". Sin esto,
+ * las secciones con ":" (espacios y servicios) daban "página no encontrada".
+ */
+function idDeLaRuta(id: string): string {
+  try {
+    return decodeURIComponent(id);
+  } catch {
+    return id;
+  }
+}
+
 export default async function SeccionPage({ params, searchParams }: Props) {
-  const seccion = obtenerSeccion(params.id);
+  const seccion = obtenerSeccion(idDeLaRuta(params.id));
   if (!seccion) notFound();
 
   const idioma: Idioma = esIdioma(searchParams.idioma) ? searchParams.idioma : IDIOMA_DE_BASE;

@@ -384,12 +384,28 @@ export const SECCIONES: SeccionEditable[] = [
       id: `espacio:${espacio.slug}`,
       grupo: "Espacios del Ecosistema",
       titulo: espacio.nombre,
-      descripcion: "Página propia del espacio.",
+      descripcion: "Su círculo en la Home y su página propia.",
       vistaPrevia: `/ecosistema/${espacio.slug}`,
       campos: [
-        { id: "titulo", etiqueta: "Título", tipo: "texto" },
-        { id: "estado", etiqueta: "Estado", tipo: "texto", ayuda: "La pastilla verde: \"Próximamente\", \"En lanzamiento…\"" },
-        { id: "estadoCorto", etiqueta: "Leyenda del círculo en la Home", tipo: "texto" },
+        {
+          id: "titulo",
+          etiqueta: "Nombre del espacio",
+          tipo: "texto",
+          ayuda: "Se ve en el círculo de la Home, en la página del espacio y en el pie.",
+        },
+        {
+          id: "estadoCorto",
+          etiqueta: "Leyenda del círculo en la Home",
+          tipo: "texto",
+          ayuda: "La palabra chica arriba del nombre, como \"Próximamente\". Vacía no aparece.",
+        },
+        {
+          id: "botonCirculo",
+          etiqueta: "Botón del círculo en la Home",
+          tipo: "texto",
+          ayuda: "Por ejemplo \"+ info\". Lleva a la página del espacio.",
+        },
+        { id: "estado", etiqueta: "Estado", tipo: "texto", ayuda: "La pastilla verde de la página: \"Próximamente\", \"En lanzamiento…\"" },
         { id: "resumen", etiqueta: "Resumen", tipo: "parrafo" },
         { id: "parrafos", etiqueta: "Texto de la página", tipo: "parrafos", ayuda: "Un renglón en blanco entre párrafo y párrafo." },
         { id: "extras", etiqueta: "Además incluye", tipo: "lista", ayuda: "Un renglón por ítem. Dejalo vacío para ocultar el bloque." },
@@ -402,8 +418,9 @@ export const SECCIONES: SeccionEditable[] = [
         const enIdioma = espacioDe(c, espacio.slug);
         return {
           titulo: enIdioma.titulo,
-          estado: enIdioma.estado,
           estadoCorto: enIdioma.estadoCorto ?? "",
+          botonCirculo: enIdioma.cta.label,
+          estado: enIdioma.estado,
           resumen: enIdioma.resumen,
           parrafos: parrafosATexto(enIdioma.parrafos),
           extras: listaATexto(enIdioma.extras ?? []),

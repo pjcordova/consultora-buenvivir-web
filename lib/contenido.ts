@@ -162,7 +162,13 @@ export async function obtenerParadigma(
 
 export async function obtenerServicios(idioma: Idioma): Promise<Contenido["ecosistema"]> {
   const { ecosistema } = contenidoDe(idioma);
-  return { ...ecosistema, ...(await editado("servicios", idioma)) } as typeof ecosistema;
+  // Los círculos muestran lo editado en la sección de cada espacio
+  const espacios = await Promise.all(
+    ecosistema.espacios.map(
+      async (espacio) => (await obtenerEspacioPagina(espacio.slug, idioma)) ?? espacio
+    )
+  );
+  return { ...ecosistema, ...(await editado("servicios", idioma)), espacios } as typeof ecosistema;
 }
 
 export async function obtenerCosmovision(idioma: Idioma): Promise<Contenido["cosmovision"]> {
@@ -330,9 +336,15 @@ export async function obtenerEspacioPagina(
   const edicion = await editado(`espacio:${slug}`, idioma);
   if (!Object.keys(edicion).length) return base;
 
+  // El círculo de la Home lleva el nombre y el botón que Belén cargó en el panel
+  const conTexto = (valor: unknown) =>
+    typeof valor === "string" && valor.trim() ? valor : undefined;
+
   return {
     ...base,
     ...edicion,
+    nombre: conTexto(edicion.titulo) ?? base.nombre,
+    cta: { ...base.cta, label: conTexto(edicion.botonCirculo) ?? base.cta.label },
     parrafos:
       typeof edicion.parrafos === "string" ? textoALista(edicion.parrafos).map((p) => [p]) : base.parrafos,
     extras: typeof edicion.extras === "string" ? textoALista(edicion.extras) : base.extras,
