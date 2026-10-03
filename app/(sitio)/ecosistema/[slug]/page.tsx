@@ -4,12 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
+import { LOGOS_REDES } from "@/components/RedesSociales";
 import { obtenerEspacioPagina } from "@/lib/contenido";
 import { rutaVersionada } from "@/lib/assets";
 import { enlaceEnIdioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
+import { videoDeYoutube } from "@/lib/youtube";
 
 type Props = { params: { slug: string } };
 
@@ -35,6 +37,7 @@ export default async function EspacioPage({ params }: Props) {
 
   const imagen = await rutaVersionada(espacio.imagen);
   const hayImagen = Boolean(imagen);
+  const video = videoDeYoutube(espacio.video);
 
   return (
     <main>
@@ -89,49 +92,85 @@ export default async function EspacioPage({ params }: Props) {
       </section>
 
       <section className="bg-white px-[8vw] py-16 sm:py-20">
-        <div className="mx-auto max-w-2xl">
-          {espacio.parrafos.map((parrafo, i) => (
-            <p key={i} className="mt-5 text-[0.95rem] leading-relaxed text-forest-800/80 first:mt-0">
-              {parrafo.map((fragmento, j) =>
-                typeof fragmento === "string" ? (
-                  fragmento
-                ) : (
-                  <strong key={j} className="font-medium text-forest-950">
-                    {fragmento.fuerte}
-                  </strong>
-                )
-              )}
-            </p>
-          ))}
+        {/* Con video: el texto a la izquierda y el video a la derecha, mitad y
+            mitad para que se vea grande, acompañando la lectura. En celular el
+            video va debajo del texto. */}
+        <div
+          className={
+            video ? "mx-auto grid max-w-7xl gap-12 lg:grid-cols-2" : "mx-auto max-w-2xl"
+          }
+        >
+          <div>
+            {espacio.parrafos.map((parrafo, i) => (
+              <p key={i} className="mt-5 text-[0.95rem] leading-relaxed text-forest-800/80 first:mt-0">
+                {parrafo.map((fragmento, j) =>
+                  typeof fragmento === "string" ? (
+                    fragmento
+                  ) : (
+                    <strong key={j} className="font-medium text-forest-950">
+                      {fragmento.fuerte}
+                    </strong>
+                  )
+                )}
+              </p>
+            ))}
 
-          {espacio.incluye && (
-            <div className="mt-12">
-              <h2 className="font-display text-2xl text-forest-950">{textos.espacio.queSeLleva}</h2>
-              <ul className="mt-6 grid gap-5 sm:grid-cols-3">
-                {espacio.incluye.map((item) => (
-                  <li key={item.titulo} className="rounded-2xl bg-cream p-5">
-                    <h3 className="font-display text-lg text-forest-950">{item.titulo}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-forest-800/80">{item.texto}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            {espacio.incluye && (
+              <div className="mt-12">
+                <h2 className="font-display text-2xl text-forest-950">{textos.espacio.queSeLleva}</h2>
+                <ul className="mt-6 grid gap-5 sm:grid-cols-3">
+                  {espacio.incluye.map((item) => (
+                    <li key={item.titulo} className="rounded-2xl bg-cream p-5">
+                      <h3 className="font-display text-lg text-forest-950">{item.titulo}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-forest-800/80">{item.texto}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          {espacio.extras && (
-            <div className="mt-12">
-              <h2 className="font-display text-2xl text-forest-950">{textos.espacio.ademas}</h2>
-              <ul className="mt-5 space-y-3">
-                {espacio.extras.map((extra) => (
-                  <li key={extra} className="flex gap-3 text-[0.95rem] text-forest-800/80">
-                    <span className="text-leaf" aria-hidden="true">
-                      →
-                    </span>
-                    {extra}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {espacio.extras && (
+              <div className="mt-12">
+                <h2 className="font-display text-2xl text-forest-950">{textos.espacio.ademas}</h2>
+                <ul className="mt-5 space-y-3">
+                  {espacio.extras.map((extra) => (
+                    <li key={extra} className="flex gap-3 text-[0.95rem] text-forest-800/80">
+                      <span className="text-leaf" aria-hidden="true">
+                        →
+                      </span>
+                      {extra}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {video && (
+            <aside className="lg:sticky lg:top-32 lg:self-start">
+              <div className="overflow-hidden rounded-2xl bg-forest-950 shadow-[0_20px_50px_-25px_rgba(18,23,15,0.5)]">
+                <iframe
+                  src={video.incrustado}
+                  title={textos.espacio.video(espacio.titulo)}
+                  className="aspect-video w-full"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+              <a
+                href={video.enYoutube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-2 text-sm text-forest-800/70 transition-colors hover:text-forest-950"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                  {LOGOS_REDES.youtube}
+                </svg>
+                {textos.espacio.verEnYoutube}
+              </a>
+            </aside>
           )}
         </div>
       </section>

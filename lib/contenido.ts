@@ -334,7 +334,15 @@ export async function obtenerEspacioPagina(
   if (!base) return undefined;
 
   const edicion = await editado(`espacio:${slug}`, idioma);
-  if (!Object.keys(edicion).length) return base;
+
+  // El video vale para los dos idiomas: en inglés se usa el cargado en español
+  // mientras no se cargue uno propio en la pestaña de inglés.
+  const enEspanol =
+    idioma === IDIOMA_DE_BASE ? edicion : await editado(`espacio:${slug}`, IDIOMA_DE_BASE);
+  const video =
+    [edicion.video, enEspanol.video].find((valor): valor is string => typeof valor === "string") ??
+    base.video;
+  if (!Object.keys(edicion).length) return { ...base, video };
 
   // El círculo de la Home lleva el nombre y el botón que Belén cargó en el panel
   const conTexto = (valor: unknown) =>
@@ -345,6 +353,7 @@ export async function obtenerEspacioPagina(
     ...edicion,
     nombre: conTexto(edicion.titulo) ?? base.nombre,
     cta: { ...base.cta, label: conTexto(edicion.botonCirculo) ?? base.cta.label },
+    video,
     parrafos:
       typeof edicion.parrafos === "string" ? textoALista(edicion.parrafos).map((p) => [p]) : base.parrafos,
     extras: typeof edicion.extras === "string" ? textoALista(edicion.extras) : base.extras,

@@ -45,6 +45,8 @@ export const espacios: Espacio[] = [
       "Monthly Logbook",
       "Collective Intelligence Practice Diploma (every 6 months)",
     ],
+    // El mismo video que en español (la sesión es en castellano)
+    video: "https://www.youtube.com/watch?v=qY4Bm8UWjOU",
     ctaPagina: {
       titulo: "Would you like to join the next gathering?",
       bajada: "Fill in the form and Belén will write to you to join the first cycle.",

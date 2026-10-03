@@ -30,6 +30,8 @@ export type Espacio = {
   incluye?: { titulo: string; texto: string }[];
   /** Lo que suma el espacio además de los encuentros. */
   extras?: string[];
+  /** Enlace de YouTube: el video se ve al costado del texto de la página. */
+  video?: string;
   ctaPagina: { titulo: string; bajada: string; principal: { label: string; href: string } };
 };
 
@@ -79,6 +81,9 @@ export const espacios: Espacio[] = [
       "Bitácora del Mes",
       "Diploma de Práctica de Inteligencia Colectiva (cada 6 meses)",
     ],
+    // "ECOSISTEMA Buen Vivir - primera sesión", del canal de la consultora.
+    // Arranca desde el principio (pedido de Belén).
+    video: "https://www.youtube.com/watch?v=qY4Bm8UWjOU",
     ctaPagina: {
       titulo: "¿Te gustaría sumarte al próximo encuentro?",
       bajada: "Completá el formulario y Belén te escribe para entrar al primer ciclo.",

@@ -63,6 +63,8 @@ const ESPANOL = {
     queSeLleva: "Qué se lleva quien participa",
     ademas: "Además incluye",
     verTodos: "Ver todos los espacios",
+    video: (espacio: string) => `Video de ${espacio}`,
+    verEnYoutube: "Verlo en YouTube",
   },
   contacto: {
     titulo: "Contacto | Buen Vivir",
@@ -167,6 +169,8 @@ const INGLES: Textos = {
     queSeLleva: "What participants take away",
     ademas: "Also included",
     verTodos: "See all spaces",
+    video: (espacio: string) => `${espacio} video`,
+    verEnYoutube: "Watch on YouTube",
   },
   contacto: {
     titulo: "Contact | Buen Vivir",

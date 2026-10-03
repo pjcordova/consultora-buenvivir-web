@@ -409,6 +409,13 @@ export const SECCIONES: SeccionEditable[] = [
         { id: "resumen", etiqueta: "Resumen", tipo: "parrafo" },
         { id: "parrafos", etiqueta: "Texto de la página", tipo: "parrafos", ayuda: "Un renglón en blanco entre párrafo y párrafo." },
         { id: "extras", etiqueta: "Además incluye", tipo: "lista", ayuda: "Un renglón por ítem. Dejalo vacío para ocultar el bloque." },
+        {
+          id: "video",
+          etiqueta: "Video de YouTube (enlace)",
+          tipo: "texto",
+          ayuda:
+            "Pegá el enlace del video: se ve al costado del texto. Si el enlace trae un minuto (&t=…), arranca ahí. Vacío no aparece.",
+        },
         { id: "ctaTitulo", etiqueta: "Cierre — título", tipo: "texto" },
         { id: "ctaBajada", etiqueta: "Cierre — bajada", tipo: "parrafo" },
         { id: "ctaBoton", etiqueta: "Cierre — botón", tipo: "enlace" },
@@ -424,6 +431,7 @@ export const SECCIONES: SeccionEditable[] = [
           resumen: enIdioma.resumen,
           parrafos: parrafosATexto(enIdioma.parrafos),
           extras: listaATexto(enIdioma.extras ?? []),
+          video: enIdioma.video ?? "",
           ctaTitulo: enIdioma.ctaPagina.titulo,
           ctaBajada: enIdioma.ctaPagina.bajada,
           ctaBoton: enIdioma.ctaPagina.principal,
