@@ -10,8 +10,9 @@ export const contacto = {
   titulo: "¿Conversamos?",
   // CONFIRMADO — CTA que Belén usa en sus publicaciones
   bajada: "Reserva tu sesión y coordinamos una conversación inicial.",
-  // PENDIENTE (preguntas 1, 2, 30 y 31): correo, horarios y tiempo de respuesta
-  nota: "Correo y horarios de atención a confirmar con Belén",
+  // El correo se muestra aparte, debajo de la bajada (lo carga el pie del panel).
+  // PENDIENTE (preguntas 2, 30 y 31): horarios y tiempo de respuesta
+  nota: "Horarios de atención a confirmar con Belén",
 
   vias: [
     {

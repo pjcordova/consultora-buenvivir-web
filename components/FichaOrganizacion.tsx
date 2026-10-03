@@ -1,4 +1,4 @@
-import { obtenerPie, obtenerWhatsapp } from "@/lib/contenido";
+import { obtenerCorreo, obtenerPie, obtenerWhatsapp } from "@/lib/contenido";
 import { enlaceEnIdioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { URL_DEL_SITIO } from "@/lib/metadatos";
@@ -9,13 +9,17 @@ import { textosDe } from "@/lib/textos";
  * Vivir, quién la dirige y dónde encontrarla.
  *
  * Solo lleva datos confirmados. La ubicación y los horarios se suman cuando
- * Belén los confirme. Las redes y el WhatsApp salen del panel, así la ficha
- * nunca queda desactualizada.
+ * Belén los confirme. Las redes, el WhatsApp y el correo salen del panel, así
+ * la ficha nunca queda desactualizada.
  */
 export default async function FichaOrganizacion() {
   const idioma = obtenerIdioma();
   const { sitio } = textosDe(idioma);
-  const [pie, whatsapp] = await Promise.all([obtenerPie(idioma), obtenerWhatsapp(idioma)]);
+  const [pie, whatsapp, correo] = await Promise.all([
+    obtenerPie(idioma),
+    obtenerWhatsapp(idioma),
+    obtenerCorreo(),
+  ]);
   const enlace = (id: string) => pie.redes.find((red) => red.id === id)?.href || undefined;
 
   // LinkedIn y Substack son perfiles personales de Belén: van en su ficha, no en la de la consultora.
@@ -40,6 +44,7 @@ export default async function FichaOrganizacion() {
       "@type": "ContactPoint",
       contactType: "customer service",
       telephone: `+${whatsapp.numero}`,
+      ...(correo ? { email: correo } : {}),
       // Por ahora solo español: sumar "English" cuando Belén confirme que atiende en inglés
       availableLanguage: "Spanish",
     },

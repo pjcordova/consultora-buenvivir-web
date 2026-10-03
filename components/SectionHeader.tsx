@@ -4,6 +4,8 @@ type SectionHeaderProps = {
   subtitle?: string;
   /** "verde": para franjas de fondo verde, con el texto en blanco. */
   tono?: "claro" | "verde";
+  /** h1 cuando es el título principal de la página (Contacto, Privacidad, Términos). */
+  nivel?: "h1" | "h2";
 };
 
 /**
@@ -14,6 +16,7 @@ export default function SectionHeader({
   title,
   subtitle,
   tono = "claro",
+  nivel: Titulo = "h2",
 }: SectionHeaderProps) {
   const sobreVerde = tono === "verde";
 
@@ -33,13 +36,13 @@ export default function SectionHeader({
         {eyebrow}
       </p>
 
-      <h2
+      <Titulo
         className={`mt-5 text-3xl leading-tight sm:text-[2.5rem] ${
           sobreVerde ? "text-white" : "text-forest-950"
         }`}
       >
         {title}
-      </h2>
+      </Titulo>
 
       {subtitle && (
         <p

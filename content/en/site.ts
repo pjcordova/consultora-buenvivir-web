@@ -48,13 +48,13 @@ export const footer: typeof es.footer = {
     whatsapp: { label: `WhatsApp: ${whatsapp.visible}`, href: whatsappUrl },
     comunidad: { label: "Join the community", href: formularioComunidadEn },
     instagram: es.footer.contacto.instagram,
-    email: { label: "Start a conversation", href: "/contacto" },
+    email: es.footer.contacto.email,
   },
   redes: es.footer.redes,
   lema: "A space for cultivation, pause and transformation guided by Belén Vera.",
   legales: [
-    { label: "Privacy", pendiente: true },
-    { label: "Terms", pendiente: true },
+    { label: "Privacy", href: "/privacidad" },
+    { label: "Terms", href: "/terminos" },
     { label: "Contact", href: "/contacto" },
   ],
 };

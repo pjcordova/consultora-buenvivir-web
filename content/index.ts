@@ -2,12 +2,14 @@ import * as belenEs from "@/content/belen";
 import * as contactoEs from "@/content/contacto";
 import * as ecosistemaEs from "@/content/ecosistema";
 import * as homeEs from "@/content/home";
+import * as legalesEs from "@/content/legales";
 import * as serviciosEs from "@/content/servicios";
 import * as sitioEs from "@/content/site";
 import * as belenEn from "@/content/en/belen";
 import * as contactoEn from "@/content/en/contacto";
 import * as ecosistemaEn from "@/content/en/ecosistema";
 import * as homeEn from "@/content/en/home";
+import * as legalesEn from "@/content/en/legales";
 import * as serviciosEn from "@/content/en/servicios";
 import * as sitioEn from "@/content/en/site";
 import type { Idioma } from "@/lib/idioma";
@@ -32,6 +34,8 @@ const ESPANOL = {
   contacto: contactoEs.contacto,
   footer: sitioEs.footer,
   whatsapp: sitioEs.whatsapp,
+  privacidad: legalesEs.privacidad,
+  terminos: legalesEs.terminos,
 };
 
 export type Contenido = typeof ESPANOL;
@@ -51,6 +55,8 @@ const INGLES: Contenido = {
   contacto: contactoEn.contacto,
   footer: sitioEn.footer,
   whatsapp: sitioEn.whatsapp,
+  privacidad: legalesEn.privacidad,
+  terminos: legalesEn.terminos,
 };
 
 const CONTENIDO: Record<Idioma, Contenido> = { es: ESPANOL, en: INGLES };

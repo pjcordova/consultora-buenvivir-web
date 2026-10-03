@@ -97,6 +97,29 @@ export default async function SobreBelenPage() {
           <div className="mt-6 text-[0.95rem]">
             <Parrafos parrafos={belen.camino} />
           </div>
+
+          {belen.formacion.length > 0 && (
+            <div className="mt-12">
+              <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
+                {belen.formacionTitulo}
+              </h2>
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                {belen.formacion.map((item) => (
+                  <li key={item} className="flex items-center gap-4 rounded-2xl bg-cream p-5">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-leaf">
+                      {/* Birrete */}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M22 9 12 4 2 9l10 5 10-5Z" />
+                        <path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
+                        <path d="M22 9v6" />
+                      </svg>
+                    </span>
+                    <span className="font-display text-lg leading-snug text-forest-950">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
 

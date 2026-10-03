@@ -1,4 +1,5 @@
 import { contenidoDe, type Contenido } from "@/content";
+import { correo } from "@/content/site";
 import { CAMPOS_COMPARTIDOS_DEL_PIE, listaATexto, parrafosATexto } from "@/lib/contenido";
 
 /**
@@ -257,6 +258,12 @@ export const SECCIONES: SeccionEditable[] = [
         },
         { id: "columnaContacto", etiqueta: "Título de la columna de contacto", tipo: "texto" },
         {
+          id: "correo",
+          etiqueta: "Correo de contacto",
+          tipo: "texto",
+          ayuda: "Se ve en el pie, en Contacto y en las páginas de Privacidad y Términos.",
+        },
+        {
           id: "whatsappNumero",
           etiqueta: "WhatsApp — número para el enlace",
           tipo: "texto",
@@ -309,6 +316,7 @@ export const SECCIONES: SeccionEditable[] = [
       columnaServicios: footer.columnas[0]?.titulo ?? "",
       columnaEcosistema: footer.columnas[1]?.titulo ?? "",
       columnaContacto: footer.contacto.titulo,
+      correo,
       whatsappNumero: whatsapp.numero,
       whatsappVisible: whatsapp.visible,
       whatsappMensaje: whatsapp.mensaje,
@@ -455,6 +463,13 @@ export const SECCIONES: SeccionEditable[] = [
       { id: "citaTexto", etiqueta: "Texto bajo la frase", tipo: "parrafo" },
       { id: "caminoTitulo", etiqueta: "Título de su camino", tipo: "texto" },
       { id: "camino", etiqueta: "Su camino", tipo: "parrafos" },
+      { id: "formacionTitulo", etiqueta: "Título de la formación", tipo: "texto" },
+      {
+        id: "formacion",
+        etiqueta: "Formación",
+        tipo: "lista",
+        ayuda: "Una formación o certificación por renglón. Dejalo vacío para ocultar el bloque.",
+      },
       { id: "enfoqueTitulo", etiqueta: "Título del enfoque", tipo: "texto" },
       { id: "enfoqueCita", etiqueta: "Frase del enfoque", tipo: "parrafo" },
       { id: "enfoque", etiqueta: "Enfoque", tipo: "parrafos" },
@@ -470,6 +485,8 @@ export const SECCIONES: SeccionEditable[] = [
       citaTexto: belen.citaTexto,
       caminoTitulo: belen.caminoTitulo,
       camino: parrafosATexto(belen.camino),
+      formacionTitulo: belen.formacionTitulo,
+      formacion: listaATexto(belen.formacion),
       enfoqueTitulo: belen.enfoqueTitulo,
       enfoqueCita: belen.enfoqueCita,
       enfoque: parrafosATexto(belen.enfoque),

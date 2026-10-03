@@ -20,6 +20,15 @@ function Enlace({ enlace, idioma, className = "" }: EnlaceProps) {
   }
   const clases = `text-cream/75 transition-colors hover:text-cream ${className}`;
 
+  // El correo abre el programa de correo de quien visita
+  if (enlace.href.startsWith("mailto:")) {
+    return (
+      <a href={enlace.href} className={clases}>
+        {enlace.label}
+      </a>
+    );
+  }
+
   // Los enlaces externos (WhatsApp, Instagram) se abren en otra pestaña
   if (enlace.href.startsWith("http")) {
     return (
@@ -116,7 +125,7 @@ export default async function Footer() {
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="m2 7 10 6 10-6" />
               </svg>
-              <Enlace enlace={contacto.email} idioma={idioma} className="underline underline-offset-4" />
+              <Enlace enlace={contacto.email} idioma={idioma} className="break-all" />
             </li>
           </ul>
 

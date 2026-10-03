@@ -66,5 +66,6 @@ export const belen: typeof es.belen = {
     ],
   ],
 
-  formacion: es.belen.formacion,
+  formacionTitulo: "Training",
+  formacion: ["Facilitation in Organizational Regeneration", "Theory U"],
 };

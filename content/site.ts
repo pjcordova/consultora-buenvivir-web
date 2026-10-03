@@ -1,8 +1,9 @@
 // Contenido del pie de página (se muestra en todas las páginas).
-// PENDIENTE: los datos de contacto vienen del mockup de Stitch. Hasta que Belén los
-// confirme, el WhatsApp y el correo se muestran sin enlace (ver `pendiente: true`).
 
 import { agendaBelen, formularioComunidad } from "@/content/enlaces";
+
+// CONFIRMADO — correo de contacto para la web (se cambia desde el panel, en el pie)
+export const correo = "consultoriabuenvivir@gmail.com";
 
 export type EnlaceFooter = {
   label: string;
@@ -61,7 +62,7 @@ export const footer = {
       label: "@consultorabuenvivir",
       href: "https://www.instagram.com/consultorabuenvivir/",
     } satisfies EnlaceFooter,
-    email: { label: "Iniciar conversación", href: "/contacto" } satisfies EnlaceFooter,
+    email: { label: correo, href: `mailto:${correo}` } satisfies EnlaceFooter,
   },
   // Redes sociales del pie. Para activar una red, pegá su enlace en `href`.
   // Sin `href` el ícono se ve apagado y no se puede clickear.
@@ -79,10 +80,9 @@ export const footer = {
     { id: "substack" as const, label: "Substack", href: "https://substack.com/@belenvera82" },
   ],
   lema: "Espacio de cultivo, pausa y transformación guiado por Belén Vera.",
-  // PENDIENTE: estas páginas todavía no existen; se muestran como texto
   legales: [
-    { label: "Privacidad", pendiente: true },
-    { label: "Términos", pendiente: true },
+    { label: "Privacidad", href: "/privacidad" },
+    { label: "Términos", href: "/terminos" },
     { label: "Contacto", href: "/contacto" },
   ] satisfies EnlaceFooter[],
 };

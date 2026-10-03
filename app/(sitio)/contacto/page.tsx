@@ -4,7 +4,13 @@ import Header from "@/components/Header";
 import RedesSociales from "@/components/RedesSociales";
 import SectionHeader from "@/components/SectionHeader";
 import { agendaBelen, agendaIncrustada } from "@/content/enlaces";
-import { obtenerContacto, obtenerPie, obtenerWhatsapp, urlWhatsapp } from "@/lib/contenido";
+import {
+  obtenerContacto,
+  obtenerCorreo,
+  obtenerPie,
+  obtenerWhatsapp,
+  urlWhatsapp,
+} from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
@@ -40,11 +46,12 @@ const ICONOS = {
 export default async function ContactoPage() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma).contacto;
-  const [contacto, pie, whatsapp, enlaceWhatsapp] = await Promise.all([
+  const [contacto, pie, whatsapp, enlaceWhatsapp, correo] = await Promise.all([
     obtenerContacto(idioma),
     obtenerPie(idioma),
     obtenerWhatsapp(idioma),
     urlWhatsapp(idioma),
+    obtenerCorreo(),
   ]);
 
   // El WhatsApp sale del panel, así el número y el mensaje se editan en un solo lugar
@@ -64,8 +71,25 @@ export default async function ContactoPage() {
           title={contacto.titulo}
           subtitle={contacto.bajada}
           tono="verde"
+          nivel="h1"
         />
-        {contacto.nota && (
+        {correo && (
+          <p className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/80">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m2 7 10 6 10-6" />
+            </svg>
+            {textos.porCorreo}
+            <a
+              href={`mailto:${correo}`}
+              className="break-all font-medium text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+            >
+              {correo}
+            </a>
+          </p>
+        )}
+        {/* Belén había cargado el correo como nota: no se repite */}
+        {contacto.nota && contacto.nota.trim().toLowerCase() !== correo.toLowerCase() && (
           <p className="mx-auto mt-4 max-w-2xl text-center text-xs italic text-white/70">
             ({contacto.nota})
           </p>

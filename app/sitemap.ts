@@ -7,6 +7,9 @@ import { URL_DEL_SITIO } from "@/lib/metadatos";
  * Mapa del sitio: las páginas públicas en los dos idiomas, cada una con la
  * dirección de su versión en el otro idioma, para que Google las relacione.
  */
+/** Privacidad y Términos: van en el mapa, pero con menos peso que el resto. */
+const LEGALES = ["/privacidad", "/terminos"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const rutas = [
     "/",
@@ -14,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/sobre-belen",
     "/contacto",
     ...espacios.map((espacio) => `/ecosistema/${espacio.slug}`),
+    ...LEGALES,
   ];
 
   const direccion = (ruta: string, idioma: (typeof IDIOMAS)[number]) => {
@@ -25,7 +29,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     IDIOMAS.map((idioma) => ({
       url: direccion(ruta, idioma),
       changeFrequency: "monthly" as const,
-      priority: ruta === "/" ? (idioma === IDIOMA_DE_BASE ? 1 : 0.9) : 0.7,
+      priority:
+        ruta === "/" ? (idioma === IDIOMA_DE_BASE ? 1 : 0.9) : LEGALES.includes(ruta) ? 0.3 : 0.7,
       alternates: {
         languages: Object.fromEntries(IDIOMAS.map((otro) => [otro, direccion(ruta, otro)])),
       },

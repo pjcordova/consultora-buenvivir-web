@@ -63,7 +63,7 @@ export const belen = {
     ],
   ] satisfies Parrafo[],
 
-  // PENDIENTE (Sección 3 del cuestionario): formación, certificaciones y afiliaciones
-  // (Presencing Institute / U-Lab / Regenerative Network for Migrant and Refugee Communities).
-  formacion: null,
+  // CONFIRMADO por Belén. Se ve al final de "Mi camino" y se edita desde el panel.
+  formacionTitulo: "Formación",
+  formacion: ["Facilitación en Regeneración Organizacional", "Teoría U"],
 };

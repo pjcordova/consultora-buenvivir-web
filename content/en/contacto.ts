@@ -10,7 +10,7 @@ export const contacto: typeof es.contacto = {
   eyebrow: "Contact · Let's talk",
   titulo: "Shall we talk?",
   bajada: "Book your session and we'll arrange an initial conversation.",
-  nota: "Email and office hours to be confirmed with Belén",
+  nota: "Office hours to be confirmed with Belén",
 
   vias: [
     {

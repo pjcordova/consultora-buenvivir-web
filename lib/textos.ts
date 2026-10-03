@@ -73,6 +73,7 @@ const ESPANOL = {
     agendaTitulo: "Agenda de Belén Vera para reservar una conversación",
     noSeVe: "¿No se ve la agenda?",
     abrirAparte: "Abrila en otra pestaña",
+    porCorreo: "O escribile por correo:",
   },
   pie: {
     derechos: "Todos los derechos reservados.",
@@ -179,6 +180,7 @@ const INGLES: Textos = {
     agendaTitulo: "Belén Vera's calendar to book a conversation",
     noSeVe: "Can't see the calendar?",
     abrirAparte: "Open it in a new tab",
+    porCorreo: "Or send her an email:",
   },
   pie: {
     derechos: "All rights reserved.",

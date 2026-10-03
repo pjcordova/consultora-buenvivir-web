@@ -3,6 +3,7 @@ import path from "node:path";
 import { contenidoDe, type Contenido } from "@/content";
 import type { Espacio } from "@/content/ecosistema";
 import type { Oferta } from "@/content/servicios";
+import { correo as correoPorDefecto } from "@/content/site";
 import { bajarDato, escribirDato, leerDato, usaBlob } from "@/lib/almacen";
 import type { ElementoGuardado, IdLista, TextoBilingue } from "@/lib/admin/listas";
 import { IDIOMA_DE_BASE, type Idioma } from "@/lib/idioma";
@@ -122,6 +123,7 @@ export const claveDeSeccion = (seccion: string, idioma: Idioma): string =>
  * redes). Se cargan una sola vez, en la versión en español.
  */
 export const CAMPOS_COMPARTIDOS_DEL_PIE = [
+  "correo",
   "whatsappNumero",
   "whatsappVisible",
   "instagram",
@@ -265,9 +267,22 @@ export async function obtenerPie(idioma: Idioma): Promise<Contenido["footer"]> {
         ...footer.contacto.instagram,
         href: enlaceRed("instagram", footer.contacto.instagram.href),
       },
+      email: await enlaceDeCorreo(),
     },
     redes: footer.redes.map((red) => ({ ...red, href: enlaceRed(red.id, red.href) })),
   };
+}
+
+/** Correo de contacto: uno solo para los dos idiomas, cargado en el pie (en español). */
+export async function obtenerCorreo(): Promise<string> {
+  const guardado = await editadoPie(IDIOMA_DE_BASE);
+  return typeof guardado.correo === "string" ? guardado.correo.trim() : correoPorDefecto;
+}
+
+/** El correo listo para el pie; sin correo cargado (href vacío) se muestra apagado. */
+async function enlaceDeCorreo(): Promise<{ label: string; href: string }> {
+  const direccion = await obtenerCorreo();
+  return direccion ? { label: direccion, href: `mailto:${direccion}` } : { label: "—", href: "" };
 }
 
 export async function obtenerWhatsapp(idioma: Idioma): Promise<Contenido["whatsapp"]> {
@@ -383,6 +398,8 @@ export async function obtenerBelen(idioma: Idioma): Promise<Contenido["belen"]> 
       typeof edicion.camino === "string" ? textoAParrafos(edicion.camino) : belen.camino,
     enfoque:
       typeof edicion.enfoque === "string" ? textoAParrafos(edicion.enfoque) : belen.enfoque,
+    formacion:
+      typeof edicion.formacion === "string" ? textoALista(edicion.formacion) : belen.formacion,
   } as typeof belen;
 }
 
