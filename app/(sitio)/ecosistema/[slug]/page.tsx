@@ -4,15 +4,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
-import { espacios, obtenerEspacio } from "@/content/ecosistema";
+import { obtenerEspacio } from "@/content/ecosistema";
 import { obtenerEspacioPagina } from "@/lib/contenido";
 import { rutaVersionada } from "@/lib/assets";
 
 type Props = { params: { slug: string } };
-
-export function generateStaticParams() {
-  return espacios.map((espacio) => ({ slug: espacio.slug }));
-}
 
 export function generateMetadata({ params }: Props): Metadata {
   const espacio = obtenerEspacio(params.slug);
@@ -28,7 +24,7 @@ export default async function EspacioPage({ params }: Props) {
   const espacio = await obtenerEspacioPagina(params.slug);
   if (!espacio) notFound();
 
-  const imagen = rutaVersionada(espacio.imagen);
+  const imagen = await rutaVersionada(espacio.imagen);
   const hayImagen = Boolean(imagen);
 
   return (

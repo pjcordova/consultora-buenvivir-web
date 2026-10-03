@@ -13,6 +13,7 @@ import { contacto } from "@/content/contacto";
 import { espacios, type Espacio } from "@/content/ecosistema";
 import { caminos, paginaServicios, type Oferta } from "@/content/servicios";
 import { footer, whatsapp } from "@/content/site";
+import { bajarDato, escribirDato, leerDato, usaBlob } from "@/lib/almacen";
 import type { Parrafo } from "@/types/content";
 
 /**
@@ -22,14 +23,16 @@ import type { Parrafo } from "@/types/content";
  * edita en /admin se guarda en data/contenido.json y pisa solo esos campos, así
  * una sección nunca queda vacía y siempre se puede volver al texto original.
  *
- * Al publicar en Vercel hay que cambiar leerGuardado/guardarSeccion por el
- * almacenamiento definitivo (Vercel Blob): el resto del sitio no se entera.
+ * En la computadora de desarrollo esto es un archivo; en el sitio publicado
+ * vive en el depósito (lib/almacen.ts). El resto del sitio no se entera.
  */
 const ARCHIVO = path.join(process.cwd(), "data", "contenido.json");
 
 export type Guardado = Record<string, Record<string, unknown>>;
 
 export async function leerGuardado(): Promise<Guardado> {
+  if (usaBlob) return leerDato<Guardado>("contenido", {});
+
   try {
     return JSON.parse(await fs.readFile(ARCHIVO, "utf8")) as Guardado;
   } catch {
@@ -37,7 +40,21 @@ export async function leerGuardado(): Promise<Guardado> {
   }
 }
 
+/**
+ * Lo último guardado, sin la copia en memoria. Antes de modificar hay que
+ * partir de lo que está realmente guardado, no de lo que se mostró recién.
+ */
+async function leerParaModificar(): Promise<Guardado> {
+  if (usaBlob) return bajarDato<Guardado>("contenido", {});
+  return leerGuardado();
+}
+
 async function escribir(datos: Guardado): Promise<void> {
+  if (usaBlob) {
+    await escribirDato("contenido", datos);
+    return;
+  }
+
   await fs.mkdir(path.dirname(ARCHIVO), { recursive: true });
   await fs.writeFile(ARCHIVO, `${JSON.stringify(datos, null, 2)}\n`, "utf8");
 }
@@ -46,11 +63,11 @@ export async function guardarSeccion(
   seccion: string,
   valores: Record<string, unknown>
 ): Promise<void> {
-  await escribir({ ...(await leerGuardado()), [seccion]: valores });
+  await escribir({ ...(await leerParaModificar()), [seccion]: valores });
 }
 
 export async function restaurarSeccion(seccion: string): Promise<void> {
-  const actual = await leerGuardado();
+  const actual = await leerParaModificar();
   delete actual[seccion];
   await escribir(actual);
 }

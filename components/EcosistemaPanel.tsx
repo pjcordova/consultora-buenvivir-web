@@ -22,9 +22,24 @@ type EcosistemaPanelProps = {
   espacios: Espacio[];
 };
 
-export default function EcosistemaPanel({ foto, logo, nombre, espacios }: EcosistemaPanelProps) {
-  const fotoFondo = rutaVersionada(foto);
-  const logoSrc = rutaVersionada(logo);
+export default async function EcosistemaPanel({
+  foto,
+  logo,
+  nombre,
+  espacios,
+}: EcosistemaPanelProps) {
+  // Las direcciones de todas las imágenes se resuelven juntas antes de dibujar.
+  const [fotoFondo, logoSrc, conImagenes] = await Promise.all([
+    rutaVersionada(foto),
+    rutaVersionada(logo),
+    Promise.all(
+      espacios.map(async (espacio) => ({
+        ...espacio,
+        imagen: espacio.imagen ? await rutaVersionada(espacio.imagen) : null,
+        adorno: espacio.adorno ? await rutaVersionada(espacio.adorno) : null,
+      }))
+    ),
+  ]);
 
   return (
     <div className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-3xl bg-forest-800">
@@ -58,11 +73,10 @@ export default function EcosistemaPanel({ foto, logo, nombre, espacios }: Ecosis
 
         {/* Espacios */}
         <ul className="grid w-full gap-10 sm:grid-cols-3 sm:gap-6">
-          {espacios.map((espacio) => {
-            const imagen = espacio.imagen ? rutaVersionada(espacio.imagen) : null;
+          {conImagenes.map((espacio) => {
+            const { imagen, adorno } = espacio;
             const hayImagen = Boolean(imagen);
             const esSello = espacio.estilo === "sello";
-            const adorno = espacio.adorno ? rutaVersionada(espacio.adorno) : null;
 
             return (
               <li key={espacio.slug} className="flex flex-col items-center gap-4">

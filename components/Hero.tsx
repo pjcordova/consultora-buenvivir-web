@@ -17,7 +17,7 @@ type HeroProps = {
 
 const FOTO_CIELO = "/images/hero-cielo.jpg";
 
-export default function Hero({
+export default async function Hero({
   eyebrow,
   title,
   titleAccent,
@@ -28,7 +28,7 @@ export default function Hero({
   scrollTarget,
 }: HeroProps) {
   // Mientras la foto no esté en public/images se muestra solo el degradado de fondo.
-  const foto = rutaVersionada(FOTO_CIELO);
+  const foto = await rutaVersionada(FOTO_CIELO);
 
   return (
     <section className="relative flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#1d3552] via-[#5a7fa8] to-[#e4e8ea] px-[6vw] py-16 md:min-h-[calc(100svh-6rem)]">

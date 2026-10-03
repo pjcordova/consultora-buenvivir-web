@@ -1,26 +1,14 @@
-import fs from "node:fs";
-import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FormularioSeccion from "@/components/admin/FormularioSeccion";
 import SlotCard from "@/components/admin/SlotCard";
-import { obtenerSeccion, SECCIONES } from "@/lib/admin/secciones";
+import { obtenerSeccion } from "@/lib/admin/secciones";
 import { obtenerSlot } from "@/lib/admin/slots";
+import { usaBlob } from "@/lib/almacen";
+import { rutaVersionada } from "@/lib/assets";
 import { leerGuardado } from "@/lib/contenido";
 
 export const dynamic = "force-dynamic";
-
-export function generateStaticParams() {
-  return SECCIONES.map((seccion) => ({ id: seccion.id }));
-}
-
-function version(ruta: string): number | null {
-  try {
-    return fs.statSync(path.join(process.cwd(), "public", ruta)).mtimeMs;
-  } catch {
-    return null;
-  }
-}
 
 export default async function SeccionPage({ params }: { params: { id: string } }) {
   const seccion = obtenerSeccion(params.id);
@@ -29,7 +17,9 @@ export default async function SeccionPage({ params }: { params: { id: string } }
   const guardado = await leerGuardado();
   const editado = guardado[seccion.id];
   const valores = { ...seccion.porDefecto, ...(editado ?? {}) };
-  const slots = seccion.slots.map(obtenerSlot).filter(Boolean);
+  const slots = seccion.slots.flatMap((id) => obtenerSlot(id) ?? []);
+  // Dirección actual de cada imagen (del depósito o del código), o null si falta.
+  const vistas = await Promise.all(slots.map((slot) => rutaVersionada(slot.ruta)));
 
   return (
     <main className="min-h-screen bg-cream px-[5vw] py-10">
@@ -69,10 +59,9 @@ export default async function SeccionPage({ params }: { params: { id: string } }
           <>
             <h2 className="mt-10 font-display text-xl text-forest-950">Imágenes</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {slots.map(
-                (slot) =>
-                  slot && <SlotCard key={slot.id} slot={slot} version={version(slot.ruta)} />
-              )}
+              {slots.map((slot, i) => (
+                <SlotCard key={slot.id} slot={slot} url={vistas[i]} directo={usaBlob} />
+              ))}
             </div>
           </>
         )}

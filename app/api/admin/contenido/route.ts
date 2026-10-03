@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
 import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
+import { publicarCambios } from "@/lib/admin/publicar";
 import { obtenerSeccion } from "@/lib/admin/secciones";
 import { guardarSeccion, restaurarSeccion } from "@/lib/contenido";
 
 const LARGO_MAXIMO = 8000;
+
+// Una respuesta nueva cada vez: el cuerpo de una respuesta se puede leer una sola vez.
+const noSePudoGuardar = () =>
+  NextResponse.json(
+    { error: "No se pudo guardar en el depósito. Probá de nuevo en un rato." },
+    { status: 502 }
+  );
 
 export async function POST(request: Request) {
   if (soloLectura) {
@@ -48,7 +56,13 @@ export async function POST(request: Request) {
     limpios[campo.id] = texto;
   }
 
-  await guardarSeccion(seccion.id, limpios);
+  try {
+    await guardarSeccion(seccion.id, limpios);
+  } catch {
+    return noSePudoGuardar();
+  }
+
+  publicarCambios("contenido");
   return NextResponse.json({ ok: true });
 }
 
@@ -67,6 +81,12 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Esa sección no existe." }, { status: 400 });
   }
 
-  await restaurarSeccion(seccion.id);
+  try {
+    await restaurarSeccion(seccion.id);
+  } catch {
+    return noSePudoGuardar();
+  }
+
+  publicarCambios("contenido");
   return NextResponse.json({ ok: true });
 }

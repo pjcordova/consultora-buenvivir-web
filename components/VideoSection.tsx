@@ -14,7 +14,7 @@ type VideoSectionProps = {
   note?: string;
 };
 
-export default function VideoSection({
+export default async function VideoSection({
   id,
   video,
   poster,
@@ -23,8 +23,8 @@ export default function VideoSection({
   statement,
   note,
 }: VideoSectionProps) {
-  const videoSrc = rutaVersionada(video);
-  const posterSrc = rutaVersionada(poster);
+  const videoSrc = await rutaVersionada(video);
+  const posterSrc = await rutaVersionada(poster);
   const hayVideo = Boolean(videoSrc);
   const hayPoster = Boolean(posterSrc);
 

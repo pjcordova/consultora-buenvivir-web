@@ -1,27 +1,30 @@
-import fs from "node:fs";
-import path from "node:path";
 import Link from "next/link";
 import SlotCard from "@/components/admin/SlotCard";
 import CerrarSesion from "@/components/admin/CerrarSesion";
 import { SECCIONES } from "@/lib/admin/secciones";
 import { SLOTS, slotsPorSeccion } from "@/lib/admin/slots";
-import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
+import {
+  editaElSitioPublicado,
+  MENSAJE_SITIO_PUBLICADO,
+  MENSAJE_SOLO_LECTURA,
+  soloLectura,
+} from "@/lib/admin/entorno";
+import { usaBlob } from "@/lib/almacen";
+import { rutaVersionada } from "@/lib/assets";
 import { leerGuardado } from "@/lib/contenido";
 
 export const dynamic = "force-dynamic";
 
-/** Fecha del archivo, o null si todavía no existe. */
-function version(ruta: string): number | null {
-  try {
-    return fs.statSync(path.join(process.cwd(), "public", ruta)).mtimeMs;
-  } catch {
-    return null;
-  }
-}
-
 export default async function AdminPage() {
   const secciones = slotsPorSeccion();
   const guardado = await leerGuardado();
+
+  // Dirección actual de cada imagen (del depósito o del código), o null si falta.
+  const vistas = new Map(
+    await Promise.all(
+      SLOTS.map(async (slot) => [slot.id, await rutaVersionada(slot.ruta)] as const)
+    )
+  );
 
   // Secciones agrupadas (Inicio, Página de Servicios, Espacios…), en orden de aparición
   const grupos = SECCIONES.reduce<[string, typeof SECCIONES][]>((acumulado, seccion) => {
@@ -30,7 +33,7 @@ export default async function AdminPage() {
     else acumulado.push([seccion.grupo, [seccion]]);
     return acumulado;
   }, []);
-  const cargadas = SLOTS.filter((slot) => version(slot.ruta) !== null).length;
+  const cargadas = SLOTS.filter((slot) => vistas.get(slot.id)).length;
 
   return (
     <main className="min-h-screen bg-cream px-[5vw] py-10">
@@ -57,6 +60,12 @@ export default async function AdminPage() {
       {soloLectura && (
         <p className="mx-auto mt-6 max-w-6xl rounded-2xl border border-honey/40 bg-butter px-5 py-4 text-sm text-forest-800">
           {MENSAJE_SOLO_LECTURA}
+        </p>
+      )}
+
+      {editaElSitioPublicado && (
+        <p className="mx-auto mt-6 max-w-6xl rounded-2xl border border-leaf/40 bg-white px-5 py-4 text-sm text-forest-800">
+          {MENSAJE_SITIO_PUBLICADO}
         </p>
       )}
 
@@ -92,7 +101,7 @@ export default async function AdminPage() {
           <h2 className="font-display text-xl text-forest-950">{seccion}</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {slots.map((slot) => (
-              <SlotCard key={slot.id} slot={slot} version={version(slot.ruta)} />
+              <SlotCard key={slot.id} slot={slot} url={vistas.get(slot.id) ?? null} directo={usaBlob} />
             ))}
           </div>
         </section>

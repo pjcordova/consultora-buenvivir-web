@@ -41,7 +41,7 @@ export default async function HomePage() {
 
         <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14">
           <Carousel
-            slides={imagenesCarrusel(
+            slides={await imagenesCarrusel(
               regeneracionOrganizacional.carrusel.prefijo,
               regeneracionOrganizacional.carrusel.total,
               (n) => `Publicación ${n} sobre regeneración organizacional`
@@ -82,7 +82,7 @@ export default async function HomePage() {
 
         <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14">
           <Carousel
-            slides={imagenesCarrusel(
+            slides={await imagenesCarrusel(
               cosmovision.carrusel.prefijo,
               cosmovision.carrusel.total,
               (n) => `Publicación ${n} sobre la cosmovisión del Buen Vivir`

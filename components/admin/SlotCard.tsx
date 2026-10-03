@@ -1,50 +1,95 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { CARPETA_ENTRADA, revisarArchivo } from "@/lib/admin/archivos";
 import type { Slot } from "@/lib/admin/slots";
 
 type SlotCardProps = {
   slot: Slot;
-  /** Marca de tiempo del archivo, para que el navegador no muestre la versión vieja. */
-  version: number | null;
+  /** Dirección actual de la imagen (del depósito o del código), o null si falta. */
+  url: string | null;
+  /** Con el depósito conectado, el archivo va directo del navegador al depósito. */
+  directo: boolean;
 };
 
-export default function SlotCard({ slot, version }: SlotCardProps) {
+export default function SlotCard({ slot, url: urlInicial, directo }: SlotCardProps) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const [estado, setEstado] = useState<"listo" | "subiendo" | "error">("listo");
   const [mensaje, setMensaje] = useState<string | null>(null);
-  const [v, setV] = useState(version);
+  const [url, setUrl] = useState(urlInicial);
+  const [etapa, setEtapa] = useState("Subiendo…");
 
-  const url = v ? `${slot.ruta}?v=${v}` : null;
   const acepta = slot.tipo === "video" ? "video/mp4" : "image/jpeg,image/png,image/webp";
 
-  async function subir(archivo: File) {
-    setEstado("subiendo");
-    setMensaje(null);
+  /**
+   * Vercel no deja pasar por el servidor archivos de más de 4,5 MB. Con el
+   * depósito conectado, el navegador deja el archivo ahí y al servidor le manda
+   * solo la dirección; él lo optimiza y lo pone en su lugar.
+   */
+  async function enviar(archivo: File): Promise<Response> {
+    if (!directo) {
+      const cuerpo = new FormData();
+      cuerpo.append("slot", slot.id);
+      cuerpo.append("archivo", archivo);
+      return fetch("/api/admin/upload", { method: "POST", body: cuerpo });
+    }
 
-    const cuerpo = new FormData();
-    cuerpo.append("slot", slot.id);
-    cuerpo.append("archivo", archivo);
+    const extension = archivo.name.match(/\.[a-z0-9]+$/i)?.[0].toLowerCase() ?? "";
+    const entrada = await upload(`${CARPETA_ENTRADA}${slot.id}${extension}`, archivo, {
+      access: "public",
+      handleUploadUrl: "/api/admin/upload/permiso",
+      clientPayload: slot.id,
+      onUploadProgress: ({ percentage }) => setEtapa(`Subiendo… ${Math.round(percentage)}%`),
+    });
+
+    setEtapa(slot.tipo === "imagen" ? "Optimizando…" : "Guardando…");
+    return fetch("/api/admin/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slot: slot.id, entrada: entrada.url }),
+    });
+  }
+
+  async function subir(archivo: File) {
+    // Se avisa antes de subir, así no hay que esperar para enterarse.
+    const problema = revisarArchivo(archivo, slot.tipo);
+    if (problema) {
+      setEstado("error");
+      setMensaje(problema);
+      return;
+    }
+
+    setEstado("subiendo");
+    setEtapa("Subiendo…");
+    setMensaje(null);
 
     let respuesta: Response;
     try {
-      respuesta = await fetch("/api/admin/upload", { method: "POST", body: cuerpo });
+      respuesta = await enviar(archivo);
     } catch {
       setEstado("error");
-      setMensaje("No hay conexión con el servidor. Fijate que esté corriendo y probá de nuevo.");
+      setMensaje(
+        directo
+          ? "No se pudo subir. Revisá la conexión y probá de nuevo; si hace rato que entraste, volvé a iniciar sesión."
+          : "No hay conexión con el servidor. Fijate que esté corriendo y probá de nuevo."
+      );
       return;
     }
     const datos = await respuesta.json().catch(() => ({}));
 
     if (!respuesta.ok) {
       setEstado("error");
-      setMensaje(datos.error ?? "No se pudo subir.");
+      setMensaje(
+        datos.error ??
+          (respuesta.status === 413 ? "El archivo es demasiado pesado para subirlo." : "No se pudo subir.")
+      );
       return;
     }
 
-    setV(datos.actualizado);
+    setUrl(datos.url);
     setEstado("listo");
     const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
     setMensaje(
@@ -66,9 +111,14 @@ export default function SlotCard({ slot, version }: SlotCardProps) {
     });
 
     if (respuesta.ok) {
-      setV(null);
+      setUrl(null);
+      setEstado("listo");
       setMensaje("Quitada");
       router.refresh();
+    } else {
+      const datos = await respuesta.json().catch(() => ({}));
+      setEstado("error");
+      setMensaje(datos.error ?? "No se pudo quitar.");
     }
   }
 
@@ -101,7 +151,7 @@ export default function SlotCard({ slot, version }: SlotCardProps) {
           disabled={estado === "subiendo"}
           className="rounded-full bg-leaf px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-leaf-dark disabled:opacity-60"
         >
-          {estado === "subiendo" ? "Subiendo…" : url ? "Reemplazar" : "Subir"}
+          {estado === "subiendo" ? etapa : url ? "Reemplazar" : "Subir"}
         </button>
 
         {url && (

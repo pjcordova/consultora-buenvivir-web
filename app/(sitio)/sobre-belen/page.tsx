@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function SobreBelenPage() {
   const belen = await obtenerBelen();
-  const foto = rutaVersionada(belen.foto);
+  const foto = await rutaVersionada(belen.foto);
 
   return (
     <main>

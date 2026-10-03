@@ -21,6 +21,15 @@ export default async function ServiciosPage() {
     obtenerCaminos(),
   ]);
 
+  // Las direcciones de los folletos se resuelven una sola vez, antes de dibujar.
+  const folletos = new Map(
+    await Promise.all(
+      caminos
+        .flatMap((camino) => camino.ofertas)
+        .map(async (oferta) => [oferta.slug, await rutaVersionada(oferta.imagen)] as const)
+    )
+  );
+
   return (
     <main>
       <Header />
@@ -51,7 +60,7 @@ export default async function ServiciosPage() {
 
           <div className="mx-auto mt-12 max-w-5xl space-y-16">
             {camino.ofertas.map((oferta, indiceOferta) => {
-              const imagen = rutaVersionada(oferta.imagen);
+              const imagen = folletos.get(oferta.slug) ?? null;
               // Se alterna el lado de la imagen para que la lectura no sea monótona
               const imagenALaDerecha = indiceOferta % 2 === 1;
 
