@@ -20,7 +20,8 @@ const config: Config = {
         },
         honey: {
           DEFAULT: "#cf9f3d",
-          deep: "#a8792b", // acento en itálica del título del hero
+          deep: "#a8792b", // texto dorado sobre fondo claro
+          light: "#e8bd5f", // acento en itálica del título del hero (sobre vidrio oscuro)
         },
         clayRose: "#c98a83",
         // Colores del logo (muestreados del archivo original)

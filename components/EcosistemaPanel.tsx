@@ -137,13 +137,15 @@ export default async function EcosistemaPanel({
                     )}
                   </div>
 
+                  {/* Asoma por la esquina de abajo a la derecha, sobre el borde del círculo:
+                      en el centro tapaba el nombre del espacio (pedido de Belén). */}
                   {adorno && (
                     <Image
                       src={adorno}
                       alt=""
-                      width={140}
-                      height={200}
-                      className="absolute -right-6 top-1/2 w-20 -translate-y-1/2 rotate-6 rounded shadow-lg sm:w-24"
+                      width={399}
+                      height={501}
+                      className="absolute -bottom-5 -right-10 w-16 rotate-6 rounded shadow-lg sm:-bottom-8 sm:-right-5 sm:w-[4.5rem]"
                     />
                   )}
                 </div>

@@ -45,27 +45,33 @@ export default async function Hero({
         />
       )}
 
-      <div className="relative w-full max-w-3xl rounded-3xl bg-white/85 px-6 py-10 text-center shadow-[0_24px_60px_-20px_rgba(18,23,15,0.45)] backdrop-blur-md sm:px-12 sm:py-12">
+      {/* Vidrio oscuro esmerilado (pedido de Belén: más transparente). Deja ver la luz
+          y los colores de la foto, muy difuminados para que no compitan con las letras,
+          y las letras claras se leen bien encima. Mismo estilo que los paneles del
+          Ecosistema y del video. */}
+      {/* Menos margen interno que antes y el ancho justo para que el texto ocupe
+          lo mismo (672px por dentro): el recuadro se achica sin cambiar el contenido. */}
+      <div className="relative w-full max-w-[46rem] rounded-3xl border border-white/20 bg-forest-950/40 px-6 py-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_24px_60px_-20px_rgba(0,0,0,0.5)] backdrop-blur-xl backdrop-saturate-150 sm:px-8 sm:py-9">
         {/* En celular la etiqueta no entra en una línea: se reparte pareja (text-balance) */}
         {eyebrow && (
-          <p className="inline-flex items-center gap-2 text-balance rounded-2xl border border-moss/25 bg-cream px-4 py-1.5 text-[10px] font-medium uppercase leading-relaxed tracking-[0.14em] text-moss sm:rounded-full sm:text-[11px] sm:tracking-[0.18em]">
-            <span className="h-1.5 w-1.5 rounded-full bg-moss" aria-hidden="true" />
+          <p className="inline-flex items-center gap-2 text-balance rounded-2xl border border-white/35 bg-white/10 px-4 py-1.5 text-[10px] font-medium uppercase leading-relaxed tracking-[0.14em] text-white sm:rounded-full sm:text-[11px] sm:tracking-[0.18em]">
+            <span className="h-1.5 w-1.5 rounded-full bg-honey-light" aria-hidden="true" />
             {eyebrow}
           </p>
         )}
 
-        {/* 46px: "Regeneración organizacional y" entra en una línea dentro de max-w-3xl */}
-        <h1 className="mt-6 text-4xl leading-[1.1] text-forest-950 sm:text-[2.875rem]">
+        {/* 46px: "Regeneración organizacional y" entra en una línea dentro del recuadro */}
+        <h1 className="mt-6 text-4xl leading-[1.1] text-white sm:text-[2.875rem]">
           {title}
-          {titleAccent && <em className="block text-honey-deep">{titleAccent}</em>}
+          {titleAccent && <em className="block text-honey-light">{titleAccent}</em>}
         </h1>
 
-        <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-forest-800/80 sm:text-lg">
+        <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-white/90 sm:text-lg">
           {body}
         </p>
 
         {note && (
-          <p className="mt-3 inline-flex items-center gap-1.5 text-xs italic text-forest-800/50">
+          <p className="mt-3 inline-flex items-center gap-1.5 text-xs italic text-white/60">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 20h9" />
               <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
