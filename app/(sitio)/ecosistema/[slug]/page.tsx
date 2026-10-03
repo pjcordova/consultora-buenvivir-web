@@ -4,18 +4,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
-import { obtenerEspacio } from "@/content/ecosistema";
 import { obtenerEspacioPagina } from "@/lib/contenido";
 import { rutaVersionada } from "@/lib/assets";
+import { enlaceEnIdioma } from "@/lib/idioma";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
+import { textosDe } from "@/lib/textos";
 
 type Props = { params: { slug: string } };
 
-export function generateMetadata({ params }: Props): Metadata {
-  const espacio = obtenerEspacio(params.slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const idioma = obtenerIdioma();
+  const espacio = await obtenerEspacioPagina(params.slug, idioma);
   if (!espacio) return {};
 
   return metadatosDePagina({
+    idioma,
     titulo: `${espacio.titulo} | Buen Vivir`,
     descripcion: espacio.resumen,
     ruta: `/ecosistema/${espacio.slug}`,
@@ -24,7 +28,9 @@ export function generateMetadata({ params }: Props): Metadata {
 }
 
 export default async function EspacioPage({ params }: Props) {
-  const espacio = await obtenerEspacioPagina(params.slug);
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma);
+  const espacio = await obtenerEspacioPagina(params.slug, idioma);
   if (!espacio) notFound();
 
   const imagen = await rutaVersionada(espacio.imagen);
@@ -38,10 +44,10 @@ export default async function EspacioPage({ params }: Props) {
         <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
           <div>
             <Link
-              href="/#servicios"
+              href={enlaceEnIdioma("/#servicios", idioma)}
               className="inline-flex items-center gap-2 text-sm text-forest-800/70 transition-colors hover:text-forest-950"
             >
-              <span aria-hidden="true">←</span> Volver a los espacios
+              <span aria-hidden="true">←</span> {textos.espacio.volver}
             </Link>
 
             <p className="mt-6 flex w-fit items-center gap-2 text-balance rounded-2xl border border-leaf/25 bg-white px-4 py-1.5 text-[11px] font-medium uppercase leading-relaxed tracking-[0.14em] text-leaf sm:rounded-full">
@@ -75,7 +81,7 @@ export default async function EspacioPage({ params }: Props) {
               />
             ) : (
               <p className="px-6 text-xs uppercase tracking-[0.14em] text-forest-800/50">
-                Imagen pendiente
+                {textos.imagenPendiente}
               </p>
             )}
           </div>
@@ -100,7 +106,7 @@ export default async function EspacioPage({ params }: Props) {
 
           {espacio.incluye && (
             <div className="mt-12">
-              <h2 className="font-display text-2xl text-forest-950">Qué se lleva quien participa</h2>
+              <h2 className="font-display text-2xl text-forest-950">{textos.espacio.queSeLleva}</h2>
               <ul className="mt-6 grid gap-5 sm:grid-cols-3">
                 {espacio.incluye.map((item) => (
                   <li key={item.titulo} className="rounded-2xl bg-cream p-5">
@@ -114,7 +120,7 @@ export default async function EspacioPage({ params }: Props) {
 
           {espacio.extras && (
             <div className="mt-12">
-              <h2 className="font-display text-2xl text-forest-950">Además incluye</h2>
+              <h2 className="font-display text-2xl text-forest-950">{textos.espacio.ademas}</h2>
               <ul className="mt-5 space-y-3">
                 {espacio.extras.map((extra) => (
                   <li key={extra} className="flex gap-3 text-[0.95rem] text-forest-800/80">
@@ -134,7 +140,7 @@ export default async function EspacioPage({ params }: Props) {
         title={espacio.ctaPagina.titulo}
         subtitle={espacio.ctaPagina.bajada}
         primary={espacio.ctaPagina.principal}
-        secondary={{ label: "Ver todos los espacios", href: "/#servicios" }}
+        secondary={{ label: textos.espacio.verTodos, href: "/#servicios" }}
       />
     </main>
   );

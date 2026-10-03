@@ -3,9 +3,13 @@ import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
 import { publicarCambios } from "@/lib/admin/publicar";
 import { obtenerSeccion } from "@/lib/admin/secciones";
-import { guardarSeccion, restaurarSeccion } from "@/lib/contenido";
+import { claveDeSeccion, guardarSeccion, restaurarSeccion } from "@/lib/contenido";
+import { esIdioma, IDIOMA_DE_BASE, type Idioma } from "@/lib/idioma";
 
 const LARGO_MAXIMO = 8000;
+
+/** El idioma de la pestaña del panel; si no viene, español (como antes). */
+const idiomaDe = (valor: unknown): Idioma => (esIdioma(valor) ? valor : IDIOMA_DE_BASE);
 
 // Una respuesta nueva cada vez: el cuerpo de una respuesta se puede leer una sola vez.
 const noSePudoGuardar = () =>
@@ -22,10 +26,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Sesión vencida. Volvé a entrar." }, { status: 401 });
   }
 
-  const { seccion: id, valores } = (await request.json()) as {
+  const { seccion: id, valores, idioma: pedido } = (await request.json()) as {
     seccion?: string;
     valores?: Record<string, unknown>;
+    idioma?: unknown;
   };
+  const idioma = idiomaDe(pedido);
 
   const seccion = obtenerSeccion(String(id ?? ""));
   if (!seccion || !valores) {
@@ -35,6 +41,8 @@ export async function POST(request: Request) {
   // Solo se guardan los campos declarados en la sección, con el formato esperado.
   const limpios: Record<string, unknown> = {};
   for (const campo of seccion.campos) {
+    // Los datos compartidos (número de WhatsApp, redes) se guardan solo en español
+    if (campo.compartido && idioma !== IDIOMA_DE_BASE) continue;
     const valor = valores[campo.id];
     if (valor === undefined) continue;
 
@@ -57,7 +65,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await guardarSeccion(seccion.id, limpios);
+    await guardarSeccion(claveDeSeccion(seccion.id, idioma), limpios);
   } catch {
     return noSePudoGuardar();
   }
@@ -66,7 +74,7 @@ export async function POST(request: Request) {
   return NextResponse.json({ ok: true });
 }
 
-/** Vuelve a los textos originales del código. */
+/** Vuelve a los textos originales del código, en el idioma de la pestaña. */
 export async function DELETE(request: Request) {
   if (soloLectura) {
     return NextResponse.json({ error: MENSAJE_SOLO_LECTURA }, { status: 503 });
@@ -75,14 +83,17 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Sesión vencida. Volvé a entrar." }, { status: 401 });
   }
 
-  const { seccion: id } = (await request.json()) as { seccion?: string };
+  const { seccion: id, idioma: pedido } = (await request.json()) as {
+    seccion?: string;
+    idioma?: unknown;
+  };
   const seccion = obtenerSeccion(String(id ?? ""));
   if (!seccion) {
     return NextResponse.json({ error: "Esa sección no existe." }, { status: 400 });
   }
 
   try {
-    await restaurarSeccion(seccion.id);
+    await restaurarSeccion(claveDeSeccion(seccion.id, idiomaDe(pedido)));
   } catch {
     return noSePudoGuardar();
   }

@@ -11,7 +11,8 @@ import {
 } from "@/lib/admin/entorno";
 import { usaBlob } from "@/lib/almacen";
 import { rutaVersionada } from "@/lib/assets";
-import { leerGuardado } from "@/lib/contenido";
+import { LISTAS } from "@/lib/admin/listas";
+import { claveDeSeccion, leerGuardado, leerLista } from "@/lib/contenido";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,7 @@ export default async function AdminPage() {
     return acumulado;
   }, []);
   const cargadas = SLOTS.filter((slot) => vistas.get(slot.id)).length;
+  const cantidades = await Promise.all(LISTAS.map(async (lista) => (await leerLista(lista.id)).length));
 
   return (
     <main className="min-h-screen bg-cream px-[5vw] py-10">
@@ -84,13 +86,36 @@ export default async function AdminPage() {
                   {seccion.descripcion}
                 </p>
                 <p className="mt-3 text-xs text-leaf">
-                  {guardado[seccion.id] ? "Con textos editados" : "Textos originales"}
+                  Español: {guardado[claveDeSeccion(seccion.id, "es")] ? "editado" : "original"}
+                  {" · "}
+                  Inglés: {guardado[claveDeSeccion(seccion.id, "en")] ? "editado" : "traducción original"}
                 </p>
               </Link>
             ))}
           </div>
         </section>
       ))}
+
+      <section className="mx-auto mt-10 max-w-6xl">
+        <h2 className="font-display text-xl text-forest-950">Testimonios y talleres</h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {LISTAS.map((lista, i) => (
+            <Link
+              key={lista.id}
+              href={`/admin/listas/${lista.id}`}
+              className="rounded-2xl border border-forest-800/10 bg-white p-5 transition-colors hover:border-leaf"
+            >
+              <h3 className="font-display text-lg text-forest-950">{lista.titulo}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-forest-800/60">{lista.descripcion}</p>
+              <p className="mt-3 text-xs text-leaf">
+                {cantidades[i] === 0
+                  ? "Vacía: no se muestra en la web"
+                  : `${cantidades[i]} cargado${cantidades[i] === 1 ? "" : "s"}`}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section className="mx-auto mt-12 max-w-6xl">
         <h2 className="font-display text-xl text-forest-950">Todas las imágenes</h2>

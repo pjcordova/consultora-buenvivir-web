@@ -18,6 +18,8 @@ export type Espacio = {
   adorno?: string;
   /** Texto del botón del círculo. */
   cta: { label: string; href: string };
+  /** Flechita hacia abajo en el botón (el espacio que ya está empezando). */
+  flecha?: boolean;
 
   // --- Página del espacio ---
   titulo: string;
@@ -38,6 +40,7 @@ export const espacios: Espacio[] = [
     imagen: "/images/servicios/casita-del-arbol.png",
     estilo: "sello",
     cta: { label: "Iniciando…", href: "/ecosistema/casita-del-arbol" },
+    flecha: true,
 
     titulo: "Casita del Árbol",
     // CONFIRMADO — estado de lanzamiento
@@ -138,7 +141,3 @@ export const espacios: Espacio[] = [
     },
   },
 ];
-
-export function obtenerEspacio(slug: string): Espacio | undefined {
-  return espacios.find((espacio) => espacio.slug === slug);
-}

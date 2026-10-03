@@ -3,11 +3,17 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Campo } from "@/lib/admin/secciones";
+import type { Idioma } from "@/lib/idioma";
+
+/** Cómo se nombra cada idioma dentro del panel, que está en español. */
+const IDIOMA_EN_EL_PANEL: Record<Idioma, string> = { es: "español", en: "inglés" };
 
 type Valores = Record<string, unknown>;
 
 type FormularioSeccionProps = {
   seccion: string;
+  /** Idioma de la pestaña: se guarda por separado del otro. */
+  idioma: Idioma;
   campos: Campo[];
   valores: Valores;
   /** true si esta sección ya tiene textos editados guardados. */
@@ -19,6 +25,7 @@ const claseInput =
 
 export default function FormularioSeccion({
   seccion,
+  idioma,
   campos,
   valores,
   editada,
@@ -38,7 +45,7 @@ export default function FormularioSeccion({
     const respuesta = await fetch("/api/admin/contenido", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ seccion, valores: datos }),
+      body: JSON.stringify({ seccion, idioma, valores: datos }),
     });
 
     if (!respuesta.ok) {
@@ -54,12 +61,13 @@ export default function FormularioSeccion({
   }
 
   async function restaurar() {
-    if (!confirm("¿Volver a los textos originales? Se pierde lo editado en esta sección.")) return;
+    const enIdioma = IDIOMA_EN_EL_PANEL[idioma];
+    if (!confirm(`¿Volver a los textos originales en ${enIdioma}? Se pierde lo editado en esta sección, solo en ese idioma.`)) return;
 
     await fetch("/api/admin/contenido", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ seccion }),
+      body: JSON.stringify({ seccion, idioma }),
     });
     router.refresh();
     setMensaje("Se restauraron los textos originales.");

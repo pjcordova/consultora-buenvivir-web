@@ -3,16 +3,17 @@ import Boton from "@/components/Boton";
 import Header from "@/components/Header";
 import RedesSociales from "@/components/RedesSociales";
 import SectionHeader from "@/components/SectionHeader";
-import { agendaBelen, agendaBelenIncrustada } from "@/content/enlaces";
+import { agendaBelen, agendaIncrustada } from "@/content/enlaces";
 import { obtenerContacto, obtenerPie, obtenerWhatsapp, urlWhatsapp } from "@/lib/contenido";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
+import { textosDe } from "@/lib/textos";
 
-export const metadata: Metadata = metadatosDePagina({
-  titulo: "Contacto | Buen Vivir",
-  descripcion:
-    "Agendá una conversación con Belén Vera, escribile por WhatsApp o sumate al Ecosistema Buen Vivir.",
-  ruta: "/contacto",
-});
+export function generateMetadata(): Metadata {
+  const idioma = obtenerIdioma();
+  const { titulo, descripcion } = textosDe(idioma).contacto;
+  return metadatosDePagina({ idioma, titulo, descripcion, ruta: "/contacto" });
+}
 
 const ICONOS = {
   calendario: (
@@ -37,11 +38,13 @@ const ICONOS = {
 };
 
 export default async function ContactoPage() {
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma).contacto;
   const [contacto, pie, whatsapp, enlaceWhatsapp] = await Promise.all([
-    obtenerContacto(),
-    obtenerPie(),
-    obtenerWhatsapp(),
-    urlWhatsapp(),
+    obtenerContacto(idioma),
+    obtenerPie(idioma),
+    obtenerWhatsapp(idioma),
+    urlWhatsapp(idioma),
   ]);
 
   // El WhatsApp sale del panel, así el número y el mensaje se editan en un solo lugar
@@ -119,22 +122,22 @@ export default async function ContactoPage() {
 
           <div className="mt-8 overflow-hidden rounded-3xl bg-white shadow-[0_18px_45px_-24px_rgba(18,23,15,0.35)] ring-1 ring-forest-800/10">
             <iframe
-              src={agendaBelenIncrustada}
-              title="Agenda de Belén Vera para reservar una conversación"
+              src={agendaIncrustada(idioma)}
+              title={textos.agendaTitulo}
               loading="lazy"
               className="block h-[56rem] w-full border-0 md:h-[50rem]"
             />
           </div>
 
           <p className="mt-4 text-xs text-forest-800/60">
-            ¿No se ve la agenda?{" "}
+            {textos.noSeVe}{" "}
             <a
               href={agendaBelen}
               target="_blank"
               rel="noopener noreferrer"
               className="text-forest-800 underline decoration-leaf/50 underline-offset-4 hover:text-forest-950"
             >
-              Abrila en otra pestaña
+              {textos.abrirAparte}
             </a>
             .
           </p>
@@ -157,7 +160,7 @@ export default async function ContactoPage() {
             </p>
           </div>
 
-          <RedesSociales redes={pie.redes} tono="claro" />
+          <RedesSociales redes={pie.redes} idioma={idioma} tono="claro" />
         </div>
       </section>
     </main>

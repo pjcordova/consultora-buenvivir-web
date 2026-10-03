@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Boton from "@/components/Boton";
 import { rutaVersionada } from "@/lib/assets";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { textosDe } from "@/lib/textos";
 
 type Cta = { label: string; href: string };
 
@@ -105,7 +107,7 @@ export default async function Hero({
           href={scrollTarget}
           className="relative mt-6 flex flex-col items-center gap-2 text-[10px] font-medium uppercase tracking-[0.25em] text-white/90 drop-shadow"
         >
-          Descender
+          {textosDe(obtenerIdioma()).portada.descender}
           <span className="h-8 w-px bg-white/70" aria-hidden="true" />
         </a>
       )}

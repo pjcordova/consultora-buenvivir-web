@@ -3,12 +3,17 @@ import Link from "next/link";
 import type { EnlaceFooter } from "@/content/site";
 import RedesSociales from "@/components/RedesSociales";
 import { obtenerPie } from "@/lib/contenido";
+import { enlaceEnIdioma, type Idioma } from "@/lib/idioma";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { textosDe } from "@/lib/textos";
+
+type EnlaceProps = { enlace: EnlaceFooter; idioma: Idioma; className?: string };
 
 /** Enlace del pie: si está pendiente de confirmar se muestra como texto. */
-function Enlace({ enlace, className = "" }: { enlace: EnlaceFooter; className?: string }) {
+function Enlace({ enlace, idioma, className = "" }: EnlaceProps) {
   if (!enlace.href) {
     return (
-      <span className={`text-cream/60 ${className}`} title="Pendiente de confirmar">
+      <span className={`text-cream/60 ${className}`} title={textosDe(idioma).pie.pendiente}>
         {enlace.label}
       </span>
     );
@@ -25,14 +30,16 @@ function Enlace({ enlace, className = "" }: { enlace: EnlaceFooter; className?: 
   }
 
   return (
-    <Link href={enlace.href} className={clases}>
+    <Link href={enlaceEnIdioma(enlace.href, idioma)} className={clases}>
       {enlace.label}
     </Link>
   );
 }
 
 export default async function Footer() {
-  const { descripcion, ubicacion, columnas, contacto, redes, lema, legales } = await obtenerPie();
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma);
+  const { descripcion, ubicacion, columnas, contacto, redes, lema, legales } = await obtenerPie(idioma);
 
   return (
     <footer className="bg-forest-900 px-[8vw] py-16 text-sm">
@@ -40,7 +47,7 @@ export default async function Footer() {
         <div>
           <Image
             src="/images/logo-buen-vivir-claro.png"
-            alt="Buen Vivir — consultora regenerativa"
+            alt={textos.sitio.logoAlt}
             width={480}
             height={331}
             className="h-14 w-auto"
@@ -64,7 +71,7 @@ export default async function Footer() {
                   <span className="text-leaf-lime" aria-hidden="true">
                     →
                   </span>
-                  <Enlace enlace={enlace} />
+                  <Enlace enlace={enlace} idioma={idioma} />
                 </li>
               ))}
             </ul>
@@ -80,13 +87,13 @@ export default async function Footer() {
                 <rect x="3" y="4.5" width="18" height="16" rx="2" />
                 <path d="M8 2.5v4M16 2.5v4M3 10h18" />
               </svg>
-              <Enlace enlace={contacto.agenda} />
+              <Enlace enlace={contacto.agenda} idioma={idioma} />
             </li>
             <li className="flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" />
               </svg>
-              <Enlace enlace={contacto.whatsapp} />
+              <Enlace enlace={contacto.whatsapp} idioma={idioma} />
             </li>
             <li className="flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
@@ -94,7 +101,7 @@ export default async function Footer() {
                 <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
                 <path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.2a6.5 6.5 0 0 1 3.5 5.8" />
               </svg>
-              <Enlace enlace={contacto.comunidad} />
+              <Enlace enlace={contacto.comunidad} idioma={idioma} />
             </li>
             <li className="flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
@@ -102,29 +109,29 @@ export default async function Footer() {
                 <circle cx="12" cy="12" r="4" />
                 <circle cx="17.5" cy="6.5" r="1" />
               </svg>
-              <Enlace enlace={contacto.instagram} />
+              <Enlace enlace={contacto.instagram} idioma={idioma} />
             </li>
             <li className="flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="m2 7 10 6 10-6" />
               </svg>
-              <Enlace enlace={contacto.email} className="underline underline-offset-4" />
+              <Enlace enlace={contacto.email} idioma={idioma} className="underline underline-offset-4" />
             </li>
           </ul>
 
-          <RedesSociales redes={redes} className="mt-6" />
+          <RedesSociales redes={redes} idioma={idioma} className="mt-6" />
         </div>
       </div>
 
       <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-cream/15 pt-6 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-pretty">
-          © {new Date().getFullYear()} Buen Vivir · Todos los derechos reservados. ·{" "}
+          © {new Date().getFullYear()} Buen Vivir · {textos.pie.derechos} ·{" "}
           <em>{lema}</em>
         </p>
         <p className="flex gap-4">
           {legales.map((enlace) => (
-            <Enlace key={enlace.label} enlace={enlace} />
+            <Enlace key={enlace.label} enlace={enlace} idioma={idioma} />
           ))}
         </p>
       </div>

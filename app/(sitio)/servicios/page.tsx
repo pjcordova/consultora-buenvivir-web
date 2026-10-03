@@ -4,23 +4,27 @@ import Boton from "@/components/Boton";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import SectionHeader from "@/components/SectionHeader";
-import { ctaServicios } from "@/content/servicios";
-import { ctaFinal } from "@/content/home";
+import { contenidoDe } from "@/content";
 import { rutaVersionada } from "@/lib/assets";
-import { obtenerCaminos, obtenerPaginaServicios } from "@/lib/contenido";
+import { obtenerCaminos, obtenerCierre, obtenerPaginaServicios } from "@/lib/contenido";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
+import { textosDe } from "@/lib/textos";
 
-export const metadata: Metadata = metadatosDePagina({
-  titulo: "Servicios | Buen Vivir",
-  descripcion:
-    "Tres caminos de acompañamiento regenerativo: Revitaliza tu Equipo, Revitaliza tu Trabajo y Revitaliza tu Vida.",
-  ruta: "/servicios",
-});
+export function generateMetadata(): Metadata {
+  const idioma = obtenerIdioma();
+  const { titulo, descripcion } = textosDe(idioma).servicios;
+  return metadatosDePagina({ idioma, titulo, descripcion, ruta: "/servicios" });
+}
 
 export default async function ServiciosPage() {
-  const [paginaServicios, caminos] = await Promise.all([
-    obtenerPaginaServicios(),
-    obtenerCaminos(),
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma);
+  const { ctaServicios } = contenidoDe(idioma);
+  const [paginaServicios, caminos, ctaFinal] = await Promise.all([
+    obtenerPaginaServicios(idioma),
+    obtenerCaminos(idioma),
+    obtenerCierre(idioma),
   ]);
 
   // Las direcciones de los folletos se resuelven una sola vez, antes de dibujar.
@@ -76,7 +80,7 @@ export default async function ServiciosPage() {
                     {imagen ? (
                       <Image
                         src={imagen}
-                        alt={`Folleto de ${oferta.titulo}`}
+                        alt={textos.servicios.folleto(oferta.titulo)}
                         width={1080}
                         height={1350}
                         sizes="(min-width: 768px) 45vw, 90vw"
@@ -84,7 +88,7 @@ export default async function ServiciosPage() {
                       />
                     ) : (
                       <div className="flex aspect-[4/5] items-center justify-center rounded-3xl border-2 border-dashed border-forest-800/20 bg-cream text-sm text-forest-800/50">
-                        Imagen pendiente
+                        {textos.imagenPendiente}
                       </div>
                     )}
                   </div>
@@ -115,7 +119,7 @@ export default async function ServiciosPage() {
                       href={ctaFinal.principal.href}
                       className="mt-7 inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-leaf-dark"
                     >
-                      Reservar mi sesión
+                      {textos.servicios.reservar}
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
@@ -129,11 +133,11 @@ export default async function ServiciosPage() {
       ))}
 
       <CtaSection
-        title="¿Empezamos?"
+        title={textos.servicios.cierreTitulo}
         subtitle={ctaServicios}
         note={ctaFinal.nota}
         primary={ctaFinal.principal}
-        secondary={{ label: "Ver los espacios del Ecosistema", href: "/#servicios" }}
+        secondary={{ label: textos.servicios.verEspacios, href: "/#servicios" }}
       />
     </main>
   );

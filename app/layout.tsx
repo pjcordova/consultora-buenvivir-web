@@ -1,27 +1,13 @@
 import type { Metadata } from "next";
-import {
-  DESCRIPCION_DEL_SITIO,
-  imagenParaCompartir,
-  NOMBRE_DEL_SITIO,
-  TITULO_DEL_SITIO,
-  URL_DEL_SITIO,
-} from "@/lib/metadatos";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { metadatosDelSitio } from "@/lib/metadatos";
 import "./globals.css";
 
-// Valores de base: cada página pone su título, descripción y dirección oficial
-// con metadatosDePagina() (lib/metadatos.ts).
-export const metadata: Metadata = {
-  metadataBase: new URL(URL_DEL_SITIO),
-  title: TITULO_DEL_SITIO,
-  description: DESCRIPCION_DEL_SITIO,
-  openGraph: {
-    type: "website",
-    locale: "es_AR",
-    siteName: NOMBRE_DEL_SITIO,
-    images: [imagenParaCompartir("inicio")],
-  },
-  twitter: { card: "summary_large_image" },
-};
+// Valores de base, en el idioma de la visita: cada página pone su título,
+// descripción y dirección oficial con metadatosDePagina() (lib/metadatos.ts).
+export function generateMetadata(): Metadata {
+  return metadatosDelSitio(obtenerIdioma());
+}
 
 export default function RootLayout({
   children,
@@ -29,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang={obtenerIdioma()}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import type { Idioma } from "@/lib/idioma";
+import { textosDe } from "@/lib/textos";
 
 export type Slide = { src: string; alt: string };
 
@@ -11,9 +13,11 @@ type CarouselProps = {
   /** Cantidad de imágenes que tendrá el carrusel (para los espacios reservados). */
   total: number;
   label: string;
+  idioma: Idioma;
 };
 
-export default function Carousel({ slides = [], total, label }: CarouselProps) {
+export default function Carousel({ slides = [], total, label, idioma }: CarouselProps) {
+  const textos = textosDe(idioma).carrusel;
   const cantidad = slides.length || total;
   const [actual, setActual] = useState(0);
 
@@ -23,7 +27,7 @@ export default function Carousel({ slides = [], total, label }: CarouselProps) {
     <div
       className="flex flex-col gap-5"
       role="group"
-      aria-roledescription="carrusel"
+      aria-roledescription={textos.tipo}
       aria-label={label}
       onKeyDown={(e) => {
         if (e.key === "ArrowLeft") ir(actual - 1);
@@ -56,7 +60,7 @@ export default function Carousel({ slides = [], total, label }: CarouselProps) {
                       <path d="m21 15-5-5L5 21" />
                     </svg>
                     <p className="text-sm text-forest-800/50">
-                      Imagen {i + 1} de {cantidad} — pendiente
+                      {textos.pendiente(i + 1, cantidad)}
                     </p>
                   </div>
                 )}
@@ -70,7 +74,7 @@ export default function Carousel({ slides = [], total, label }: CarouselProps) {
         <button
           type="button"
           onClick={() => ir(actual - 1)}
-          aria-label="Imagen anterior"
+          aria-label={textos.anterior}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-forest-800/25 text-forest-950 transition-colors hover:bg-cream"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -85,7 +89,7 @@ export default function Carousel({ slides = [], total, label }: CarouselProps) {
                 key={i}
                 type="button"
                 onClick={() => ir(i)}
-                aria-label={`Ir a la imagen ${i + 1}`}
+                aria-label={textos.irA(i + 1)}
                 aria-current={i === actual}
                 className={`h-2 w-2 rounded-full transition-colors ${
                   i === actual ? "bg-leaf" : "bg-[#ccc6b7] hover:bg-forest-800/40"
@@ -94,14 +98,14 @@ export default function Carousel({ slides = [], total, label }: CarouselProps) {
             ))}
           </div>
           <p className="text-xs text-forest-800/60" aria-live="polite">
-            {actual + 1} de {cantidad}
+            {textos.posicion(actual + 1, cantidad)}
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => ir(actual + 1)}
-          aria-label="Imagen siguiente"
+          aria-label={textos.siguiente}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-forest-800/25 text-forest-950 transition-colors hover:bg-cream"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

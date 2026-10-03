@@ -6,6 +6,8 @@ import FichaOrganizacion from "@/components/FichaOrganizacion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import InfoCard from "@/components/InfoCard";
+import SeccionTalleres from "@/components/SeccionTalleres";
+import SeccionTestimonios from "@/components/SeccionTestimonios";
 import SectionHeader from "@/components/SectionHeader";
 import VideoSection from "@/components/VideoSection";
 import { imagenesCarrusel } from "@/lib/assets";
@@ -16,25 +18,41 @@ import {
   obtenerParadigma,
   obtenerPortada,
   obtenerServicios,
+  obtenerTalleres,
+  obtenerTestimonios,
 } from "@/lib/contenido";
-import { DESCRIPCION_DEL_SITIO, TITULO_DEL_SITIO, metadatosDePagina } from "@/lib/metadatos";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { metadatosDePagina } from "@/lib/metadatos";
+import { textosDe } from "@/lib/textos";
 
-export const metadata: Metadata = metadatosDePagina({
-  titulo: TITULO_DEL_SITIO,
-  descripcion: DESCRIPCION_DEL_SITIO,
-  ruta: "/",
-});
+export function generateMetadata(): Metadata {
+  const idioma = obtenerIdioma();
+  const { sitio } = textosDe(idioma);
+  return metadatosDePagina({ idioma, titulo: sitio.titulo, descripcion: sitio.descripcion, ruta: "/" });
+}
 
 export default async function HomePage() {
-  const [hero, regeneracionOrganizacional, ecosistema, cosmovision, linajes, ctaFinal] =
-    await Promise.all([
-      obtenerPortada(),
-      obtenerParadigma(),
-      obtenerServicios(),
-      obtenerCosmovision(),
-      obtenerLinajes(),
-      obtenerCierre(),
-    ]);
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma).inicio;
+  const [
+    hero,
+    regeneracionOrganizacional,
+    ecosistema,
+    cosmovision,
+    linajes,
+    ctaFinal,
+    talleres,
+    testimonios,
+  ] = await Promise.all([
+    obtenerPortada(idioma),
+    obtenerParadigma(idioma),
+    obtenerServicios(idioma),
+    obtenerCosmovision(idioma),
+    obtenerLinajes(idioma),
+    obtenerCierre(idioma),
+    obtenerTalleres(idioma),
+    obtenerTestimonios(idioma),
+  ]);
 
   return (
     <main>
@@ -54,10 +72,11 @@ export default async function HomePage() {
             slides={await imagenesCarrusel(
               regeneracionOrganizacional.carrusel.prefijo,
               regeneracionOrganizacional.carrusel.total,
-              (n) => `Publicación ${n} sobre regeneración organizacional`
+              textos.publicacionParadigma
             )}
             total={regeneracionOrganizacional.carrusel.total}
-            label="Publicaciones sobre regeneración organizacional"
+            label={textos.carruselParadigma}
+            idioma={idioma}
           />
           <InfoCard
             icon="hoja"
@@ -83,6 +102,9 @@ export default async function HomePage() {
         />
       </section>
 
+      {/* Solo aparecen cuando Belén cargó algo en el panel */}
+      <SeccionTalleres talleres={talleres} idioma={idioma} />
+
       <section id="cosmovision" className="bg-white px-[8vw] py-20 sm:py-24">
         <SectionHeader
           eyebrow={cosmovision.eyebrow}
@@ -95,10 +117,11 @@ export default async function HomePage() {
             slides={await imagenesCarrusel(
               cosmovision.carrusel.prefijo,
               cosmovision.carrusel.total,
-              (n) => `Publicación ${n} sobre la cosmovisión del Buen Vivir`
+              textos.publicacionCosmovision
             )}
             total={cosmovision.carrusel.total}
-            label="Publicaciones sobre la cosmovisión del Buen Vivir"
+            label={textos.carruselCosmovision}
+            idioma={idioma}
           />
           <InfoCard
             icon="brote"
@@ -119,6 +142,8 @@ export default async function HomePage() {
         statement={linajes.statement}
         note={linajes.note}
       />
+
+      <SeccionTestimonios testimonios={testimonios} idioma={idioma} />
 
       <CtaSection
         title={ctaFinal.titulo}

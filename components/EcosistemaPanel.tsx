@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Boton from "@/components/Boton";
 import { rutaVersionada } from "@/lib/assets";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { textosDe } from "@/lib/textos";
 
 type Espacio = {
   slug: string;
@@ -13,6 +15,7 @@ type Espacio = {
   /** Imagen que asoma al costado del círculo (tapa del libro). */
   adorno?: string;
   cta: { label: string; href: string };
+  flecha?: boolean;
 };
 
 type EcosistemaPanelProps = {
@@ -28,6 +31,8 @@ export default async function EcosistemaPanel({
   nombre,
   espacios,
 }: EcosistemaPanelProps) {
+  const textos = textosDe(obtenerIdioma());
+
   // Las direcciones de todas las imágenes se resuelven juntas antes de dibujar.
   const [fotoFondo, logoSrc, conImagenes] = await Promise.all([
     rutaVersionada(foto),
@@ -125,7 +130,7 @@ export default async function EcosistemaPanel({
                         </p>
                         {!hayImagen && (
                           <p className="mt-2 text-[10px] uppercase tracking-[0.14em] opacity-60">
-                            Imagen pendiente
+                            {textos.imagenPendiente}
                           </p>
                         )}
                       </div>
@@ -148,7 +153,7 @@ export default async function EcosistemaPanel({
                   className="inline-flex items-center gap-2 rounded-full bg-leaf-olive px-6 py-2.5 font-redonda text-base font-semibold text-white transition-colors hover:bg-leaf-dark sm:text-lg"
                 >
                   {espacio.cta.label}
-                  {espacio.cta.label === "Iniciando…" && (
+                  {espacio.flecha && (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d="M12 5v14M19 12l-7 7-7-7" />
                     </svg>
@@ -160,7 +165,7 @@ export default async function EcosistemaPanel({
         </ul>
 
         {!fotoFondo && (
-          <p className="text-xs text-white/50">Foto del bosque — pendiente</p>
+          <p className="text-xs text-white/50">{textos.fotoBosquePendiente}</p>
         )}
       </div>
     </div>

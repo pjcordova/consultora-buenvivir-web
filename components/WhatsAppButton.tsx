@@ -1,18 +1,23 @@
 import { obtenerWhatsapp, urlWhatsapp } from "@/lib/contenido";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
+import { textosDe } from "@/lib/textos";
 
 /**
  * Botón flotante fijo abajo a la derecha. Abre WhatsApp con el mensaje ya escrito.
  */
 export default async function WhatsAppButton() {
-  const [whatsapp, whatsappUrl] = await Promise.all([obtenerWhatsapp(), urlWhatsapp()]);
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma).whatsapp;
+  // El mensaje que viene escrito sale en el idioma de la página
+  const [whatsapp, whatsappUrl] = await Promise.all([obtenerWhatsapp(idioma), urlWhatsapp(idioma)]);
 
   return (
     <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Escribir por WhatsApp a ${whatsapp.visible}`}
-      title="Solicitar una asesoría por WhatsApp"
+      aria-label={textos.escribir(whatsapp.visible)}
+      title={textos.ayuda}
       className="group fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg shadow-forest-950/25 transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf sm:bottom-8 sm:right-8"
     >
       <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

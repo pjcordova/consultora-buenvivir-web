@@ -1,19 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-  cosmovision,
-  ctaFinal,
-  ecosistema,
-  hero,
-  linajes,
-  regeneracionOrganizacional,
-} from "@/content/home";
-import { belen } from "@/content/belen";
-import { contacto } from "@/content/contacto";
-import { espacios, type Espacio } from "@/content/ecosistema";
-import { caminos, paginaServicios, type Oferta } from "@/content/servicios";
-import { footer, whatsapp } from "@/content/site";
+import { contenidoDe, type Contenido } from "@/content";
+import type { Espacio } from "@/content/ecosistema";
+import type { Oferta } from "@/content/servicios";
 import { bajarDato, escribirDato, leerDato, usaBlob } from "@/lib/almacen";
+import type { ElementoGuardado, IdLista, TextoBilingue } from "@/lib/admin/listas";
+import { IDIOMA_DE_BASE, type Idioma } from "@/lib/idioma";
 import type { Parrafo } from "@/types/content";
 
 /**
@@ -117,10 +109,31 @@ export function textoALista(texto: string): string[] {
     .filter(Boolean);
 }
 
+/* --- Idioma de lo guardado ----------------------------------------------------
+ * Lo editado en español se guarda con el nombre de la sección ("portada"), como
+ * siempre; lo editado en inglés, con el idioma al final ("portada@en").
+ */
+
+export const claveDeSeccion = (seccion: string, idioma: Idioma): string =>
+  idioma === IDIOMA_DE_BASE ? seccion : `${seccion}@${idioma}`;
+
+/**
+ * Campos del pie que valen para los dos idiomas (el número de WhatsApp y las
+ * redes). Se cargan una sola vez, en la versión en español.
+ */
+export const CAMPOS_COMPARTIDOS_DEL_PIE = [
+  "whatsappNumero",
+  "whatsappVisible",
+  "instagram",
+  "linkedin",
+  "tiktok",
+  "youtube",
+];
+
 /* --- Lectores por sección --------------------------------------------------- */
 
-async function editado(seccion: string): Promise<Record<string, unknown>> {
-  return (await leerGuardado())[seccion] ?? {};
+async function editado(seccion: string, idioma: Idioma): Promise<Record<string, unknown>> {
+  return (await leerGuardado())[claveDeSeccion(seccion, idioma)] ?? {};
 }
 
 /** Si el panel guardó párrafos los convierte; si no, deja los originales. */
@@ -135,48 +148,111 @@ function conParrafos<T extends { parrafos: Parrafo[] }>(
   return { ...base, ...guardado, parrafos } as T;
 }
 
-export async function obtenerPortada(): Promise<typeof hero> {
-  return { ...hero, ...(await editado("portada")) } as typeof hero;
+export async function obtenerPortada(idioma: Idioma): Promise<Contenido["hero"]> {
+  const { hero } = contenidoDe(idioma);
+  return { ...hero, ...(await editado("portada", idioma)) } as typeof hero;
 }
 
-export async function obtenerParadigma(): Promise<typeof regeneracionOrganizacional> {
-  return conParrafos(regeneracionOrganizacional, await editado("paradigma"));
+export async function obtenerParadigma(
+  idioma: Idioma
+): Promise<Contenido["regeneracionOrganizacional"]> {
+  return conParrafos(contenidoDe(idioma).regeneracionOrganizacional, await editado("paradigma", idioma));
 }
 
-export async function obtenerServicios(): Promise<typeof ecosistema> {
-  return { ...ecosistema, ...(await editado("servicios")) } as typeof ecosistema;
+export async function obtenerServicios(idioma: Idioma): Promise<Contenido["ecosistema"]> {
+  const { ecosistema } = contenidoDe(idioma);
+  return { ...ecosistema, ...(await editado("servicios", idioma)) } as typeof ecosistema;
 }
 
-export async function obtenerCosmovision(): Promise<typeof cosmovision> {
-  return conParrafos(cosmovision, await editado("cosmovision"));
+export async function obtenerCosmovision(idioma: Idioma): Promise<Contenido["cosmovision"]> {
+  return conParrafos(contenidoDe(idioma).cosmovision, await editado("cosmovision", idioma));
 }
 
-export async function obtenerLinajes(): Promise<typeof linajes> {
-  return { ...linajes, ...(await editado("linajes")) } as typeof linajes;
+export async function obtenerLinajes(idioma: Idioma): Promise<Contenido["linajes"]> {
+  const { linajes } = contenidoDe(idioma);
+  return { ...linajes, ...(await editado("linajes", idioma)) } as typeof linajes;
 }
 
-export async function obtenerCierre(): Promise<typeof ctaFinal> {
-  return { ...ctaFinal, ...(await editado("cierre")) } as typeof ctaFinal;
+export async function obtenerCierre(idioma: Idioma): Promise<Contenido["ctaFinal"]> {
+  const { ctaFinal } = contenidoDe(idioma);
+  return { ...ctaFinal, ...(await editado("cierre", idioma)) } as typeof ctaFinal;
+}
+
+/**
+ * Lo editado en el pie para un idioma, con los campos compartidos tomados
+ * siempre de la versión en español.
+ */
+async function editadoPie(idioma: Idioma): Promise<Record<string, unknown>> {
+  const guardado = await leerGuardado();
+  const enEspanol = guardado[claveDeSeccion("pie", IDIOMA_DE_BASE)] ?? {};
+  const propio = { ...(guardado[claveDeSeccion("pie", idioma)] ?? {}) };
+  for (const campo of CAMPOS_COMPARTIDOS_DEL_PIE) {
+    if (campo in enEspanol) propio[campo] = enEspanol[campo];
+    else delete propio[campo];
+  }
+  return propio;
+}
+
+/** Campos del panel con el título de cada columna de enlaces del pie, en orden. */
+const CAMPOS_TITULO_DE_COLUMNA = ["columnaServicios", "columnaEcosistema"];
+
+/**
+ * El nombre actual de un camino o de un espacio a partir de su enlace
+ * ("/servicios#camino-2", "/ecosistema/casita-del-arbol"): si Belén lo renombra
+ * en el panel, el pie lo muestra con el nombre nuevo.
+ */
+async function nombresDeEnlaces(idioma: Idioma): Promise<(href: string) => string | undefined> {
+  const [caminos, espacios] = await Promise.all([
+    obtenerCaminos(idioma),
+    Promise.all(
+      contenidoDe(idioma).espacios.map((espacio) => obtenerEspacioPagina(espacio.slug, idioma))
+    ),
+  ]);
+  const CAMINO = "/servicios#camino-";
+  const ESPACIO = "/ecosistema/";
+
+  return (href) => {
+    if (href.startsWith(CAMINO)) return caminos[Number(href.slice(CAMINO.length)) - 1]?.titulo;
+    if (href.startsWith(ESPACIO)) {
+      return espacios.find((espacio) => espacio?.slug === href.slice(ESPACIO.length))?.titulo;
+    }
+    return undefined;
+  };
 }
 
 /** Pie de página: los campos sueltos del panel se reacomodan en su lugar. */
-export async function obtenerPie(): Promise<typeof footer> {
-  const guardado = await editado("pie");
+export async function obtenerPie(idioma: Idioma): Promise<Contenido["footer"]> {
+  const { footer } = contenidoDe(idioma);
+  const guardado = await editadoPie(idioma);
   const enlaceRed = (id: string, actual: string | undefined) =>
     typeof guardado[id] === "string" ? String(guardado[id]) : (actual ?? "");
+  const [whatsapp, nombreActual] = await Promise.all([
+    obtenerWhatsapp(idioma),
+    nombresDeEnlaces(idioma),
+  ]);
 
   return {
     ...footer,
     descripcion: String(guardado.descripcion ?? footer.descripcion),
     ubicacion: String(guardado.ubicacion ?? footer.ubicacion),
     lema: String(guardado.lema ?? footer.lema),
+    columnas: footer.columnas.map((columna, i) => ({
+      ...columna,
+      titulo: String(guardado[CAMPOS_TITULO_DE_COLUMNA[i]] ?? columna.titulo),
+      // Los enlaces a un camino o a un espacio llevan su nombre actual (editado o no)
+      enlaces: columna.enlaces.map((enlace) => ({
+        ...enlace,
+        label: (enlace.href && nombreActual(enlace.href)) || enlace.label,
+      })),
+    })),
     contacto: {
       ...footer.contacto,
+      titulo: String(guardado.columnaContacto ?? footer.contacto.titulo),
       intro: String(guardado.introContacto ?? footer.contacto.intro),
       whatsapp: {
         ...footer.contacto.whatsapp,
-        label: `WhatsApp: ${String(guardado.whatsappVisible ?? whatsapp.visible)}`,
-        href: await urlWhatsapp(),
+        label: `WhatsApp: ${whatsapp.visible}`,
+        href: await urlWhatsapp(idioma),
       },
       instagram: {
         ...footer.contacto.instagram,
@@ -187,8 +263,9 @@ export async function obtenerPie(): Promise<typeof footer> {
   };
 }
 
-export async function obtenerWhatsapp(): Promise<typeof whatsapp> {
-  const guardado = await editado("pie");
+export async function obtenerWhatsapp(idioma: Idioma): Promise<Contenido["whatsapp"]> {
+  const { whatsapp } = contenidoDe(idioma);
+  const guardado = await editadoPie(idioma);
   return {
     numero: String(guardado.whatsappNumero ?? whatsapp.numero),
     visible: String(guardado.whatsappVisible ?? whatsapp.visible),
@@ -196,23 +273,39 @@ export async function obtenerWhatsapp(): Promise<typeof whatsapp> {
   };
 }
 
-export async function urlWhatsapp(): Promise<string> {
-  const datos = await obtenerWhatsapp();
+export async function urlWhatsapp(idioma: Idioma): Promise<string> {
+  const datos = await obtenerWhatsapp(idioma);
   return `https://wa.me/${datos.numero}?text=${encodeURIComponent(datos.mensaje)}`;
 }
 
 /** Página de Servicios: encabezado + los 7 servicios con sus textos. */
-export async function obtenerPaginaServicios(): Promise<typeof paginaServicios> {
-  return { ...paginaServicios, ...(await editado("pagina-servicios")) } as typeof paginaServicios;
+export async function obtenerPaginaServicios(
+  idioma: Idioma
+): Promise<Contenido["paginaServicios"]> {
+  const { paginaServicios } = contenidoDe(idioma);
+  return {
+    ...paginaServicios,
+    ...(await editado("pagina-servicios", idioma)),
+  } as typeof paginaServicios;
 }
 
-export async function obtenerCaminos(): Promise<typeof caminos> {
+/** Los tres caminos con sus servicios. El nombre y la descripción de cada camino
+ * se editan en el encabezado de la página de Servicios. */
+export async function obtenerCaminos(idioma: Idioma): Promise<Contenido["caminos"]> {
+  const { caminos } = contenidoDe(idioma);
   const guardado = await leerGuardado();
+  const encabezado = guardado[claveDeSeccion("pagina-servicios", idioma)] ?? {};
+  const editadoDelCamino = (numero: number, campo: "titulo" | "descripcion") => {
+    const valor = encabezado[`camino_${numero}_${campo}`];
+    return typeof valor === "string" && valor.trim() ? valor : undefined;
+  };
 
-  return caminos.map((camino) => ({
+  return caminos.map((camino, i) => ({
     ...camino,
+    titulo: editadoDelCamino(i + 1, "titulo") ?? camino.titulo,
+    descripcion: editadoDelCamino(i + 1, "descripcion") ?? camino.descripcion,
     ofertas: camino.ofertas.map((oferta) => {
-      const edicion = guardado[`servicio:${oferta.slug}`];
+      const edicion = guardado[claveDeSeccion(`servicio:${oferta.slug}`, idioma)];
       if (!edicion) return oferta;
 
       return {
@@ -226,11 +319,14 @@ export async function obtenerCaminos(): Promise<typeof caminos> {
 }
 
 /** Página de un espacio del Ecosistema. */
-export async function obtenerEspacioPagina(slug: string): Promise<Espacio | undefined> {
-  const base = espacios.find((espacio) => espacio.slug === slug);
+export async function obtenerEspacioPagina(
+  slug: string,
+  idioma: Idioma
+): Promise<Espacio | undefined> {
+  const base = contenidoDe(idioma).espacios.find((espacio) => espacio.slug === slug);
   if (!base) return undefined;
 
-  const edicion = await editado(`espacio:${slug}`);
+  const edicion = await editado(`espacio:${slug}`, idioma);
   if (!Object.keys(edicion).length) return base;
 
   return {
@@ -249,8 +345,9 @@ export async function obtenerEspacioPagina(slug: string): Promise<Espacio | unde
 }
 
 /** Página Sobre Belén. */
-export async function obtenerBelen(): Promise<typeof belen> {
-  const edicion = await editado("sobre-belen");
+export async function obtenerBelen(idioma: Idioma): Promise<Contenido["belen"]> {
+  const { belen } = contenidoDe(idioma);
+  const edicion = await editado("sobre-belen", idioma);
 
   return {
     ...belen,
@@ -267,9 +364,10 @@ export async function obtenerBelen(): Promise<typeof belen> {
   } as typeof belen;
 }
 
-/** Página de Contacto (las tres vías y el bloque de redes). */
-export async function obtenerContacto(): Promise<typeof contacto> {
-  const edicion = await editado("contacto");
+/** Página de Contacto (las tres vías, la agenda y el bloque de redes). */
+export async function obtenerContacto(idioma: Idioma): Promise<Contenido["contacto"]> {
+  const { contacto } = contenidoDe(idioma);
+  const edicion = await editado("contacto", idioma);
 
   return {
     ...contacto,
@@ -284,4 +382,80 @@ export async function obtenerContacto(): Promise<typeof contacto> {
       };
     }),
   } as typeof contacto;
+}
+
+/* --- Listas: testimonios y talleres -----------------------------------------
+ * Se guardan una sola vez para los dos idiomas (lib/admin/listas.ts).
+ */
+
+const claveDeLista = (id: IdLista) => `lista:${id}`;
+
+export async function leerLista(id: IdLista): Promise<ElementoGuardado[]> {
+  const guardado = (await leerGuardado())[claveDeLista(id)];
+  return Array.isArray(guardado?.items) ? (guardado.items as ElementoGuardado[]) : [];
+}
+
+export async function guardarLista(id: IdLista, items: ElementoGuardado[]): Promise<void> {
+  await guardarSeccion(claveDeLista(id), { items });
+}
+
+/** El texto en el idioma pedido; si falta la versión en inglés, la de español. */
+function textoEn(valor: unknown, idioma: Idioma): string {
+  if (typeof valor === "string") return valor.trim();
+  if (valor && typeof valor === "object") {
+    const { es, en } = valor as Partial<TextoBilingue>;
+    return ((idioma !== IDIOMA_DE_BASE && en?.trim()) || es?.trim() || "").trim();
+  }
+  return "";
+}
+
+export type Testimonio = { id: string; texto: string; nombre: string; rol: string };
+
+/** Los testimonios marcados para mostrar, en el orden que les dio Belén. */
+export async function obtenerTestimonios(idioma: Idioma): Promise<Testimonio[]> {
+  return (await leerLista("testimonios"))
+    .filter((item) => item.visible !== false)
+    .map((item) => ({
+      id: item.id,
+      texto: textoEn(item.texto, idioma),
+      nombre: textoEn(item.nombre, idioma),
+      rol: textoEn(item.rol, idioma),
+    }))
+    .filter((testimonio) => testimonio.texto && testimonio.nombre);
+}
+
+export type Taller = {
+  id: string;
+  titulo: string;
+  /** AAAA-MM-DD */
+  fecha: string;
+  /** HH:MM, hora de Argentina. Puede venir vacía. */
+  hora: string;
+  modalidad: string;
+  descripcion: string;
+  cupo: string;
+  inscripcion: string;
+};
+
+/** Hoy en Argentina, como AAAA-MM-DD (el formato de Canadá en inglés es justo ese). */
+const hoyEnArgentina = () =>
+  new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
+
+/** Los talleres de hoy en adelante, del más próximo al más lejano. */
+export async function obtenerTalleres(idioma: Idioma): Promise<Taller[]> {
+  const hoy = hoyEnArgentina();
+
+  return (await leerLista("talleres"))
+    .map((item) => ({
+      id: item.id,
+      titulo: textoEn(item.titulo, idioma),
+      fecha: textoEn(item.fecha, idioma),
+      hora: textoEn(item.hora, idioma),
+      modalidad: textoEn(item.modalidad, idioma),
+      descripcion: textoEn(item.descripcion, idioma),
+      cupo: textoEn(item.cupo, idioma),
+      inscripcion: textoEn(item.inscripcion, idioma),
+    }))
+    .filter((taller) => taller.titulo && taller.fecha >= hoy)
+    .sort((a, b) => `${a.fecha} ${a.hora}`.localeCompare(`${b.fecha} ${b.hora}`));
 }

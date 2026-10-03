@@ -3,21 +3,22 @@ import Image from "next/image";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import Parrafos from "@/components/Parrafos";
-import { ctaFinal } from "@/content/home";
 import { rutaVersionada } from "@/lib/assets";
-import { obtenerBelen } from "@/lib/contenido";
+import { obtenerBelen, obtenerCierre } from "@/lib/contenido";
+import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
+import { textosDe } from "@/lib/textos";
 
-export const metadata: Metadata = metadatosDePagina({
-  titulo: "Sobre Belén | Buen Vivir",
-  descripcion:
-    "Belén Vera, facilitadora de procesos de Regeneración Organizacional y Personal: su camino desde el voluntariado ambiental hasta la Consultora Buen Vivir.",
-  ruta: "/sobre-belen",
-  imagen: "belen",
-});
+export function generateMetadata(): Metadata {
+  const idioma = obtenerIdioma();
+  const { titulo, descripcion } = textosDe(idioma).sobreBelen;
+  return metadatosDePagina({ idioma, titulo, descripcion, ruta: "/sobre-belen", imagen: "belen" });
+}
 
 export default async function SobreBelenPage() {
-  const belen = await obtenerBelen();
+  const idioma = obtenerIdioma();
+  const textos = textosDe(idioma).sobreBelen;
+  const [belen, ctaFinal] = await Promise.all([obtenerBelen(idioma), obtenerCierre(idioma)]);
   const foto = await rutaVersionada(belen.foto);
 
   return (
@@ -29,7 +30,7 @@ export default async function SobreBelenPage() {
           {foto ? (
             <Image
               src={foto}
-              alt="Belén Vera, facilitadora en Regeneración Organizacional y Personal"
+              alt={textos.fotoAlt}
               width={588}
               height={734}
               priority
@@ -38,7 +39,7 @@ export default async function SobreBelenPage() {
             />
           ) : (
             <div className="flex aspect-[4/5] items-center justify-center rounded-3xl border-2 border-dashed border-white/40 text-sm text-white/70">
-              Foto pendiente
+              {textos.fotoPendiente}
             </div>
           )}
 
@@ -123,11 +124,11 @@ export default async function SobreBelenPage() {
 
       <CtaSection
         fondo="blanco"
-        title="¿Conversamos?"
+        title={textos.cierreTitulo}
         subtitle={ctaFinal.bajada}
         note={ctaFinal.nota}
         primary={ctaFinal.principal}
-        secondary={{ label: "Ver los servicios", href: "/servicios" }}
+        secondary={{ label: textos.verServicios, href: "/servicios" }}
       />
     </main>
   );

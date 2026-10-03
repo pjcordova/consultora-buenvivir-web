@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { Idioma } from "@/lib/idioma";
+import { textosDe } from "@/lib/textos";
 
 export type RedId = "instagram" | "linkedin" | "tiktok" | "youtube";
 
@@ -35,6 +37,7 @@ export const LOGOS_REDES: Record<RedId, ReactNode> = {
 
 type RedesSocialesProps = {
   redes: Red[];
+  idioma: Idioma;
   /** "oscuro": sobre el verde del pie. "claro": sobre fondos claros. */
   tono?: "oscuro" | "claro";
   className?: string;
@@ -43,6 +46,7 @@ type RedesSocialesProps = {
 /** Fila de íconos de redes: apagados mientras no tengan enlace. */
 export default function RedesSociales({
   redes,
+  idioma,
   tono = "oscuro",
   className = "",
 }: RedesSocialesProps) {
@@ -77,8 +81,8 @@ export default function RedesSociales({
               </a>
             ) : (
               <span
-                aria-label={`${red.label} — pendiente de enlace`}
-                title="Pendiente: falta el enlace"
+                aria-label={textosDe(idioma).redes.sinEnlace(red.label)}
+                title={textosDe(idioma).redes.faltaEnlace}
                 className={`${base} ${apagado}`}
               >
                 {icono}
