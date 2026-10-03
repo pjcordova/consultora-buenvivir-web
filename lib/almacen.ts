@@ -1,5 +1,6 @@
 import { del, list, put } from "@vercel/blob";
 import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 /**
  * Depósito del contenido que edita el panel.
@@ -11,7 +12,9 @@ import { unstable_cache } from "next/cache";
  *
  * El interruptor es el token: si Vercel lo inyectó, se usa el depósito.
  */
-export const usaBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+
+export const usaBlob = Boolean(TOKEN);
 
 /** Los dos archivos de datos que guardamos: los textos y el mapa de imágenes. */
 type Dato = "contenido" | "medios";
@@ -40,7 +43,7 @@ type Version = { url: string; pathname: string };
 
 /** Versiones guardadas, de la más nueva a la más vieja. */
 async function versiones(nombre: Dato): Promise<Version[]> {
-  const { blobs } = await list({ prefix: `datos/${nombre}` });
+  const { blobs } = await list({ prefix: `datos/${nombre}`, token: TOKEN });
   // La marca de tiempo tiene siempre 13 cifras: el orden alfabético es el cronológico.
   const nuevas = blobs
     .filter((blob) => blob.pathname.startsWith(carpeta(nombre)))
@@ -67,30 +70,13 @@ export async function bajarDato<T>(nombre: Dato, porDefecto: T): Promise<T> {
   return (await respuesta.json()) as T;
 }
 
-/**
- * Lo mismo, guardado en memoria: la página no le pide el archivo al depósito
- * en cada visita. Cada vez que el panel guarda, se tira la copia.
- * Si el depósito no responde, esa visita ve los textos originales (sin guardar
- * ese resultado) en lugar de una página con error.
- */
-export async function leerDato<T>(nombre: Dato, porDefecto: T): Promise<T> {
-  try {
-    return await unstable_cache(() => bajarDato(nombre, porDefecto), ["dato", nombre], {
-      tags: [etiqueta(nombre)],
-    })();
-  } catch (error) {
-    console.error(`[almacen] No se pudo leer "${nombre}" del depósito:`, error);
-    return porDefecto;
-  }
-}
-
 export async function escribirDato(nombre: Dato, datos: unknown): Promise<void> {
   // La marca de tiempo ordena las versiones; el sufijo al azar (addRandomSuffix)
   // evita que dos guardados en el mismo milisegundo choquen.
   const { pathname } = await put(
     `${carpeta(nombre)}${Date.now()}.json`,
     `${JSON.stringify(datos, null, 2)}\n`,
-    { access: "public", contentType: "application/json", addRandomSuffix: true }
+    { access: "public", token: TOKEN, contentType: "application/json", addRandomSuffix: true }
   );
 
   // Se borran solo las versiones más viejas que esta: nunca una más nueva que
@@ -99,17 +85,64 @@ export async function escribirDato(nombre: Dato, datos: unknown): Promise<void> 
     (version) => version.pathname === archivoAnterior(nombre) || version.pathname < pathname
   );
   if (viejas.length) {
-    await del(viejas.map((version) => version.url)).catch(() => undefined);
+    await del(
+      viejas.map((version) => version.url),
+      { token: TOKEN }
+    ).catch(() => undefined);
   }
+}
+
+/*
+ * Lecturas para armar las páginas, con tres cuidados para no gastar
+ * operaciones del depósito (cada list() cuenta, y en 2026-10 el plan gratuito
+ * se agotó en un día y suspendió el depósito):
+ * 1. Copia guardada entre visitas (unstable_cache), que se tira cada vez que
+ *    el panel guarda (revalidateTag en lib/admin/publicar.ts).
+ * 2. Una sola lectura por página, aunque la pidan muchas secciones (cache):
+ *    antes, cada sección de la Home pedía la suya.
+ * 3. Si el depósito falla, se espera un minuto antes de volver a intentar,
+ *    en vez de insistir en cada visita.
+ */
+const ESPERA_TRAS_UN_FALLO_MS = 60_000;
+const ultimoFallo = new Map<Dato, number>();
+
+const copiaGuardada: Record<Dato, () => Promise<unknown>> = {
+  contenido: unstable_cache(() => bajarDato<unknown>("contenido", null), ["dato", "contenido"], {
+    tags: [etiqueta("contenido")],
+  }),
+  medios: unstable_cache(() => bajarDato<unknown>("medios", null), ["dato", "medios"], {
+    tags: [etiqueta("medios")],
+  }),
+};
+
+const leerUnaVez = cache(async (nombre: Dato): Promise<unknown> => {
+  const fallo = ultimoFallo.get(nombre);
+  if (fallo && Date.now() - fallo < ESPERA_TRAS_UN_FALLO_MS) return null;
+
+  try {
+    return await copiaGuardada[nombre]();
+  } catch (error) {
+    ultimoFallo.set(nombre, Date.now());
+    console.error(`[almacen] No se pudo leer "${nombre}" del depósito:`, error);
+    return null;
+  }
+});
+
+/**
+ * Lo guardado, para armar una página. Si el depósito no responde, esa visita
+ * ve los textos originales en lugar de una página con error.
+ */
+export async function leerDato<T>(nombre: Dato, porDefecto: T): Promise<T> {
+  return ((await leerUnaVez(nombre)) as T | null) ?? porDefecto;
 }
 
 export const leerMedios = () => leerDato<MapaMedios>("medios", {});
 
-/** Borra sin hacer ruido: si el archivo viejo ya no está, no es un problema. */
-async function borrarDelDeposito(url: string | null | undefined): Promise<void> {
+/** Borra un archivo del depósito sin hacer ruido: si ya no está, no es un problema. */
+export async function borrarMedio(url: string | null | undefined): Promise<void> {
   if (!url) return;
   try {
-    await del(url);
+    await del(url, { token: TOKEN });
   } catch {
     /* el archivo anterior ya no existe */
   }
@@ -127,6 +160,7 @@ export async function subirMedio(
 ): Promise<string> {
   const { url } = await put(`medios${ruta}`, contenido, {
     access: "public",
+    token: TOKEN,
     contentType,
     addRandomSuffix: true,
   });
@@ -136,7 +170,7 @@ export async function subirMedio(
   mapa[ruta] = { url, actualizado: Date.now() };
   await escribirDato("medios", mapa);
 
-  await borrarDelDeposito(anterior?.url);
+  await borrarMedio(anterior?.url);
   return url;
 }
 
@@ -150,5 +184,8 @@ export async function quitarMedio(ruta: string): Promise<void> {
   mapa[ruta] = { url: null, actualizado: Date.now() };
   await escribirDato("medios", mapa);
 
-  await borrarDelDeposito(anterior?.url);
+  await borrarMedio(anterior?.url);
 }
+
+/** Clave del depósito, para el permiso de subida directa desde el navegador. */
+export const claveDelDepositoDeMedios = () => TOKEN;

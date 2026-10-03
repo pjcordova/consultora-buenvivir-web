@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { del } from "@vercel/blob";
 import sharp from "sharp";
 import { NextResponse } from "next/server";
 import { CARPETA_ENTRADA, revisarArchivo } from "@/lib/admin/archivos";
@@ -8,7 +7,7 @@ import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
 import { publicarCambios } from "@/lib/admin/publicar";
 import { obtenerSlot, type Slot } from "@/lib/admin/slots";
-import { quitarMedio, subirMedio, usaBlob } from "@/lib/almacen";
+import { borrarMedio, quitarMedio, subirMedio, usaBlob } from "@/lib/almacen";
 
 // Una foto grande tarda unos segundos en bajarse del depósito y optimizarse.
 export const maxDuration = 60;
@@ -164,7 +163,7 @@ export async function POST(request: Request) {
     return await guardar(recibido);
   } finally {
     // El archivo de paso ya no hace falta: quedó guardado (optimizado) o se rechazó.
-    if (recibido.entrada) await del(recibido.entrada).catch(() => undefined);
+    await borrarMedio(recibido.entrada);
   }
 }
 

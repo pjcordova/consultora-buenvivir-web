@@ -4,6 +4,7 @@ import { CARPETA_ENTRADA, LIMITES, TIPOS } from "@/lib/admin/archivos";
 import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
 import { obtenerSlot } from "@/lib/admin/slots";
+import { claveDelDepositoDeMedios } from "@/lib/almacen";
 
 /**
  * Permiso para que el navegador suba un archivo directo al depósito.
@@ -24,6 +25,8 @@ export async function POST(request: Request) {
 
   try {
     const respuesta = await handleUpload({
+      // El permiso es para el depósito público de las fotos, no para el de los datos
+      token: claveDelDepositoDeMedios(),
       body: cuerpo,
       request,
       onBeforeGenerateToken: async (ruta, idDelSlot) => {
