@@ -3,6 +3,7 @@ import Boton from "@/components/Boton";
 import Header from "@/components/Header";
 import RedesSociales from "@/components/RedesSociales";
 import SectionHeader from "@/components/SectionHeader";
+import { agendaBelen, agendaBelenIncrustada } from "@/content/enlaces";
 import { obtenerContacto, obtenerPie, obtenerWhatsapp, urlWhatsapp } from "@/lib/contenido";
 import { metadatosDePagina } from "@/lib/metadatos";
 
@@ -106,7 +107,41 @@ export default async function ContactoPage() {
         </ul>
       </section>
 
-      <section className="bg-cream px-[8vw] py-16 sm:py-20">
+      {/* La agenda de Google de Belén, para reservar sin salir del sitio */}
+      <section id="agenda" className="bg-cream px-[8vw] py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
+            {contacto.agendaTitulo}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-forest-800/80">
+            {contacto.agendaTexto}
+          </p>
+
+          <div className="mt-8 overflow-hidden rounded-3xl bg-white shadow-[0_18px_45px_-24px_rgba(18,23,15,0.35)] ring-1 ring-forest-800/10">
+            <iframe
+              src={agendaBelenIncrustada}
+              title="Agenda de Belén Vera para reservar una conversación"
+              loading="lazy"
+              className="block h-[56rem] w-full border-0 md:h-[50rem]"
+            />
+          </div>
+
+          <p className="mt-4 text-xs text-forest-800/60">
+            ¿No se ve la agenda?{" "}
+            <a
+              href={agendaBelen}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-forest-800 underline decoration-leaf/50 underline-offset-4 hover:text-forest-950"
+            >
+              Abrila en otra pestaña
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+
+      <section className="border-t border-forest-800/10 bg-white px-[8vw] py-16 sm:py-20">
         <div className="mx-auto flex max-w-5xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="font-display text-2xl text-forest-950">{contacto.redesTitulo}</h2>

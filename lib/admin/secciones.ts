@@ -404,7 +404,7 @@ export const SECCIONES: SeccionEditable[] = [
     id: "contacto",
     grupo: "Contacto",
     titulo: "Página de Contacto",
-    descripcion: "El encabezado y las tres vías para escribirle a Belén.",
+    descripcion: "El encabezado, las tres vías para escribirle a Belén y la agenda.",
     vistaPrevia: "/contacto",
     campos: [
       { id: "eyebrow", etiqueta: "Etiqueta", tipo: "texto" },
@@ -415,6 +415,8 @@ export const SECCIONES: SeccionEditable[] = [
         { id: `via_${via.id}_titulo`, etiqueta: `${via.titulo} — título`, tipo: "texto" as const },
         { id: `via_${via.id}_texto`, etiqueta: `${via.titulo} — texto`, tipo: "parrafo" as const },
       ]),
+      { id: "agendaTitulo", etiqueta: "Título de la agenda", tipo: "texto" },
+      { id: "agendaTexto", etiqueta: "Texto de la agenda", tipo: "parrafo" },
       { id: "redesTitulo", etiqueta: "Título del bloque de redes", tipo: "texto" },
       { id: "redesTexto", etiqueta: "Texto del bloque de redes", tipo: "parrafo" },
     ],
@@ -430,6 +432,8 @@ export const SECCIONES: SeccionEditable[] = [
           [`via_${via.id}_texto`, via.texto],
         ])
       ),
+      agendaTitulo: contacto.agendaTitulo,
+      agendaTexto: contacto.agendaTexto,
       redesTitulo: contacto.redesTitulo,
       redesTexto: contacto.redesTexto,
     },

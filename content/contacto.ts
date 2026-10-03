@@ -1,5 +1,4 @@
 import { formularioComunidad } from "@/content/enlaces";
-import { ctaFinal } from "@/content/home";
 import { footer } from "@/content/site";
 
 /**
@@ -21,7 +20,8 @@ export const contacto = {
       titulo: "Agendá una conversación",
       texto:
         "Elegí el día y la hora que mejor te queden en la agenda de Belén, y coordinan el primer encuentro sin compromisos.",
-      cta: { label: "Ver horarios disponibles", href: ctaFinal.principal.href },
+      // Baja hasta la agenda, que está en la misma página
+      cta: { label: "Ver horarios disponibles", href: "#agenda" },
       destacada: true,
     },
     {
@@ -43,6 +43,10 @@ export const contacto = {
       destacada: false,
     },
   ],
+
+  agendaTitulo: "Elegí día y horario",
+  agendaTexto:
+    "Estos son los horarios libres de Belén. Elegí el que mejor te quede y completá tus datos para reservar la conversación inicial.",
 
   redesTitulo: "También podés seguirla acá",
   redesTexto: footer.contacto.intro,
