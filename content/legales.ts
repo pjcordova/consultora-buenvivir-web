@@ -128,7 +128,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "Sobre el acompañamiento",
       parrafos: [
-        "Los procesos de facilitación y acompañamiento no reemplazan la atención médica, psicológica, legal ni financiera de profesionales de esas áreas.",
+        "Los procesos de facilitación y acompañamiento no reemplazan la atención médica ni psicológica.",
       ],
     },
     {

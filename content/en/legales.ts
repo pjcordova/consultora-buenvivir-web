@@ -112,7 +112,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "About the accompaniment",
       parrafos: [
-        "Facilitation and accompaniment processes do not replace medical, psychological, legal or financial care from professionals in those fields.",
+        "Facilitation and accompaniment processes do not replace medical or psychological care.",
       ],
     },
     {
