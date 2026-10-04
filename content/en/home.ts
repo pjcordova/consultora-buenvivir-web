@@ -1,5 +1,4 @@
 import * as es from "@/content/home";
-import { agendaBelen } from "@/content/enlaces";
 import { espacios } from "@/content/en/ecosistema";
 
 /**
@@ -101,6 +100,6 @@ export const ctaFinal: typeof es.ctaFinal = {
   bajada:
     "Every process begins with a pause to listen to what needs attention. Let's talk, with no preset commitments.",
   nota: "Contact channels and availability to be confirmed with Belén",
-  principal: { label: "Write to Belén", href: agendaBelen },
+  principal: { label: "Contact Belén", href: "/contacto" },
   secundario: { label: "See all services", href: "/servicios" },
 };

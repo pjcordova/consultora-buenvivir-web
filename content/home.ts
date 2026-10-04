@@ -1,5 +1,4 @@
 import { espacios } from "@/content/ecosistema";
-import { agendaBelen } from "@/content/enlaces";
 import type { Parrafo } from "@/types/content";
 
 // Contenido de Home.
@@ -159,7 +158,8 @@ export const ctaFinal = {
   bajada:
     "Cada proceso comienza con una pausa para escuchar qué necesita ser atendido. Conversemos sin compromisos preestablecidos.",
   nota: "Canales de contacto y disponibilidad a confirmar con Belén",
-  // Agenda de Google de Belén (editable desde el panel, sección "Cierre")
-  principal: { label: "Escribir a Belén", href: agendaBelen },
+  // Lleva a la página de Contacto, con todas las vías (pedido 2026-10-04; editable
+  // desde el panel, sección "Cierre"). También es el cierre de Servicios y Sobre Belén.
+  principal: { label: "Contactar a Belén", href: "/contacto" },
   secundario: { label: "Revisar los servicios completos", href: "/servicios" },
 };

@@ -146,8 +146,9 @@ export default async function ServiciosPage() {
                           </svg>
                         </Boton>
                       )}
+                      {/* Directo a la agenda que está dentro de Contacto */}
                       <Boton
-                        href={ctaFinal.principal.href}
+                        href="/contacto#agenda"
                         className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
                           tieneInscripcion(oferta)
                             ? "border border-forest-800/20 text-forest-800 hover:bg-cream"
