@@ -3,11 +3,18 @@ import Image from "next/image";
 import Boton from "@/components/Boton";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
+import SeccionPreguntas from "@/components/SeccionPreguntas";
 import SectionHeader from "@/components/SectionHeader";
 import { contenidoDe } from "@/content";
 import type { Oferta } from "@/content/servicios";
 import { rutaVersionada } from "@/lib/assets";
-import { obtenerCaminos, obtenerCierre, obtenerPaginaServicios } from "@/lib/contenido";
+import {
+  obtenerCaminos,
+  obtenerCierre,
+  obtenerPaginaServicios,
+  obtenerPreguntas,
+  urlWhatsapp,
+} from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
@@ -28,11 +35,14 @@ export default async function ServiciosPage() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma);
   const { ctaServicios } = contenidoDe(idioma);
-  const [paginaServicios, caminos, ctaFinal] = await Promise.all([
-    obtenerPaginaServicios(idioma),
-    obtenerCaminos(idioma),
-    obtenerCierre(idioma),
-  ]);
+  const [paginaServicios, caminos, ctaFinal, { preguntas, deEjemplo }, enlaceWhatsapp] =
+    await Promise.all([
+      obtenerPaginaServicios(idioma),
+      obtenerCaminos(idioma),
+      obtenerCierre(idioma),
+      obtenerPreguntas(idioma),
+      urlWhatsapp(idioma),
+    ]);
 
   // Las direcciones de los folletos se resuelven una sola vez, antes de dibujar.
   const folletos = new Map(
@@ -158,7 +168,16 @@ export default async function ServiciosPage() {
         </section>
       ))}
 
+      {/* Las mismas preguntas que en Contacto (la ficha para Google va solo allá) */}
+      <SeccionPreguntas
+        preguntas={preguntas}
+        deEjemplo={deEjemplo}
+        idioma={idioma}
+        whatsapp={enlaceWhatsapp}
+      />
+
       <CtaSection
+        fondo={preguntas.length ? "blanco" : "crema"}
         title={textos.servicios.cierreTitulo}
         subtitle={ctaServicios}
         note={ctaFinal.nota}

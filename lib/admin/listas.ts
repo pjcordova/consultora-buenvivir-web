@@ -21,7 +21,7 @@ export type CampoDeLista = {
   ayuda?: string;
 };
 
-export type IdLista = "testimonios" | "talleres";
+export type IdLista = "testimonios" | "talleres" | "preguntas";
 
 export type ListaEditable = {
   id: IdLista;
@@ -88,6 +88,33 @@ export const LISTAS: ListaEditable[] = [
         etiqueta: "Enlace de inscripción",
         tipo: "enlace",
         ayuda: "Un formulario, la agenda o /contacto. Vacío: el botón lleva a Contacto.",
+      },
+    ],
+  },
+  {
+    id: "preguntas",
+    titulo: "Preguntas frecuentes",
+    descripcion:
+      "Se muestran en Contacto y al final de Servicios, en el orden de esta lista. Sirven para responder las dudas de siempre (la primera sesión, la modalidad, el idioma, la duración, el precio) antes de que te escriban.",
+    elemento: "pregunta",
+    vistaPrevia: "/contacto#preguntas",
+    maximo: 15,
+    campos: [
+      {
+        id: "pregunta",
+        etiqueta: "Pregunta",
+        tipo: "texto",
+        porIdioma: true,
+        obligatorio: true,
+        ayuda: "Por ejemplo: ¿Las sesiones son online o presenciales?",
+      },
+      {
+        id: "respuesta",
+        etiqueta: "Respuesta",
+        tipo: "parrafo",
+        porIdioma: true,
+        obligatorio: true,
+        ayuda: "Corta y clara. Un renglón en blanco separa párrafos.",
       },
     ],
   },

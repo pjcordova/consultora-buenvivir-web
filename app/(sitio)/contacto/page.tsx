@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Boton from "@/components/Boton";
 import Header from "@/components/Header";
 import RedesSociales from "@/components/RedesSociales";
+import SeccionPreguntas from "@/components/SeccionPreguntas";
 import SectionHeader from "@/components/SectionHeader";
 import { agendaBelen, agendaIncrustada } from "@/content/enlaces";
 import {
   obtenerContacto,
   obtenerCorreo,
   obtenerPie,
+  obtenerPreguntas,
   obtenerWhatsapp,
   urlWhatsapp,
 } from "@/lib/contenido";
@@ -46,13 +48,15 @@ const ICONOS = {
 export default async function ContactoPage() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma).contacto;
-  const [contacto, pie, whatsapp, enlaceWhatsapp, correo] = await Promise.all([
-    obtenerContacto(idioma),
-    obtenerPie(idioma),
-    obtenerWhatsapp(idioma),
-    urlWhatsapp(idioma),
-    obtenerCorreo(),
-  ]);
+  const [contacto, pie, whatsapp, enlaceWhatsapp, correo, { preguntas, deEjemplo }] =
+    await Promise.all([
+      obtenerContacto(idioma),
+      obtenerPie(idioma),
+      obtenerWhatsapp(idioma),
+      urlWhatsapp(idioma),
+      obtenerCorreo(),
+      obtenerPreguntas(idioma),
+    ]);
 
   // El WhatsApp sale del panel, así el número y el mensaje se editan en un solo lugar
   const vias = contacto.vias.map((via) =>
@@ -134,8 +138,21 @@ export default async function ContactoPage() {
         </ul>
       </section>
 
-      {/* La agenda de Google de Belén, para reservar sin salir del sitio */}
-      <section id="agenda" className="bg-cream px-[8vw] py-16 sm:py-20">
+      {/* Las dudas de siempre, antes de la agenda: responde antes de que escriban */}
+      <SeccionPreguntas
+        preguntas={preguntas}
+        deEjemplo={deEjemplo}
+        idioma={idioma}
+        whatsapp={enlaceWhatsapp}
+        conFicha
+      />
+
+      {/* La agenda de Google de Belén, para reservar sin salir del sitio.
+          Alterna el fondo con la franja de arriba (crema si no hay preguntas). */}
+      <section
+        id="agenda"
+        className={`px-[8vw] py-16 sm:py-20 ${preguntas.length ? "bg-white" : "bg-cream"}`}
+      >
         <div className="mx-auto max-w-5xl">
           <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
             {contacto.agendaTitulo}

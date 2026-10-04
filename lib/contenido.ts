@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { contenidoDe, type Contenido } from "@/content";
 import type { Espacio } from "@/content/ecosistema";
+import { PREGUNTAS_DE_EJEMPLO } from "@/content/preguntas";
 import type { Oferta } from "@/content/servicios";
 import { correo as correoPorDefecto } from "@/content/site";
 import { bajarDato, escribirDato, leerDato, usaBlob } from "@/lib/almacen";
@@ -441,7 +442,7 @@ export async function obtenerContacto(idioma: Idioma): Promise<Contenido["contac
   } as typeof contacto;
 }
 
-/* --- Listas: testimonios y talleres -----------------------------------------
+/* --- Listas: testimonios, talleres y preguntas frecuentes ---------------------
  * Se guardan una sola vez para los dos idiomas (lib/admin/listas.ts).
  */
 
@@ -515,4 +516,32 @@ export async function obtenerTalleres(idioma: Idioma): Promise<Taller[]> {
     }))
     .filter((taller) => taller.titulo && taller.fecha >= hoy)
     .sort((a, b) => `${a.fecha} ${a.hora}`.localeCompare(`${b.fecha} ${b.hora}`));
+}
+
+export type Pregunta = { id: string; pregunta: string; respuesta: string };
+
+/**
+ * Las preguntas frecuentes, en el orden que les dio Belén.
+ * Mientras la lista del panel está vacía, en la computadora de desarrollo se
+ * ven preguntas de ejemplo (marcadas como tales) para poder revisar el diseño;
+ * en el sitio publicado, sin preguntas la sección no aparece.
+ */
+export async function obtenerPreguntas(
+  idioma: Idioma
+): Promise<{ preguntas: Pregunta[]; deEjemplo: boolean }> {
+  const preguntas = (await leerLista("preguntas"))
+    .map((item) => ({
+      id: item.id,
+      pregunta: textoEn(item.pregunta, idioma),
+      respuesta: textoEn(item.respuesta, idioma),
+    }))
+    .filter((item) => item.pregunta && item.respuesta);
+
+  if (preguntas.length || process.env.NODE_ENV !== "development") {
+    return { preguntas, deEjemplo: false };
+  }
+  return {
+    preguntas: PREGUNTAS_DE_EJEMPLO[idioma].map((item, i) => ({ id: `ejemplo-${i}`, ...item })),
+    deEjemplo: true,
+  };
 }

@@ -91,6 +91,15 @@ const ESPANOL = {
     etiqueta: "Testimonios · Voces del camino",
     titulo: "Lo que cuentan quienes transitaron el proceso",
   },
+  preguntas: {
+    etiqueta: "Preguntas frecuentes",
+    titulo: "Lo que suelen preguntar",
+    bajada: "Las dudas más comunes antes de empezar un proceso con Belén.",
+    otraDuda: "¿Te quedó otra duda?",
+    escribir: "Escribile por WhatsApp",
+    ejemplo:
+      "Vista de ejemplo: solo se ve en tu computadora. Las preguntas y respuestas reales las carga Belén desde el panel.",
+  },
   talleres: {
     etiqueta: "Agenda · Próximos encuentros",
     titulo: "Próximos talleres y encuentros",
@@ -197,6 +206,15 @@ const INGLES: Textos = {
   testimonios: {
     etiqueta: "Testimonials · Voices along the way",
     titulo: "What people say about the process",
+  },
+  preguntas: {
+    etiqueta: "Frequently asked questions",
+    titulo: "What people usually ask",
+    bajada: "The most common questions before starting a process with Belén.",
+    otraDuda: "Still have a question?",
+    escribir: "Message her on WhatsApp",
+    ejemplo:
+      "Sample view: only visible on your computer. Belén adds the real questions and answers from the panel.",
   },
   talleres: {
     etiqueta: "Agenda · Upcoming gatherings",
