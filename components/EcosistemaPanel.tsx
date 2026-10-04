@@ -86,6 +86,19 @@ export default async function EcosistemaPanel({
             return (
               <li key={espacio.slug} className="flex flex-col items-center gap-4">
                 <div className="relative">
+                  {/* Los círculos con insignia y foto (la Casita) no llevan texto encima:
+                      su nombre va en una etiqueta apoyada sobre el borde de arriba, sin
+                      correr el círculo (los tres quedan a la misma altura). Para los
+                      lectores de pantalla ya lo dice la foto. */}
+                  {esSello && hayImagen && (
+                    <p
+                      aria-hidden="true"
+                      // Quicksand (redondeada), la misma de los botones de los círculos
+                      className="absolute -top-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-cream px-4 py-1.5 font-redonda text-sm font-bold text-forest-950 shadow-[0_8px_20px_-8px_rgba(18,23,15,0.6)] ring-1 ring-white/60 sm:text-base"
+                    >
+                      {espacio.nombre}
+                    </p>
+                  )}
                   <div
                     className={`relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-full p-6 text-center sm:h-56 sm:w-56 ${
                       hayImagen
