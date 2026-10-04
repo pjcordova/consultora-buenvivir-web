@@ -106,11 +106,20 @@ export async function escribirDato(nombre: Dato, datos: unknown): Promise<void> 
 const ESPERA_TRAS_UN_FALLO_MS = 60_000;
 const ultimoFallo = new Map<Dato, number>();
 
+/*
+ * Cada publicación del sitio arranca con su propia copia: así, lo guardado
+ * desde fuera del panel publicado (el panel de la computadora de desarrollo,
+ * que también escribe en el depósito) se ve apenas se vuelve a publicar.
+ */
+const PUBLICACION = process.env.VERCEL_DEPLOYMENT_ID ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+
 const copiaGuardada: Record<Dato, () => Promise<unknown>> = {
-  contenido: unstable_cache(() => bajarDato<unknown>("contenido", null), ["dato", "contenido"], {
-    tags: [etiqueta("contenido")],
-  }),
-  medios: unstable_cache(() => bajarDato<unknown>("medios", null), ["dato", "medios"], {
+  contenido: unstable_cache(
+    () => bajarDato<unknown>("contenido", null),
+    ["dato", "contenido", PUBLICACION],
+    { tags: [etiqueta("contenido")] }
+  ),
+  medios: unstable_cache(() => bajarDato<unknown>("medios", null), ["dato", "medios", PUBLICACION], {
     tags: [etiqueta("medios")],
   }),
 };

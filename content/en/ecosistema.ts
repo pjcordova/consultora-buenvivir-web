@@ -1,4 +1,8 @@
-import { formularioComunidadEn } from "@/content/enlaces";
+import {
+  formularioComunidadEn,
+  preinscripcionCreatividad,
+  preinscripcionRegeneracionPersonal,
+} from "@/content/enlaces";
 import type { Espacio } from "@/content/ecosistema";
 
 /**
@@ -16,14 +20,15 @@ export const espacios: Espacio[] = [
     flecha: true,
 
     titulo: "Casita del Árbol",
-    estado: "Launching — the first cycle begins in September",
-    resumen: "A place for curious people, professionals, entrepreneurs and changemakers.",
+    estado: "Launching.",
+    resumen:
+      "An international learning community to regenerate ourselves and face the complexity of our time, through the practice of collective intelligence.",
     parrafos: [
       [
         "Once a month we meet online to listen to each other, learn, talk and explore together what can emerge when we bring different experiences, disciplines and ways of seeing the world into dialogue.",
       ],
       [
-        "[PENDING — add here how a gathering unfolds: length, day and format, as confirmed by Belén]",
+        "To develop capacities such as: systems thinking, regenerative leadership, holistic well-being, collaboration, social innovation, deep listening, integral communication, and personal and professional development.",
       ],
     ],
     incluye: [
@@ -41,8 +46,8 @@ export const espacios: Espacio[] = [
       },
     ],
     extras: [
-      "Directory of Ecosystem Professionals",
-      "Monthly Logbook",
+      "A place in the Directory of Ecosystem Professionals",
+      "Monthly Logbook with additional material",
       "Collective Intelligence Practice Diploma (every 6 months)",
     ],
     // El mismo video que en español (la sesión es en castellano)
@@ -66,16 +71,18 @@ export const espacios: Espacio[] = [
     resumen: "A group space to reconnect with your own sense of meaning, rhythm and inner coherence.",
     parrafos: [
       [
-        "[PENDING — content to be defined with Belén: how it differs from the individual Personal Regeneration process, how many sessions there are, who it is for and how to sign up]",
+        "A caring space for listening, reflection and conscious action, to nurture your essence and understand your present moment, plant the changes you need for your well-being and move closer to your goals. To discover your potential and find yourself again.",
       ],
       [
-        "Meanwhile, individual Personal Regeneration work is already available: systems thinking to recognize patterns, Theory U to pause and observe, and personal flourishing to reconnect with purpose and direction.",
+        "You will learn to bring into your life systems thinking to recognize patterns, Theory U to pause and observe, better communication, and your personal flourishing to reconnect with your purpose and direction.",
       ],
     ],
+    // El formulario de pre-inscripción está en español
     ctaPagina: {
-      titulo: "Want to hear when the group opens?",
-      bajada: "Write to Belén and she will let you know when the first cycle begins.",
-      principal: { label: "Let me know when it opens", href: "/contacto" },
+      titulo: "Pre-registration is open",
+      bajada:
+        "Fill in the pre-registration form (in Spanish) and Belén will let you know when the first cycle begins.",
+      principal: { label: "Pre-register", href: preinscripcionRegeneracionPersonal },
     },
   },
   {
@@ -89,19 +96,25 @@ export const espacios: Espacio[] = [
 
     titulo: "Regeneration and Creativity Group",
     estado: "Coming soon",
-    resumen: "A self-discovery process built around Julia Cameron's book The Artist's Way.",
+    resumen:
+      "A self-discovery process built around Julia Cameron's book The Artist's Way, enriched with personal regeneration, systems thinking and Theory U.",
     parrafos: [
       [
-        "[PENDING — content to be defined with Belén: number of sessions, reading pace for the book, materials and how to sign up]",
-      ],
-      [
-        "The process invites you to awaken creativity as an everyday life force, reconnect with your own essence, release blocks and create new possibilities from your purpose.",
+        "For those who feel the call to know themselves deeply and recover their vitality. For those who want to revitalize their creativity in everyday life and discover their most authentic way of living.",
       ],
     ],
+    incluye: [
+      { titulo: "Awaken your creativity as an everyday life force" },
+      { titulo: "Reconnect with your essence and authenticity" },
+      { titulo: "Release blocks and get closer to your inner child" },
+      { titulo: "Create new possibilities from your purpose" },
+    ],
+    // El formulario de pre-inscripción está en español
     ctaPagina: {
-      titulo: "Want to hear when the group opens?",
-      bajada: "Write to Belén and she will let you know when the first cycle begins.",
-      principal: { label: "Let me know when it opens", href: "/contacto" },
+      titulo: "Pre-registration is open",
+      bajada:
+        "Fill in the pre-registration form (in Spanish) and Belén will let you know when the first cycle begins.",
+      principal: { label: "Pre-register", href: preinscripcionCreatividad },
     },
   },
 ];

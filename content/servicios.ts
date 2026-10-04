@@ -3,6 +3,8 @@
 // los puntos de "incluye", de los folletos.
 // PENDIENTE (preguntas 19, 20, 21): costo y duración de la conversación inicial.
 
+import { preinscripcionCreatividad } from "@/content/enlaces";
+
 export type Oferta = {
   slug: string;
   titulo: string;
@@ -13,6 +15,8 @@ export type Oferta = {
   /** A quién está dirigido. */
   paraQuien: string;
   incluye: string[];
+  /** Botón propio (un formulario de inscripción, por ejemplo). Va antes de "Reservar mi sesión". */
+  inscripcion?: { label: string; href: string };
 };
 
 export type Camino = {
@@ -136,6 +140,8 @@ export const caminos: Camino[] = [
           "Liberar bloqueos y acercarte a tu niño interior",
           "Crear nuevas posibilidades desde tu propósito",
         ],
+        // Pedido de Belén (2026-10-04): el formulario de pre-inscripción del grupo
+        inscripcion: { label: "Pre-inscribirme", href: preinscripcionCreatividad },
       },
       {
         slug: "para-profesionales-diversos",

@@ -38,6 +38,7 @@ export default async function EspacioPage({ params }: Props) {
   const imagen = await rutaVersionada(espacio.imagen);
   const hayImagen = Boolean(imagen);
   const video = videoDeYoutube(espacio.video);
+  const incluye = espacio.incluye ?? [];
 
   return (
     <main>
@@ -115,21 +116,49 @@ export default async function EspacioPage({ params }: Props) {
               </p>
             ))}
 
-            {espacio.incluye && (
+            {/* Con título y texto: tarjetas (de a tres o de a dos, para que no quede
+                una sola abajo). Si algún ítem no trae texto: lista con tildes. */}
+            {incluye.length > 0 && (
               <div className="mt-12">
                 <h2 className="font-display text-2xl text-forest-950">{textos.espacio.queSeLleva}</h2>
-                <ul className="mt-6 grid gap-5 sm:grid-cols-3">
-                  {espacio.incluye.map((item) => (
-                    <li key={item.titulo} className="rounded-2xl bg-cream p-5">
-                      <h3 className="font-display text-lg text-forest-950">{item.titulo}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-forest-800/80">{item.texto}</p>
-                    </li>
-                  ))}
-                </ul>
+                {incluye.every((item) => item.texto) ? (
+                  <ul
+                    className={`mt-6 grid gap-5 ${
+                      incluye.length % 3 === 0 ? "sm:grid-cols-3" : "sm:grid-cols-2"
+                    }`}
+                  >
+                    {incluye.map((item) => (
+                      <li key={item.titulo} className="rounded-2xl bg-cream p-5">
+                        <h3 className="font-display text-lg text-forest-950">{item.titulo}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-forest-800/80">{item.texto}</p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="mt-6 space-y-3">
+                    {incluye.map((item) => (
+                      <li
+                        key={item.titulo}
+                        className="flex items-start gap-3 rounded-2xl bg-cream px-5 py-4 text-[0.95rem] text-forest-950"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0 text-leaf" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        <span>
+                          {item.titulo}
+                          {item.texto && (
+                            <span className="text-forest-800/80">: {item.texto}</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             )}
 
-            {espacio.extras && (
+            {/* Vacío en el panel = el bloque no aparece */}
+            {espacio.extras && espacio.extras.length > 0 && (
               <div className="mt-12">
                 <h2 className="font-display text-2xl text-forest-950">{textos.espacio.ademas}</h2>
                 <ul className="mt-5 space-y-3">

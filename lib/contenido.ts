@@ -110,6 +110,23 @@ export function textoALista(texto: string): string[] {
     .filter(Boolean);
 }
 
+/** "Qué se lleva quien participa": un renglón por ítem, "Título: texto" (el texto es opcional). */
+type ItemIncluye = { titulo: string; texto?: string };
+
+export function incluyeATexto(items: ItemIncluye[]): string {
+  return items.map((item) => (item.texto ? `${item.titulo}: ${item.texto}` : item.titulo)).join("\n");
+}
+
+export function textoAIncluye(texto: string): ItemIncluye[] {
+  return textoALista(texto).map((linea) => {
+    const dosPuntos = linea.indexOf(":");
+    if (dosPuntos <= 0) return { titulo: linea };
+    const titulo = linea.slice(0, dosPuntos).trim();
+    const resto = linea.slice(dosPuntos + 1).trim();
+    return resto ? { titulo, texto: resto } : { titulo };
+  });
+}
+
 /* --- Idioma de lo guardado ----------------------------------------------------
  * Lo editado en español se guarda con el nombre de la sección ("portada"), como
  * siempre; lo editado en inglés, con el idioma al final ("portada@en").
@@ -372,6 +389,7 @@ export async function obtenerEspacioPagina(
     parrafos:
       typeof edicion.parrafos === "string" ? textoALista(edicion.parrafos).map((p) => [p]) : base.parrafos,
     extras: typeof edicion.extras === "string" ? textoALista(edicion.extras) : base.extras,
+    incluye: typeof edicion.incluye === "string" ? textoAIncluye(edicion.incluye) : base.incluye,
     ctaPagina: {
       ...base.ctaPagina,
       titulo: String(edicion.ctaTitulo ?? base.ctaPagina.titulo),

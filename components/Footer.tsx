@@ -20,11 +20,20 @@ function Enlace({ enlace, idioma, className = "" }: EnlaceProps) {
   }
   const clases = `text-cream/75 transition-colors hover:text-cream ${className}`;
 
-  // El correo abre el programa de correo de quien visita
+  // El correo abre el programa de correo de quien visita. Si no entra en la
+  // columna, baja de línea después de la "@" y no en medio de una palabra.
   if (enlace.href.startsWith("mailto:")) {
+    const [usuario, dominio] = enlace.label.split("@");
     return (
       <a href={enlace.href} className={clases}>
-        {enlace.label}
+        {dominio ? (
+          <>
+            {usuario}@<wbr />
+            {dominio}
+          </>
+        ) : (
+          enlace.label
+        )}
       </a>
     );
   }
@@ -125,7 +134,7 @@ export default async function Footer() {
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="m2 7 10 6 10-6" />
               </svg>
-              <Enlace enlace={contacto.email} idioma={idioma} className="break-all" />
+              <Enlace enlace={contacto.email} idioma={idioma} />
             </li>
           </ul>
 

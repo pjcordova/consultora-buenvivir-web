@@ -27,3 +27,10 @@ export const formularioComunidad =
  * Registration"), que Belén ya tenía publicado. Verificado activo el 2026-10-03.
  */
 export const formularioComunidadEn = "https://forms.gle/ZWLrTYtRZyHwwFmQ7";
+
+/**
+ * Pre-inscripción a los dos grupos que abren próximamente (los pasó Belén el
+ * 2026-10-04; verificados activos y sin inicio de sesión de Google).
+ */
+export const preinscripcionRegeneracionPersonal = "https://forms.gle/c1Ca6p7vsdcLLK1U7";
+export const preinscripcionCreatividad = "https://forms.gle/qHLvcoDVj7MzgNTP6";

@@ -82,7 +82,7 @@ export default async function ContactoPage() {
             {textos.porCorreo}
             <a
               href={`mailto:${correo}`}
-              className="break-all font-medium text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+              className="break-words font-medium text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
             >
               {correo}
             </a>

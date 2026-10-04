@@ -1,6 +1,11 @@
 import { contenidoDe, type Contenido } from "@/content";
 import { correo } from "@/content/site";
-import { CAMPOS_COMPARTIDOS_DEL_PIE, listaATexto, parrafosATexto } from "@/lib/contenido";
+import {
+  CAMPOS_COMPARTIDOS_DEL_PIE,
+  incluyeATexto,
+  listaATexto,
+  parrafosATexto,
+} from "@/lib/contenido";
 
 /**
  * Qué se puede editar de cada sección desde el panel.
@@ -373,6 +378,13 @@ export const SECCIONES: SeccionEditable[] = [
           { id: "descripcion", etiqueta: "Descripción", tipo: "parrafo" },
           { id: "paraQuien", etiqueta: "Para quién es", tipo: "parrafo" },
           { id: "incluye", etiqueta: "Qué incluye", tipo: "lista", ayuda: "Un renglón por ítem." },
+          {
+            id: "inscripcion",
+            etiqueta: "Botón de inscripción (opcional)",
+            tipo: "enlace",
+            ayuda:
+              "Por ejemplo \"Pre-inscribirme\" y el enlace de un formulario de Google. Aparece antes de \"Reservar mi sesión\". Sin texto o sin destino no aparece.",
+          },
         ],
         slots: [`folleto-${oferta.imagen.split("/").pop()?.replace(".jpg", "")}`],
         porDefecto: (c) => {
@@ -382,6 +394,7 @@ export const SECCIONES: SeccionEditable[] = [
             descripcion: enIdioma.descripcion,
             paraQuien: enIdioma.paraQuien,
             incluye: listaATexto(enIdioma.incluye),
+            inscripcion: enIdioma.inscripcion ?? { label: "", href: "" },
           };
         },
       })
@@ -416,6 +429,13 @@ export const SECCIONES: SeccionEditable[] = [
         { id: "estado", etiqueta: "Estado", tipo: "texto", ayuda: "La pastilla verde de la página: \"Próximamente\", \"En lanzamiento…\"" },
         { id: "resumen", etiqueta: "Resumen", tipo: "parrafo" },
         { id: "parrafos", etiqueta: "Texto de la página", tipo: "parrafos", ayuda: "Un renglón en blanco entre párrafo y párrafo." },
+        {
+          id: "incluye",
+          etiqueta: "Qué se lleva quien participa",
+          tipo: "lista",
+          ayuda:
+            "Un renglón por ítem. Para una tarjeta con título y texto, separalos con dos puntos (Perspectiva: Acceder a miradas diversas…). Sin dos puntos se muestra como lista. Vacío no aparece.",
+        },
         { id: "extras", etiqueta: "Además incluye", tipo: "lista", ayuda: "Un renglón por ítem. Dejalo vacío para ocultar el bloque." },
         {
           id: "video",
@@ -426,7 +446,13 @@ export const SECCIONES: SeccionEditable[] = [
         },
         { id: "ctaTitulo", etiqueta: "Cierre — título", tipo: "texto" },
         { id: "ctaBajada", etiqueta: "Cierre — bajada", tipo: "parrafo" },
-        { id: "ctaBoton", etiqueta: "Cierre — botón", tipo: "enlace" },
+        {
+          id: "ctaBoton",
+          etiqueta: "Cierre — botón",
+          tipo: "enlace",
+          ayuda:
+            "En \"Destino\" va adónde lleva: una página del sitio (/contacto) o un enlace completo, como un formulario de Google (https://forms.gle/…).",
+        },
       ],
       slots: [],
       porDefecto: (c) => {
@@ -438,6 +464,7 @@ export const SECCIONES: SeccionEditable[] = [
           estado: enIdioma.estado,
           resumen: enIdioma.resumen,
           parrafos: parrafosATexto(enIdioma.parrafos),
+          incluye: incluyeATexto(enIdioma.incluye ?? []),
           extras: listaATexto(enIdioma.extras ?? []),
           video: enIdioma.video ?? "",
           ctaTitulo: enIdioma.ctaPagina.titulo,

@@ -1,4 +1,8 @@
-import { formularioComunidad } from "@/content/enlaces";
+import {
+  formularioComunidad,
+  preinscripcionCreatividad,
+  preinscripcionRegeneracionPersonal,
+} from "@/content/enlaces";
 import type { Parrafo } from "@/types/content";
 
 /**
@@ -26,8 +30,8 @@ export type Espacio = {
   estado: string;
   resumen: string;
   parrafos: Parrafo[];
-  /** Qué se lleva quien participa. */
-  incluye?: { titulo: string; texto: string }[];
+  /** Qué se lleva quien participa. Sin texto, el ítem se muestra en una lista simple. */
+  incluye?: { titulo: string; texto?: string }[];
   /** Lo que suma el espacio además de los encuentros. */
   extras?: string[];
   /** Enlace de YouTube: el video se ve al costado del texto de la página. */
@@ -45,18 +49,16 @@ export const espacios: Espacio[] = [
     flecha: true,
 
     titulo: "Casita del Árbol",
-    // CONFIRMADO — estado de lanzamiento
-    estado: "En lanzamiento — primer ciclo comienza en septiembre",
-    // CONFIRMADO como texto de Belén, PENDIENTE (pregunta 13): confirmar que describe
-    // a este espacio y no al Ecosistema en general (hoy aparece con tres nombres distintos).
+    // CONFIRMADO — textos que Belén cargó en el panel (2026-10-03)
+    estado: "En lanzamiento.",
     resumen:
-      "Un lugar para personas curiosas, profesionales, emprendedoras y agentes de cambio.",
+      "Una comunidad internacional de aprendizaje, para regenerarnos, para afrontar la complejidad de nuestro tiempo. A través de la práctica de inteligencia colectiva.",
     parrafos: [
       [
         "Una vez al mes nos encontramos virtualmente para escucharnos, aprender, conversar y explorar juntos qué puede emerger cuando ponemos en diálogo distintas experiencias, disciplinas y formas de ver el mundo.",
       ],
       [
-        "[PENDIENTE — sumar acá cómo se desarrolla un encuentro, duración, día y modalidad, según lo que confirme Belén]",
+        "Para desarrollar capacidades como: Pensamiento sistémico, Liderazgo regenerativo, Bienestar integral, Colaboración, Innovación social, Escucha profunda, Comunicación integral, Desarrollo personal y profesional.",
       ],
     ],
     // CONFIRMADO — beneficios publicados
@@ -75,10 +77,10 @@ export const espacios: Espacio[] = [
         texto: "Conocer personas, descubrir ideas y abrir colaboraciones.",
       },
     ],
-    // PENDIENTE (pregunta 15): confirmar si siguen vigentes
+    // CONFIRMADO en el panel (2026-10-03)
     extras: [
-      "Directorio de Profesionales del Ecosistema",
-      "Bitácora del Mes",
+      "Participación en Directorio de Profesionales del Ecosistema",
+      "Bitácora del Mes con material adicional.",
       "Diploma de Práctica de Inteligencia Colectiva (cada 6 meses)",
     ],
     // "ECOSISTEMA Buen Vivir - primera sesión", del canal de la consultora.
@@ -103,18 +105,21 @@ export const espacios: Espacio[] = [
     estado: "Próximamente",
     resumen:
       "Un espacio grupal para reconectar con el propio sentido, el ritmo y la coherencia interna.",
+    // CONFIRMADO — textos que Belén cargó en el panel (2026-10-03)
     parrafos: [
       [
-        "[PENDIENTE — contenido a definir con Belén: en qué se diferencia del proceso individual de Regeneración Personal, cuántos encuentros son, para quién es y cómo se inscribe]",
+        "Un espacio cuidado de escucha, reflexión y acción consciente, para nutrir tu esencia y comprender tu momento presente, sembrar los cambios que necesitas para tu bienestar y acercarte a tus objetivos. Descubrir tu potencial y reencontrarte.",
       ],
       [
-        "Mientras tanto, el trabajo individual de Regeneración Personal ya está disponible: pensamiento sistémico para reconocer patrones, Teoría U para pausar y observar, y florecimiento personal para reconectar con propósito y dirección.",
+        "Vas a aprender a incorporar a tu vida el pensamiento sistémico para reconocer patrones, Teoría U para pausar y observar, comunicarte mejor y alcanzar tu florecimiento personal para reconectar con tu propósito y dirección.",
       ],
     ],
+    // Belén pidió un botón a su formulario de pre-inscripción
     ctaPagina: {
-      titulo: "¿Querés avisos cuando abra el grupo?",
-      bajada: "Escribile a Belén y te cuenta cuándo comienza el primer ciclo.",
-      principal: { label: "Avisame cuando abra", href: "/contacto" },
+      titulo: "Ya puedes pre-inscribirte",
+      bajada:
+        "Completa el formulario de pre-inscripción y Belén te avisa cuándo comienza el primer ciclo.",
+      principal: { label: "Pre-inscribirme", href: preinscripcionRegeneracionPersonal },
     },
   },
   {
@@ -129,20 +134,27 @@ export const espacios: Espacio[] = [
 
     titulo: "Grupo de Regeneración y Creatividad",
     estado: "Próximamente",
+    // CONFIRMADO — los textos que Belén cargó para el servicio "Creatividad y
+    // Regeneración" en la página de Servicios (2026-10-03), que es este mismo grupo
     resumen:
-      "Un proceso de autoconocimiento que integra el libro El Camino del Artista, de Julia Cameron.",
+      "Un proceso de autoconocimiento que integra el libro El Camino del Artista, de Julia Cameron, nutrido con regeneración personal, pensamiento sistémico y Teoría U.",
     parrafos: [
       [
-        "[PENDIENTE — contenido a definir con Belén: cantidad de encuentros, ritmo de lectura del libro, materiales y forma de inscripción]",
-      ],
-      [
-        "El proceso propone despertar la creatividad como fuerza de vida cotidiana, reconectar con la propia esencia, liberar bloqueos y crear nuevas posibilidades desde el propósito.",
+        "Para quienes sienten el llamado a conocerse profundamente y recuperar su vitalidad. Para quienes quieren revitalizar su creatividad en la vida cotidiana y descubrir su forma de vivir más auténtica.",
       ],
     ],
+    // Sin descripción: se muestran como lista
+    incluye: [
+      { titulo: "Despertar tu creatividad como fuerza de vida cotidiana" },
+      { titulo: "Reconectar con tu esencia y autenticidad" },
+      { titulo: "Liberar bloqueos y acercarte a tu niño interior" },
+      { titulo: "Crear nuevas posibilidades desde tu propósito" },
+    ],
     ctaPagina: {
-      titulo: "¿Querés avisos cuando abra el grupo?",
-      bajada: "Escribile a Belén y te cuenta cuándo comienza el primer ciclo.",
-      principal: { label: "Avisame cuando abra", href: "/contacto" },
+      titulo: "Ya puedes pre-inscribirte",
+      bajada:
+        "Completa el formulario de pre-inscripción y Belén te avisa cuándo comienza el primer ciclo.",
+      principal: { label: "Pre-inscribirme", href: preinscripcionCreatividad },
     },
   },
 ];

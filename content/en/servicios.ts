@@ -1,5 +1,6 @@
 import * as es from "@/content/servicios";
 import type { Camino } from "@/content/servicios";
+import { preinscripcionCreatividad } from "@/content/enlaces";
 
 /**
  * Servicios, en inglés.
@@ -120,6 +121,7 @@ export const caminos: Camino[] = [
           "Release blocks and get closer to your inner child",
           "Create new possibilities from your purpose",
         ],
+        inscripcion: { label: "Pre-register", href: preinscripcionCreatividad },
       },
       {
         slug: "para-profesionales-diversos",

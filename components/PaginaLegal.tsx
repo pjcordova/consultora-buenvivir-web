@@ -24,7 +24,7 @@ export default async function PaginaLegal({ texto, idioma }: PaginaLegalProps) {
       if (trozo === "{correo}") {
         // Sin correo cargado en el panel, se manda a la página de Contacto
         return correo ? (
-          <a key={i} href={`mailto:${correo}`} className={`break-all ${ESTILO_ENLACE}`}>
+          <a key={i} href={`mailto:${correo}`} className={`break-words ${ESTILO_ENLACE}`}>
             {correo}
           </a>
         ) : (

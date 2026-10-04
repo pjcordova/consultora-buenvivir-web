@@ -5,11 +5,18 @@ import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import SectionHeader from "@/components/SectionHeader";
 import { contenidoDe } from "@/content";
+import type { Oferta } from "@/content/servicios";
 import { rutaVersionada } from "@/lib/assets";
 import { obtenerCaminos, obtenerCierre, obtenerPaginaServicios } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
+
+/** El botón de inscripción del panel cuenta solo si tiene texto y destino. */
+const tieneInscripcion = (
+  oferta: Oferta
+): oferta is Oferta & { inscripcion: { label: string; href: string } } =>
+  Boolean(oferta.inscripcion?.label.trim() && oferta.inscripcion.href.trim());
 
 export function generateMetadata(): Metadata {
   const idioma = obtenerIdioma();
@@ -115,15 +122,34 @@ export default async function ServiciosPage() {
                       ))}
                     </ul>
 
-                    <Boton
-                      href={ctaFinal.principal.href}
-                      className="mt-7 inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-leaf-dark"
-                    >
-                      {textos.servicios.reservar}
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </Boton>
+                    {/* Con botón de inscripción propio, ese va primero y "Reservar mi
+                        sesión" pasa a segundo plano */}
+                    <div className="mt-7 flex flex-wrap items-center gap-3">
+                      {tieneInscripcion(oferta) && (
+                        <Boton
+                          href={oferta.inscripcion.href}
+                          className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-leaf-dark"
+                        >
+                          {oferta.inscripcion.label}
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                          </svg>
+                        </Boton>
+                      )}
+                      <Boton
+                        href={ctaFinal.principal.href}
+                        className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
+                          tieneInscripcion(oferta)
+                            ? "border border-forest-800/20 text-forest-800 hover:bg-cream"
+                            : "bg-leaf text-white hover:bg-leaf-dark"
+                        }`}
+                      >
+                        {textos.servicios.reservar}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </Boton>
+                    </div>
                   </div>
                 </article>
               );
