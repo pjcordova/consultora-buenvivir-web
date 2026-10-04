@@ -6,7 +6,7 @@ import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import Parrafos from "@/components/Parrafos";
 import { imagenesCarrusel, rutaVersionada } from "@/lib/assets";
-import { obtenerBelen, obtenerCierre } from "@/lib/contenido";
+import { obtenerBelen, obtenerCierre, obtenerLeyendas } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
@@ -20,15 +20,28 @@ export function generateMetadata(): Metadata {
 export default async function SobreBelenPage() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma).sobreBelen;
-  const [belen, ctaFinal] = await Promise.all([obtenerBelen(idioma), obtenerCierre(idioma)]);
-  const foto = await rutaVersionada(belen.foto);
+  const [belen, ctaFinal, leyendas] = await Promise.all([
+    obtenerBelen(idioma),
+    obtenerCierre(idioma),
+    obtenerLeyendas(idioma),
+  ]);
+  /**
+   * Las fotos cargadas de un carrusel, cada una con la leyenda que Belén le puso
+   * en el panel. La leyenda también describe la foto para los lectores de pantalla.
+   */
+  const fotosCon = async (prefijo: string, total: number, alt: (n: number) => string) =>
+    (await imagenesCarrusel(prefijo, total, alt)).flatMap((slide, i) => {
+      const leyenda = leyendas[`${prefijo}-${i + 1}`] || undefined;
+      return slide ? [{ ...slide, alt: leyenda ?? slide.alt, leyenda }] : [];
+    });
 
-  // Solo las fotos cargadas, cada una con su leyenda (la del mismo número de renglón)
-  const fotosFreyre = (
-    await imagenesCarrusel("freyre", 8, (n) => textos.fotoFreyre(belen.freyreTitulo, n))
-  ).flatMap((slide, i) =>
-    slide ? [{ ...slide, leyenda: belen.freyreLeyendas[i] || undefined }] : []
-  );
+  const [foto, fotosFreyre, fotosEnfoque] = await Promise.all([
+    rutaVersionada(belen.foto),
+    fotosCon("freyre", 8, (n) => textos.fotoFreyre(belen.freyreTitulo, n)),
+    fotosCon("enfoque", 3, textos.fotoEnfoque),
+  ]);
+  // En el sitio publicado, el carrusel de "Mi enfoque" existe solo si Belén subió alguna foto
+  const hayLugarFotoEnfoque = fotosEnfoque.length > 0 || process.env.NODE_ENV === "development";
 
   return (
     <main>
@@ -170,25 +183,47 @@ export default async function SobreBelenPage() {
         </div>
       </section>
 
+      {/* Mi enfoque: con la foto de Belén facilitando, el texto a la izquierda y
+          la foto a la derecha (en celular, la foto arriba). Sin foto, una sola
+          columna como antes; en la computadora de desarrollo se marca el lugar. */}
       <section className="bg-cream px-[8vw] py-16 sm:py-20">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
-            {belen.enfoqueTitulo}
-          </h2>
+        <div
+          className={
+            hayLugarFotoEnfoque
+              ? "mx-auto grid max-w-5xl items-start gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:gap-14"
+              : "mx-auto max-w-2xl"
+          }
+        >
+          <div>
+            <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
+              {belen.enfoqueTitulo}
+            </h2>
 
-          <blockquote className="mt-6 rounded-3xl bg-white p-7 sm:p-9">
-            <p className="font-display text-xl italic leading-snug text-forest-950">
-              &ldquo;{belen.enfoqueCita}&rdquo;
-            </p>
-            <footer className="mt-4 flex items-center gap-2 text-sm text-forest-800/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
-              Belén Vera
-            </footer>
-          </blockquote>
+            <blockquote className="mt-6 rounded-3xl bg-white p-7 sm:p-9">
+              <p className="font-display text-xl italic leading-snug text-forest-950">
+                &ldquo;{belen.enfoqueCita}&rdquo;
+              </p>
+              <footer className="mt-4 flex items-center gap-2 text-sm text-forest-800/70">
+                <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
+                Belén Vera
+              </footer>
+            </blockquote>
 
-          <div className="mt-8 text-[0.95rem]">
-            <Parrafos parrafos={belen.enfoque} />
+            <div className="mt-8 text-[0.95rem]">
+              <Parrafos parrafos={belen.enfoque} />
+            </div>
           </div>
+
+          {hayLugarFotoEnfoque && (
+            <div className="order-first md:sticky md:top-32 md:order-last md:mt-14">
+              <Carousel
+                slides={fotosEnfoque.length ? fotosEnfoque : undefined}
+                total={3}
+                label={textos.enfoqueCarrusel}
+                idioma={idioma}
+              />
+            </div>
+          )}
         </div>
       </section>
 

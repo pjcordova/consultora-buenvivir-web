@@ -12,9 +12,11 @@ type SlotCardProps = {
   url: string | null;
   /** Con el depósito conectado, el archivo va directo del navegador al depósito. */
   directo: boolean;
+  /** Leyenda guardada de la foto (solo los lugares que llevan leyenda). */
+  leyenda?: { es: string; en: string };
 };
 
-export default function SlotCard({ slot, url: urlInicial, directo }: SlotCardProps) {
+export default function SlotCard({ slot, url: urlInicial, directo, leyenda }: SlotCardProps) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const [estado, setEstado] = useState<"listo" | "subiendo" | "error">("listo");
@@ -174,6 +176,8 @@ export default function SlotCard({ slot, url: urlInicial, directo }: SlotCardPro
         )}
       </div>
 
+      {slot.leyenda && <Leyenda slot={slot.id} inicial={leyenda} />}
+
       <input
         ref={input}
         type="file"
@@ -186,5 +190,83 @@ export default function SlotCard({ slot, url: urlInicial, directo }: SlotCardPro
         }}
       />
     </article>
+  );
+}
+
+const claseLeyenda =
+  "mt-1 w-full rounded-lg border border-forest-800/20 bg-white px-3 py-2 text-sm text-forest-950 outline-none focus:border-leaf";
+
+/**
+ * Leyenda corta de la foto, debajo de la imagen en la web. Se guarda aparte de
+ * la foto: se puede escribir antes o después de subirla.
+ */
+function Leyenda({ slot, inicial }: { slot: string; inicial?: { es: string; en: string } }) {
+  const router = useRouter();
+  const [guardada, setGuardada] = useState({ es: inicial?.es ?? "", en: inicial?.en ?? "" });
+  const [texto, setTexto] = useState(guardada);
+  const [estado, setEstado] = useState<"listo" | "guardando" | "error">("listo");
+  const [mensaje, setMensaje] = useState<string | null>(null);
+  const cambio = texto.es !== guardada.es || texto.en !== guardada.en;
+
+  async function guardar() {
+    setEstado("guardando");
+    setMensaje(null);
+    try {
+      const respuesta = await fetch("/api/admin/leyendas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slot, ...texto }),
+      });
+      const datos = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) throw new Error(datos.error ?? "No se pudo guardar la leyenda.");
+      setGuardada(texto);
+      setEstado("listo");
+      setMensaje("Leyenda guardada");
+      router.refresh();
+    } catch (error) {
+      setEstado("error");
+      setMensaje(error instanceof Error ? error.message : "No se pudo guardar la leyenda.");
+    }
+  }
+
+  return (
+    <div className="mt-4 border-t border-forest-800/10 pt-4">
+      <label className="block text-xs text-forest-800/70">
+        Leyenda (opcional)
+        <input
+          type="text"
+          value={texto.es}
+          maxLength={300}
+          onChange={(e) => setTexto({ ...texto, es: e.target.value })}
+          placeholder="Por ejemplo: Taller de ecoladrillos en la escuela, 2016"
+          className={claseLeyenda}
+        />
+      </label>
+      <label className="mt-2 block text-xs text-forest-800/70">
+        En inglés (opcional: si queda vacía, se muestra la de español)
+        <input
+          type="text"
+          value={texto.en}
+          maxLength={300}
+          onChange={(e) => setTexto({ ...texto, en: e.target.value })}
+          className={claseLeyenda}
+        />
+      </label>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={guardar}
+          disabled={!cambio || estado === "guardando"}
+          className="rounded-full bg-leaf px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-leaf-dark disabled:opacity-50"
+        >
+          {estado === "guardando" ? "Guardando…" : "Guardar leyenda"}
+        </button>
+        {mensaje && (
+          <span role="status" className={`text-xs ${estado === "error" ? "text-[#8d3a32]" : "text-leaf"}`}>
+            {mensaje}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }

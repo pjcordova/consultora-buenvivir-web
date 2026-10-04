@@ -58,6 +58,8 @@ const ESPANOL = {
     cierreTitulo: "¿Conversamos?",
     verServicios: "Ver los servicios",
     trayectoria: "Trayectoria",
+    enfoqueCarrusel: "Belén Vera facilitando encuentros",
+    fotoEnfoque: (n: number) => `Belén Vera facilitando un encuentro, foto ${n}`,
     fotoFreyre: (titulo: string, n: number) => `${titulo}: actividad ${n}`,
   },
   espacio: {
@@ -177,6 +179,8 @@ const INGLES: Textos = {
     cierreTitulo: "Shall we talk?",
     verServicios: "See the services",
     trayectoria: "Track record",
+    enfoqueCarrusel: "Belén Vera facilitating gatherings",
+    fotoEnfoque: (n: number) => `Belén Vera facilitating a gathering, photo ${n}`,
     fotoFreyre: (titulo: string, n: number) => `${titulo}: activity ${n}`,
   },
   espacio: {

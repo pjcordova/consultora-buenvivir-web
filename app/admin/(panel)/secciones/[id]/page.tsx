@@ -7,7 +7,7 @@ import { obtenerSeccion } from "@/lib/admin/secciones";
 import { obtenerSlot } from "@/lib/admin/slots";
 import { usaBlob } from "@/lib/almacen";
 import { rutaVersionada } from "@/lib/assets";
-import { claveDeSeccion, leerGuardado } from "@/lib/contenido";
+import { claveDeSeccion, leerGuardado, leerLeyendasGuardadas } from "@/lib/contenido";
 import { enlaceEnIdioma, esIdioma, IDIOMA_DE_BASE, IDIOMAS, type Idioma } from "@/lib/idioma";
 
 export const dynamic = "force-dynamic";
@@ -51,6 +51,8 @@ export default async function SeccionPage({ params, searchParams }: Props) {
   const slots = seccion.slots.flatMap((id) => obtenerSlot(id) ?? []);
   // Dirección actual de cada imagen (del depósito o del código), o null si falta.
   const vistas = await Promise.all(slots.map((slot) => rutaVersionada(slot.ruta)));
+  // Las leyendas de las fotos que las llevan (Sobre Belén)
+  const leyendas = slots.some((slot) => slot.leyenda) ? await leerLeyendasGuardadas() : {};
 
   return (
     <main className="min-h-screen bg-cream px-[5vw] py-10">
@@ -125,10 +127,20 @@ export default async function SeccionPage({ params, searchParams }: Props) {
         {slots.length > 0 && (
           <>
             <h2 className="mt-10 font-display text-xl text-forest-950">Imágenes</h2>
-            <p className="mt-1 text-xs text-forest-800/60">Las imágenes son las mismas en los dos idiomas.</p>
+            <p className="mt-1 text-xs text-forest-800/60">
+              Las imágenes son las mismas en los dos idiomas.
+              {slots.some((slot) => slot.leyenda) &&
+                " Las que llevan leyenda la tienen debajo, con su versión en inglés."}
+            </p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {slots.map((slot, i) => (
-                <SlotCard key={slot.id} slot={slot} url={vistas[i]} directo={usaBlob} />
+                <SlotCard
+                  key={slot.id}
+                  slot={slot}
+                  url={vistas[i]}
+                  directo={usaBlob}
+                  leyenda={leyendas[slot.id]}
+                />
               ))}
             </div>
           </>

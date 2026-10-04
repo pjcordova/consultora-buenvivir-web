@@ -424,10 +424,6 @@ export async function obtenerBelen(idioma: Idioma): Promise<Contenido["belen"]> 
       typeof edicion.enfoque === "string" ? textoAParrafos(edicion.enfoque) : belen.enfoque,
     formacion:
       typeof edicion.formacion === "string" ? textoALista(edicion.formacion) : belen.formacion,
-    freyreLeyendas:
-      typeof edicion.freyreLeyendas === "string"
-        ? textoALista(edicion.freyreLeyendas)
-        : belen.freyreLeyendas,
   } as typeof belen;
 }
 
@@ -553,4 +549,31 @@ export async function obtenerPreguntas(
     preguntas: PREGUNTAS_DE_EJEMPLO[idioma].map((item, i) => ({ id: `ejemplo-${i}`, ...item })),
     deEjemplo: true,
   };
+}
+
+/* --- Leyendas de las fotos ---------------------------------------------------
+ * Algunas fotos (las de Sobre Belén) llevan una leyenda corta debajo, en los dos
+ * idiomas. Se cargan en el panel junto a cada foto y se guardan todas juntas:
+ * "leyendas" → { lugar de la foto: { es, en } }.
+ */
+
+const CLAVE_LEYENDAS = "leyendas";
+
+/** Las leyendas tal como están guardadas, para mostrarlas en el panel. */
+export async function leerLeyendasGuardadas(): Promise<Record<string, TextoBilingue>> {
+  return ((await leerGuardado())[CLAVE_LEYENDAS] ?? {}) as Record<string, TextoBilingue>;
+}
+
+/** La leyenda de cada foto en el idioma pedido (sin la de inglés, la de español). */
+export async function obtenerLeyendas(idioma: Idioma): Promise<Record<string, string>> {
+  const guardadas = await leerLeyendasGuardadas();
+  return Object.fromEntries(
+    Object.entries(guardadas).map(([lugar, texto]) => [lugar, textoEn(texto, idioma)])
+  );
+}
+
+export async function guardarLeyenda(lugar: string, texto: TextoBilingue): Promise<void> {
+  const actual = await leerParaModificar();
+  const leyendas = { ...(actual[CLAVE_LEYENDAS] ?? {}), [lugar]: texto };
+  await escribir({ ...actual, [CLAVE_LEYENDAS]: leyendas });
 }

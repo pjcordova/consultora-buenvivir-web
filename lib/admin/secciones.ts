@@ -521,13 +521,6 @@ export const SECCIONES: SeccionEditable[] = [
         tipo: "enlace",
         ayuda: "El enlace a la página de Facebook. Sin texto o sin destino, el botón no aparece.",
       },
-      {
-        id: "freyreLeyendas",
-        etiqueta: "Ecoproyectos Freyre — leyendas de las fotos",
-        tipo: "lista",
-        ayuda:
-          "Opcional. Un renglón por foto, en el mismo orden que las fotos de abajo (por ejemplo: Taller de ecoladrillos en la escuela, 2016). Las fotos se suben más abajo, en esta misma sección.",
-      },
       { id: "formacionTitulo", etiqueta: "Título de la formación", tipo: "texto" },
       {
         id: "formacion",
@@ -539,7 +532,11 @@ export const SECCIONES: SeccionEditable[] = [
       { id: "enfoqueCita", etiqueta: "Frase del enfoque", tipo: "parrafo" },
       { id: "enfoque", etiqueta: "Enfoque", tipo: "parrafos" },
     ],
-    slots: ["belen-foto", ...Array.from({ length: 8 }, (_, i) => `freyre-${i + 1}`)],
+    slots: [
+      "belen-foto",
+      ...Array.from({ length: 8 }, (_, i) => `freyre-${i + 1}`),
+      ...Array.from({ length: 3 }, (_, i) => `enfoque-${i + 1}`),
+    ],
     porDefecto: ({ belen }) => ({
       eyebrow: belen.eyebrow,
       saludo: belen.saludo,
@@ -553,7 +550,6 @@ export const SECCIONES: SeccionEditable[] = [
       freyreTitulo: belen.freyreTitulo,
       freyreTexto: belen.freyreTexto,
       freyreEnlace: belen.freyreEnlace,
-      freyreLeyendas: listaATexto(belen.freyreLeyendas),
       formacionTitulo: belen.formacionTitulo,
       formacion: listaATexto(belen.formacion),
       enfoqueTitulo: belen.enfoqueTitulo,

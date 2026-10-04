@@ -11,6 +11,8 @@ export type Slot = {
   /** Ruta pública del archivo (dentro de /public). */
   ruta: string;
   tipo: "imagen" | "video";
+  /** Lleva una leyenda corta debajo de la foto, que se carga junto a ella en el panel. */
+  leyenda?: boolean;
 };
 
 const carrusel = (
@@ -151,9 +153,19 @@ export const SLOTS: Slot[] = [
     ruta: "/images/belen.jpg",
     tipo: "imagen",
   },
+  // Carrusel de "Mi enfoque": Belén en acción (talleres, círculos, sesiones)
+  ...carrusel("enfoque", "Sobre Belén", 3, "Mi enfoque, foto").map((slot) => ({
+    ...slot,
+    ayuda:
+      "Una foto real de Belén en acción: un taller, un círculo de conversación, una sesión con un equipo. Cuadrada, por ejemplo 1080 × 1080 px.",
+    leyenda: true,
+  })),
   // Carrusel de su trayectoria en Sobre Belén: fotos que Belén baja de la página
   // de Facebook de Ecoproyectos Freyre. Solo se muestran las que estén cargadas.
-  ...carrusel("freyre", "Sobre Belén", 8, "Ecoproyectos Freyre, foto"),
+  ...carrusel("freyre", "Sobre Belén", 8, "Ecoproyectos Freyre, foto").map((slot) => ({
+    ...slot,
+    leyenda: true,
+  })),
   {
     id: "ballenas-foto",
     seccion: "Linajes de aprendizaje",
