@@ -38,12 +38,22 @@ export default function MedirClics() {
       });
     };
 
+    // Formularios marcados con data-medir (la suscripción a las novedades).
+    // Solo se cuenta el envío: el correo escrito nunca se manda a las estadísticas.
+    const alEnviar = (evento: SubmitEvent) => {
+      const formulario = evento.target as HTMLFormElement | null;
+      const nombre = formulario?.dataset?.medir;
+      if (nombre) track(nombre, { pagina: window.location.pathname });
+    };
+
     // En fase de captura: se cuenta aunque el enlace abra otra pestaña
     document.addEventListener("click", alHacerClic, true);
     document.addEventListener("auxclick", alHacerClic, true);
+    document.addEventListener("submit", alEnviar, true);
     return () => {
       document.removeEventListener("click", alHacerClic, true);
       document.removeEventListener("auxclick", alHacerClic, true);
+      document.removeEventListener("submit", alEnviar, true);
     };
   }, []);
 

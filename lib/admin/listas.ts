@@ -95,9 +95,9 @@ export const LISTAS: ListaEditable[] = [
     id: "preguntas",
     titulo: "Preguntas frecuentes",
     descripcion:
-      "Se muestran en Contacto y al final de Servicios, en el orden de esta lista. Sirven para responder las dudas de siempre (la primera sesión, la modalidad, el idioma, la duración, el precio) antes de que te escriban.",
+      "Se muestran en la Home (antes de \"Iniciar una conversación\"), en Contacto y al final de Servicios, en el orden de esta lista. Sirven para responder las dudas de siempre (la primera sesión, la modalidad, el idioma, la duración, el precio) antes de que te escriban.",
     elemento: "pregunta",
-    vistaPrevia: "/contacto#preguntas",
+    vistaPrevia: "/#preguntas",
     maximo: 15,
     campos: [
       {

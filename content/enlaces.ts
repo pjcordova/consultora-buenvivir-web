@@ -34,3 +34,10 @@ export const formularioComunidadEn = "https://forms.gle/ZWLrTYtRZyHwwFmQ7";
  */
 export const preinscripcionRegeneracionPersonal = "https://forms.gle/c1Ca6p7vsdcLLK1U7";
 export const preinscripcionCreatividad = "https://forms.gle/qHLvcoDVj7MzgNTP6";
+
+/**
+ * Publicación de Belén en Substack. La franja de novedades abre su página de
+ * suscripción con el correo ya escrito (?email=…, verificado el 2026-10-04):
+ * la persona confirma ahí y Substack le manda el correo de bienvenida.
+ */
+export const substackBelen = "https://belenvera82.substack.com";

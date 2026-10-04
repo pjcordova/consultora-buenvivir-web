@@ -2,10 +2,10 @@
  * Páginas de Privacidad y Términos.
  *
  * CONFIRMADO por Belén: la responsable es ella como persona (Belén Vera) y el
- * correo de contacto es el del pie. Describen cómo funciona el sitio hoy (sin
- * formularios propios, estadísticas sin cookies, agenda y formularios de Google,
- * videos de YouTube, WhatsApp). Si se suma un formulario propio, un newsletter o
- * pagos en el sitio, hay que actualizarlas.
+ * correo de contacto es el del pie. Describen cómo funciona el sitio hoy (no
+ * guarda datos personales, estadísticas sin cookies, agenda y formularios de
+ * Google, videos de YouTube, WhatsApp, novedades por correo con Substack). Si se
+ * suma un formulario que guarde datos en el sitio o pagos, hay que actualizarlas.
  *
  * En los textos, {correo} se reemplaza por el correo de contacto (con enlace) y
  * {privacidad} por un enlace a la Política de privacidad.
@@ -26,7 +26,7 @@ export const privacidad: TextoLegal = {
   titulo: "Política de privacidad",
   bajada:
     "Cómo se cuidan los datos de quienes visitan este sitio y se ponen en contacto con Buen Vivir.",
-  actualizado: "Última actualización: 3 de octubre de 2026",
+  actualizado: "Última actualización: 4 de octubre de 2026",
   bloques: [
     {
       titulo: "Quién es responsable de tus datos",
@@ -37,18 +37,19 @@ export const privacidad: TextoLegal = {
     {
       titulo: "Qué datos se reciben",
       parrafos: [
-        "El sitio no tiene formularios propios ni cuentas de usuario: solo se reciben los datos que vos decidís compartir al ponerte en contacto.",
+        "El sitio no tiene cuentas de usuario ni guarda datos personales: solo se reciben los datos que vos decidís compartir al ponerte en contacto o al suscribirte a las novedades.",
       ],
       lista: [
         "Si escribís por correo o por WhatsApp: tu nombre, tu correo o tu número de teléfono y lo que cuentes en el mensaje.",
         "Si reservás una conversación en la agenda: los datos que pide la reserva de Google Calendar, como tu nombre y tu correo.",
-        "Si te sumás a la comunidad: las respuestas que completes en el formulario de Google Forms.",
+        "Si te sumás a la comunidad o te pre-inscribís a un grupo: las respuestas que completes en el formulario de Google Forms.",
+        "Si te suscribís a las novedades: tu correo, que el formulario de la web le pasa a Substack, donde queda en la lista de suscripción de Belén. Podés darte de baja desde cualquiera de los correos que recibas.",
       ],
     },
     {
       titulo: "Para qué se usan",
       parrafos: [
-        "Para responder tus consultas, coordinar y llevar adelante las sesiones o encuentros que acuerdes, y contarte las novedades de la comunidad si te sumaste a ella.",
+        "Para responder tus consultas, coordinar y llevar adelante las sesiones o encuentros que acuerdes, y mandarte novedades si te suscribiste o te sumaste a la comunidad.",
         "Tus datos no se venden ni se ceden a terceros, y no se usan para publicidad.",
       ],
     },
@@ -61,6 +62,7 @@ export const privacidad: TextoLegal = {
         "Vercel (Estados Unidos) aloja el sitio y, como cualquier servidor, registra datos técnicos de las visitas, como la dirección IP, para su funcionamiento y su seguridad.",
         "Google provee la agenda de reservas, los formularios de inscripción y los videos de YouTube que se ven en algunas páginas.",
         "WhatsApp (Meta) recibe los mensajes que se envían desde el botón de WhatsApp.",
+        "Substack (Estados Unidos) guarda la lista de suscripción a las novedades y envía esos correos.",
       ],
     },
     {

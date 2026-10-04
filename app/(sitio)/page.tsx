@@ -6,6 +6,8 @@ import FichaOrganizacion from "@/components/FichaOrganizacion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import InfoCard from "@/components/InfoCard";
+import SeccionNovedades from "@/components/SeccionNovedades";
+import SeccionPreguntas from "@/components/SeccionPreguntas";
 import SeccionTalleres from "@/components/SeccionTalleres";
 import SeccionTestimonios from "@/components/SeccionTestimonios";
 import SectionHeader from "@/components/SectionHeader";
@@ -15,11 +17,14 @@ import {
   obtenerCierre,
   obtenerCosmovision,
   obtenerLinajes,
+  obtenerNovedades,
   obtenerParadigma,
   obtenerPortada,
+  obtenerPreguntas,
   obtenerServicios,
   obtenerTalleres,
   obtenerTestimonios,
+  urlWhatsapp,
 } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
@@ -43,6 +48,9 @@ export default async function HomePage() {
     ctaFinal,
     talleres,
     testimonios,
+    { preguntas, deEjemplo },
+    enlaceWhatsapp,
+    novedades,
   ] = await Promise.all([
     obtenerPortada(idioma),
     obtenerParadigma(idioma),
@@ -52,6 +60,9 @@ export default async function HomePage() {
     obtenerCierre(idioma),
     obtenerTalleres(idioma),
     obtenerTestimonios(idioma),
+    obtenerPreguntas(idioma),
+    urlWhatsapp(idioma),
+    obtenerNovedades(idioma),
   ]);
 
   return (
@@ -145,6 +156,18 @@ export default async function HomePage() {
 
       <SeccionTestimonios testimonios={testimonios} idioma={idioma} />
 
+      {/* Las dudas de siempre, justo antes de invitar a conversar */}
+      <SeccionPreguntas
+        preguntas={preguntas}
+        deEjemplo={deEjemplo}
+        idioma={idioma}
+        whatsapp={enlaceWhatsapp}
+      />
+
+      {/* Para quien todavía no quiere escribir: dejar el correo y recibir novedades */}
+      <SeccionNovedades textos={novedades} />
+
+      {/* La franja verde ya separa: el cierre conserva su fondo crema */}
       <CtaSection
         title={ctaFinal.titulo}
         subtitle={ctaFinal.bajada}

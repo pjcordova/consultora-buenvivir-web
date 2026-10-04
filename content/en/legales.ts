@@ -10,7 +10,7 @@ export const privacidad: TextoLegal = {
   titulo: "Privacy policy",
   bajada:
     "How the data of people who visit this site and get in touch with Buen Vivir is looked after.",
-  actualizado: "Last updated: October 3, 2026",
+  actualizado: "Last updated: October 4, 2026",
   bloques: [
     {
       titulo: "Who is responsible for your data",
@@ -21,18 +21,19 @@ export const privacidad: TextoLegal = {
     {
       titulo: "What data is received",
       parrafos: [
-        "The site has no forms of its own and no user accounts: the only data received is what you choose to share when you get in touch.",
+        "The site has no user accounts and does not store personal data: the only data received is what you choose to share when you get in touch or subscribe to the news.",
       ],
       lista: [
         "If you write by email or WhatsApp: your name, your email address or phone number and whatever you share in the message.",
         "If you book a conversation in the calendar: the details requested by the Google Calendar booking, such as your name and email.",
-        "If you join the community: the answers you fill in on the Google Forms form.",
+        "If you join the community or pre-register for a group: the answers you fill in on the Google Forms form.",
+        "If you subscribe to the news: your email address, which the form on the site passes on to Substack, where it stays on Belén's subscriber list. You can unsubscribe from any of the emails you receive.",
       ],
     },
     {
       titulo: "What it is used for",
       parrafos: [
-        "To answer your questions, arrange and carry out the sessions or gatherings you agree on, and share community news with you if you joined it.",
+        "To answer your questions, arrange and carry out the sessions or gatherings you agree on, and send you news if you subscribed or joined the community.",
         "Your data is not sold or passed on to third parties, and it is not used for advertising.",
       ],
     },
@@ -45,6 +46,7 @@ export const privacidad: TextoLegal = {
         "Vercel (United States) hosts the site and, like any server, logs technical data about visits, such as the IP address, for its operation and security.",
         "Google provides the booking calendar, the sign-up forms and the YouTube videos shown on some pages.",
         "WhatsApp (Meta) receives the messages sent from the WhatsApp button.",
+        "Substack (United States) keeps the news subscriber list and sends those emails.",
       ],
     },
     {

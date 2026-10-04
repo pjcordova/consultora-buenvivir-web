@@ -137,6 +137,19 @@ export const linajes = {
   },
 };
 
+// Franja para suscribirse a las novedades por correo, antes del cierre. Los
+// correos quedan en la lista de Substack de Belén (content/enlaces.ts): el sitio
+// no guarda ninguno. Textos editables desde el panel ("Novedades por correo").
+export const novedades = {
+  eyebrow: "Novedades por correo",
+  titulo: "Recibí las novedades de Belén",
+  bajada:
+    "Talleres, encuentros, escritos y recursos sobre regeneración, directo en tu correo.",
+  nota: "Te llegan desde Substack y podés darte de baja cuando quieras.",
+  campo: "Tu correo electrónico",
+  boton: "Suscribirme",
+};
+
 export const ctaFinal = {
   // CONFIRMADO — CTA real y consistente en publicaciones de servicios
   texto: "Reserva tu sesión y coordinamos una conversación inicial.",

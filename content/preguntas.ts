@@ -11,7 +11,7 @@ export const PREGUNTAS_DE_EJEMPLO: Record<Idioma, { pregunta: string; respuesta:
     {
       pregunta: "¿Cómo es la primera conversación?",
       respuesta:
-        "Es un primer encuentro para conocerse: le contás a Belén en qué momento estás y qué estás buscando, y ven juntos qué camino te puede servir. Se reserva en la agenda de esta página.",
+        "Es un primer encuentro para conocerse: le contás a Belén en qué momento estás y qué estás buscando, y ven juntos qué camino te puede servir. Se reserva en la agenda de la página de Contacto.",
     },
     {
       pregunta: "¿Las sesiones son online o presenciales?",
@@ -35,7 +35,7 @@ export const PREGUNTAS_DE_EJEMPLO: Record<Idioma, { pregunta: string; respuesta:
     {
       pregunta: "What is the first conversation like?",
       respuesta:
-        "It's a first meeting to get to know each other: you tell Belén where you are and what you're looking for, and together you see which path could help. You can book it in the calendar on this page.",
+        "It's a first meeting to get to know each other: you tell Belén where you are and what you're looking for, and together you see which path could help. You can book it in the calendar on the Contact page.",
     },
     {
       pregunta: "Are sessions online or in person?",

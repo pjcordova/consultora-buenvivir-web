@@ -216,6 +216,29 @@ export const SECCIONES: SeccionEditable[] = [
     }),
   },
   {
+    id: "novedades",
+    grupo: "Inicio",
+    titulo: "Novedades por correo",
+    descripcion:
+      "La franja verde para dejar el correo, antes del cierre. Los correos quedan en tu lista de Substack (la web no guarda ninguno).",
+    vistaPrevia: "/#novedades",
+    campos: [
+      { id: "eyebrow", etiqueta: "Etiqueta", tipo: "texto" },
+      { id: "titulo", etiqueta: "Título", tipo: "texto" },
+      { id: "bajada", etiqueta: "Bajada", tipo: "parrafo" },
+      {
+        id: "nota",
+        etiqueta: "Nota debajo del formulario",
+        tipo: "texto",
+        ayuda: "Dejala vacía para que no aparezca.",
+      },
+      { id: "campo", etiqueta: "Texto dentro del casillero del correo", tipo: "texto" },
+      { id: "boton", etiqueta: "Botón", tipo: "texto" },
+    ],
+    slots: [],
+    porDefecto: ({ novedades }) => ({ ...novedades }),
+  },
+  {
     id: "cierre",
     grupo: "Inicio",
     titulo: "Cierre",

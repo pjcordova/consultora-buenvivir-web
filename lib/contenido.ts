@@ -200,6 +200,11 @@ export async function obtenerLinajes(idioma: Idioma): Promise<Contenido["linajes
   return { ...linajes, ...(await editado("linajes", idioma)) } as typeof linajes;
 }
 
+export async function obtenerNovedades(idioma: Idioma): Promise<Contenido["novedades"]> {
+  const { novedades } = contenidoDe(idioma);
+  return { ...novedades, ...(await editado("novedades", idioma)) } as typeof novedades;
+}
+
 export async function obtenerCierre(idioma: Idioma): Promise<Contenido["ctaFinal"]> {
   const { ctaFinal } = contenidoDe(idioma);
   return { ...ctaFinal, ...(await editado("cierre", idioma)) } as typeof ctaFinal;

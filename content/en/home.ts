@@ -86,6 +86,15 @@ export const linajes: typeof es.linajes = {
   medios: es.linajes.medios,
 };
 
+export const novedades: typeof es.novedades = {
+  eyebrow: "News by email",
+  titulo: "Get Belén's news",
+  bajada: "Workshops, gatherings, writings and resources on regeneration, straight to your inbox.",
+  nota: "Emails are sent through Substack, in Spanish, and you can unsubscribe at any time.",
+  campo: "Your email address",
+  boton: "Subscribe",
+};
+
 export const ctaFinal: typeof es.ctaFinal = {
   texto: "Book your session and we'll arrange an initial conversation.",
   titulo: "Start a conversation about your organizational or personal moment",
