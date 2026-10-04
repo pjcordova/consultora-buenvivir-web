@@ -57,6 +57,8 @@ const ESPANOL = {
     fotoPendiente: "Foto pendiente",
     cierreTitulo: "¿Conversamos?",
     verServicios: "Ver los servicios",
+    trayectoria: "Trayectoria",
+    fotoFreyre: (titulo: string, n: number) => `${titulo}: actividad ${n}`,
   },
   espacio: {
     volver: "Volver a los espacios",
@@ -174,6 +176,8 @@ const INGLES: Textos = {
     fotoPendiente: "Photo pending",
     cierreTitulo: "Shall we talk?",
     verServicios: "See the services",
+    trayectoria: "Track record",
+    fotoFreyre: (titulo: string, n: number) => `${titulo}: activity ${n}`,
   },
   espacio: {
     volver: "Back to the spaces",

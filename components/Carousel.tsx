@@ -5,7 +5,8 @@ import { useState } from "react";
 import type { Idioma } from "@/lib/idioma";
 import { textosDe } from "@/lib/textos";
 
-export type Slide = { src: string; alt: string };
+/** leyenda: texto opcional que se lee debajo de la foto que se está viendo. */
+export type Slide = { src: string; alt: string; leyenda?: string };
 
 type CarouselProps = {
   /** Imágenes reales. Los lugares vacíos muestran un espacio reservado. */
@@ -69,6 +70,13 @@ export default function Carousel({ slides = [], total, label, idioma }: Carousel
           })}
         </div>
       </div>
+
+      {/* Si alguna foto trae leyenda, se reserva el renglón para que no salten los controles */}
+      {slides.some((slide) => slide?.leyenda) && (
+        <p className="-mt-1 min-h-[2.5rem] text-pretty text-center text-sm leading-snug text-forest-800/80" aria-live="polite">
+          {slides[actual]?.leyenda}
+        </p>
+      )}
 
       <div className="flex items-center justify-between">
         <button

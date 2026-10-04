@@ -151,6 +151,9 @@ export const SLOTS: Slot[] = [
     ruta: "/images/belen.jpg",
     tipo: "imagen",
   },
+  // Carrusel de su trayectoria en Sobre Belén: fotos que Belén baja de la página
+  // de Facebook de Ecoproyectos Freyre. Solo se muestran las que estén cargadas.
+  ...carrusel("freyre", "Sobre Belén", 8, "Ecoproyectos Freyre, foto"),
   {
     id: "ballenas-foto",
     seccion: "Linajes de aprendizaje",

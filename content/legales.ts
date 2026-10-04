@@ -136,7 +136,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "Enlaces y contenidos de otros sitios",
       parrafos: [
-        "El sitio incluye enlaces y contenidos de servicios de otras empresas, como Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok y Substack. Buen Vivir no es responsable por sus contenidos ni por sus políticas.",
+        "El sitio incluye enlaces y contenidos de servicios de otras empresas, como Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok, Substack y Facebook. Buen Vivir no es responsable por sus contenidos ni por sus políticas.",
       ],
     },
     {

@@ -28,6 +28,7 @@ const REDES: [RegExp, string][] = [
   [/tiktok\.com/i, "TikTok"],
   [/youtube\.com|youtu\.be/i, "YouTube"],
   [/substack\.com/i, "Substack"],
+  [/facebook\.com|fb\.com/i, "Facebook"],
 ];
 
 export type ClicMedible = {

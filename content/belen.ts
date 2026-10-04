@@ -63,6 +63,18 @@ export const belen = {
     ],
   ] satisfies Parrafo[],
 
+  // Ecoproyectos Freyre: su grupo voluntario de educación ambiental (10 años).
+  // Tarjeta con carrusel dentro de "Mi camino"; las fotos las sube Belén desde el
+  // panel (lugares freyre-1 a freyre-8) y las leyendas van en el mismo orden.
+  freyreTitulo: "Ecoproyectos Freyre",
+  freyreTexto:
+    "El primer grupo voluntario de educación ambiental de Freyre: 10 años uniendo sociedad civil, escuelas y organismos públicos.",
+  freyreEnlace: {
+    label: "Ver más en Facebook",
+    href: "https://www.facebook.com/profile.php?id=100063968382795",
+  },
+  freyreLeyendas: [] as string[],
+
   // CONFIRMADO por Belén. Se ve al final de "Mi camino" y se edita desde el panel.
   formacionTitulo: "Formación",
   formacion: ["Facilitación en Regeneración Organizacional", "Teoría U"],

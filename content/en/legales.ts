@@ -120,7 +120,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "Links and content from other sites",
       parrafos: [
-        "The site includes links and content from services of other companies, such as Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok and Substack. Buen Vivir is not responsible for their content or their policies.",
+        "The site includes links and content from services of other companies, such as Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok, Substack and Facebook. Buen Vivir is not responsible for their content or their policies.",
       ],
     },
     {

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Boton from "@/components/Boton";
+import Carousel from "@/components/Carousel";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import Parrafos from "@/components/Parrafos";
-import { rutaVersionada } from "@/lib/assets";
+import { imagenesCarrusel, rutaVersionada } from "@/lib/assets";
 import { obtenerBelen, obtenerCierre } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
@@ -20,6 +22,13 @@ export default async function SobreBelenPage() {
   const textos = textosDe(idioma).sobreBelen;
   const [belen, ctaFinal] = await Promise.all([obtenerBelen(idioma), obtenerCierre(idioma)]);
   const foto = await rutaVersionada(belen.foto);
+
+  // Solo las fotos cargadas, cada una con su leyenda (la del mismo número de renglón)
+  const fotosFreyre = (
+    await imagenesCarrusel("freyre", 8, (n) => textos.fotoFreyre(belen.freyreTitulo, n))
+  ).flatMap((slide, i) =>
+    slide ? [{ ...slide, leyenda: belen.freyreLeyendas[i] || undefined }] : []
+  );
 
   return (
     <main>
@@ -97,7 +106,45 @@ export default async function SobreBelenPage() {
           <div className="mt-6 text-[0.95rem]">
             <Parrafos parrafos={belen.camino} />
           </div>
+        </div>
 
+        {/* Ecoproyectos Freyre: su trayectoria en fotos, más ancho que el texto.
+            Aparece cuando Belén sube al menos una foto (en la computadora de
+            desarrollo se ve siempre, con los lugares vacíos marcados). */}
+        {(fotosFreyre.length > 0 || process.env.NODE_ENV === "development") && (
+          <div className="mx-auto mt-12 grid max-w-5xl items-center gap-10 rounded-3xl bg-cream p-6 sm:p-10 md:grid-cols-2 md:gap-12">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-leaf/25 bg-white px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-leaf">
+                <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
+                {textos.trayectoria}
+              </p>
+              <h2 className="mt-5 font-display text-2xl text-forest-950 sm:text-3xl">
+                {belen.freyreTitulo}
+              </h2>
+              <p className="mt-4 text-[0.95rem] leading-relaxed text-forest-800/80">{belen.freyreTexto}</p>
+              {belen.freyreEnlace?.label && belen.freyreEnlace.href && (
+                <Boton
+                  href={belen.freyreEnlace.href}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-forest-800/20 bg-white px-5 py-2.5 text-sm font-medium text-forest-800 transition-colors hover:border-leaf hover:text-forest-950"
+                >
+                  {belen.freyreEnlace.label}
+                  {/* Flecha hacia afuera: se abre en otra pestaña */}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M7 17 17 7M8 7h9v9" />
+                  </svg>
+                </Boton>
+              )}
+            </div>
+            <Carousel
+              slides={fotosFreyre.length ? fotosFreyre : undefined}
+              total={8}
+              label={belen.freyreTitulo}
+              idioma={idioma}
+            />
+          </div>
+        )}
+
+        <div className="mx-auto max-w-2xl">
           {belen.formacion.length > 0 && (
             <div className="mt-12">
               <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">

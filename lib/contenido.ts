@@ -424,6 +424,10 @@ export async function obtenerBelen(idioma: Idioma): Promise<Contenido["belen"]> 
       typeof edicion.enfoque === "string" ? textoAParrafos(edicion.enfoque) : belen.enfoque,
     formacion:
       typeof edicion.formacion === "string" ? textoALista(edicion.formacion) : belen.formacion,
+    freyreLeyendas:
+      typeof edicion.freyreLeyendas === "string"
+        ? textoALista(edicion.freyreLeyendas)
+        : belen.freyreLeyendas,
   } as typeof belen;
 }
 

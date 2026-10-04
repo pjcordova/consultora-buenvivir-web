@@ -66,6 +66,12 @@ export const belen: typeof es.belen = {
     ],
   ],
 
+  freyreTitulo: "Ecoproyectos Freyre",
+  freyreTexto:
+    "The first volunteer environmental education group in Freyre: 10 years bringing together civil society, schools and public bodies.",
+  freyreEnlace: { label: "See more on Facebook", href: es.belen.freyreEnlace.href },
+  freyreLeyendas: [],
+
   formacionTitulo: "Training",
   formacion: ["Facilitation in Organizational Regeneration", "Theory U"],
 };
