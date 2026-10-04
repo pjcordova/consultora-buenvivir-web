@@ -19,7 +19,7 @@ export const PREGUNTAS_DE_EJEMPLO: Record<Idioma, { pregunta: string; respuesta:
     },
     {
       pregunta: "¿En qué idioma son los encuentros?",
-      respuesta: "En español.",
+      respuesta: "En español y en inglés.",
     },
     {
       pregunta: "¿Cuánto dura un proceso?",
@@ -43,7 +43,7 @@ export const PREGUNTAS_DE_EJEMPLO: Record<Idioma, { pregunta: string; respuesta:
     },
     {
       pregunta: "What language are the sessions in?",
-      respuesta: "In Spanish.",
+      respuesta: "In Spanish and English.",
     },
     {
       pregunta: "How long does a process last?",

@@ -45,8 +45,8 @@ export default async function FichaOrganizacion() {
       contactType: "customer service",
       telephone: `+${whatsapp.numero}`,
       ...(correo ? { email: correo } : {}),
-      // Por ahora solo español: sumar "English" cuando Belén confirme que atiende en inglés
-      availableLanguage: "Spanish",
+      // CONFIRMADO (2026-10-04): Belén atiende en español y en inglés
+      availableLanguage: ["Spanish", "English"],
     },
   };
 
