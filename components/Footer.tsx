@@ -60,7 +60,7 @@ export default async function Footer() {
   const { descripcion, ubicacion, columnas, contacto, redes, lema, legales } = await obtenerPie(idioma);
 
   return (
-    <footer className="bg-forest-900 px-[8vw] py-16 text-sm">
+    <footer data-zona="pie" className="bg-forest-900 px-[8vw] py-16 text-sm">
       <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Image

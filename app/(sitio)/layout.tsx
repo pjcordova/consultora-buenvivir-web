@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/Footer";
+import MedirClics from "@/components/MedirClics";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 /*
@@ -22,6 +23,8 @@ export default function SitioLayout({ children }: { children: React.ReactNode })
       <WhatsAppButton />
       {/* Estadísticas de Vercel: sin cookies, así que no hace falta cartel de aviso */}
       <Analytics />
+      {/* Y qué botones se tocan: WhatsApp, agenda, formularios, correo, redes */}
+      <MedirClics />
     </>
   );
 }

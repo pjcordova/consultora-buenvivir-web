@@ -19,6 +19,7 @@ export default function HeaderSticky({ children }: { children: React.ReactNode }
 
   return (
     <header
+      data-zona="menú"
       className={`sticky top-0 z-30 flex h-20 items-center justify-between bg-white px-[8vw] transition-shadow duration-300 md:h-24 ${
         scrolleado ? "shadow-[0_6px_20px_-12px_rgba(18,23,15,0.5)]" : ""
       }`}
