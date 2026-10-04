@@ -47,6 +47,7 @@ export const footer: typeof es.footer = {
     agenda: { label: "Book a conversation", href: agendaBelen },
     whatsapp: { label: `WhatsApp: ${whatsapp.visible}`, href: whatsappUrl },
     comunidad: { label: "Join the community", href: formularioComunidadEn },
+    novedades: { label: "Get news by email", href: "/#novedades" },
     instagram: es.footer.contacto.instagram,
     email: es.footer.contacto.email,
   },

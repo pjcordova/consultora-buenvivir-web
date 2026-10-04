@@ -58,6 +58,8 @@ export const footer = {
     agenda: { label: "Agendar una conversación", href: agendaBelen } satisfies EnlaceFooter,
     whatsapp: { label: `WhatsApp: ${whatsapp.visible}`, href: whatsappUrl } satisfies EnlaceFooter,
     comunidad: { label: "Sumarme a la comunidad", href: formularioComunidad } satisfies EnlaceFooter,
+    // Lleva a la franja de suscripción de la Home
+    novedades: { label: "Recibir novedades por correo", href: "/#novedades" } satisfies EnlaceFooter,
     instagram: {
       label: "@consultorabuenvivir",
       href: "https://www.instagram.com/consultorabuenvivir/",

@@ -77,6 +77,7 @@ const ESPANOL = {
   },
   pie: {
     derechos: "Todos los derechos reservados.",
+    preguntas: "Preguntas frecuentes",
     pendiente: "Pendiente de confirmar",
   },
   redes: {
@@ -193,6 +194,7 @@ const INGLES: Textos = {
   },
   pie: {
     derechos: "All rights reserved.",
+    preguntas: "FAQ",
     pendiente: "To be confirmed",
   },
   redes: {

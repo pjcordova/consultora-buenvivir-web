@@ -52,7 +52,7 @@ export const privacidad: TextoLegal = {
     {
       titulo: "Statistics and cookies",
       parrafos: [
-        "To know how many people visit the site and which pages they read, it uses Vercel Web Analytics, which counts visits in an aggregated and anonymous way, without cookies and without identifying anyone.",
+        "To know how many people visit the site, which pages they read and which buttons they tap (for example WhatsApp, the calendar or subscribe), it uses Vercel Web Analytics, which counts this in an aggregated and anonymous way, without cookies and without identifying anyone. It never records what you type, such as the email address you subscribe with.",
         "The site uses only two cookies of its own: one remembers the language you chose (it lasts one year) and the other keeps the admin panel session open, used only by whoever manages the site.",
         "The Google calendar and the YouTube videos may store their own cookies when you interact with them. Videos are shown in YouTube's privacy-enhanced mode.",
       ],

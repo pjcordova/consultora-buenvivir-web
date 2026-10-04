@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { EnlaceFooter } from "@/content/site";
 import RedesSociales from "@/components/RedesSociales";
-import { obtenerPie } from "@/lib/contenido";
+import { obtenerPie, obtenerPreguntas } from "@/lib/contenido";
 import { enlaceEnIdioma, type Idioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { textosDe } from "@/lib/textos";
@@ -57,7 +57,9 @@ function Enlace({ enlace, idioma, className = "" }: EnlaceProps) {
 export default async function Footer() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma);
-  const { descripcion, ubicacion, columnas, contacto, redes, lema, legales } = await obtenerPie(idioma);
+  const [{ descripcion, ubicacion, columnas, contacto, redes, lema, legales }, { preguntas, deEjemplo }] =
+    await Promise.all([obtenerPie(idioma), obtenerPreguntas(idioma)]);
+  const hayPreguntas = preguntas.length > 0 && !deEjemplo;
 
   return (
     <footer data-zona="pie" className="bg-forest-900 px-[8vw] py-16 text-sm">
@@ -122,6 +124,14 @@ export default async function Footer() {
               <Enlace enlace={contacto.comunidad} idioma={idioma} />
             </li>
             <li className="flex items-center gap-2">
+              {/* Campana: avisos de novedades (el sobre ya es el del correo) */}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              </svg>
+              <Enlace enlace={contacto.novedades} idioma={idioma} />
+            </li>
+            <li className="flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-cream/60" aria-hidden="true">
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <circle cx="12" cy="12" r="4" />
@@ -143,14 +153,18 @@ export default async function Footer() {
       </div>
 
       <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-cream/15 pt-6 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
+        {/* La titular del sitio es Belén Vera (ver Privacidad y Términos) */}
         <p className="text-pretty">
-          © {new Date().getFullYear()} Buen Vivir · {textos.pie.derechos} ·{" "}
+          © {new Date().getFullYear()} Belén Vera · Buen Vivir · {textos.pie.derechos} ·{" "}
           <em>{lema}</em>
         </p>
-        <p className="flex gap-4">
-          {legales.map((enlace) => (
-            <Enlace key={enlace.label} enlace={enlace} idioma={idioma} />
-          ))}
+        <p className="flex flex-wrap gap-x-4 gap-y-2 sm:shrink-0 sm:flex-nowrap">
+          {/* "Preguntas frecuentes" solo si Belén cargó alguna (si no, la sección no existe) */}
+          {[...(hayPreguntas ? [{ label: textos.pie.preguntas, href: "/#preguntas" }] : []), ...legales].map(
+            (enlace) => (
+              <Enlace key={enlace.label} enlace={enlace} idioma={idioma} />
+            )
+          )}
         </p>
       </div>
     </footer>

@@ -68,7 +68,7 @@ export const privacidad: TextoLegal = {
     {
       titulo: "Estadísticas y cookies",
       parrafos: [
-        "Para saber cuántas personas visitan el sitio y qué páginas leen se usa Vercel Web Analytics, que cuenta las visitas de forma agregada y anónima, sin cookies y sin identificar a nadie.",
+        "Para saber cuántas personas visitan el sitio, qué páginas leen y qué botones tocan (por ejemplo, el de WhatsApp, el de la agenda o el de suscribirse) se usa Vercel Web Analytics, que lo cuenta de forma agregada y anónima, sin cookies y sin identificar a nadie. Nunca registra lo que escribís, como el correo con el que te suscribís.",
         "El sitio usa solo dos cookies propias: una recuerda el idioma que elegiste (dura un año) y la otra mantiene abierta la sesión del panel de administración, que solo usa quien administra el sitio.",
         "La agenda de Google y los videos de YouTube pueden guardar sus propias cookies cuando interactuás con ellos. Los videos se muestran en el modo de privacidad mejorada de YouTube.",
       ],
