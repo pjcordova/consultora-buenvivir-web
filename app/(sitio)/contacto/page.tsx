@@ -122,11 +122,9 @@ export default async function ContactoPage() {
 
               <Boton
                 href={via.cta.href}
-                className={`mt-6 inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
-                  via.destacada
-                    ? "bg-leaf text-white hover:bg-leaf-dark"
-                    : "border border-forest-800/20 text-forest-800 hover:bg-white"
-                }`}
+                // Los tres botones en el mismo verde (pedido de Belén): la agenda
+                // se distingue solo por el borde de su tarjeta
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-leaf px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-leaf-dark"
               >
                 {via.cta.label}
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
