@@ -61,6 +61,10 @@ const ESPANOL = {
     enfoqueCarrusel: "Belén Vera facilitando encuentros",
     fotoEnfoque: (n: number) => `Belén Vera facilitando un encuentro, foto ${n}`,
     fotoFreyre: (titulo: string, n: number) => `${titulo}: actividad ${n}`,
+    verificar: "Verificar certificado",
+    verCertificado: "Ver certificado",
+    certificadoDe: (formacion: string) => `Certificado: ${formacion}`,
+    cerrar: "Cerrar",
   },
   espacio: {
     volver: "Volver a los espacios",
@@ -182,6 +186,10 @@ const INGLES: Textos = {
     enfoqueCarrusel: "Belén Vera facilitating gatherings",
     fotoEnfoque: (n: number) => `Belén Vera facilitating a gathering, photo ${n}`,
     fotoFreyre: (titulo: string, n: number) => `${titulo}: activity ${n}`,
+    verificar: "Verify certificate",
+    verCertificado: "View certificate",
+    certificadoDe: (formacion: string) => `Certificate: ${formacion}`,
+    cerrar: "Close",
   },
   espacio: {
     volver: "Back to the spaces",

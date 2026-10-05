@@ -2,11 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SlotCard from "@/components/admin/SlotCard";
 import type { CampoDeLista, ElementoGuardado, ListaEditable, TextoBilingue } from "@/lib/admin/listas";
+import { slotDeCertificado } from "@/lib/admin/slots";
 
 type EditorListaProps = {
   lista: ListaEditable;
   items: ElementoGuardado[];
+  /** Imagen ya subida de cada elemento, por id (solo las listas con campo de imagen). */
+  imagenes?: Record<string, string | null>;
+  /** Con el depósito conectado, la imagen va directo del navegador al depósito. */
+  directo?: boolean;
 };
 
 const claseInput =
@@ -16,6 +22,7 @@ const claseInput =
 function elementoNuevo(lista: ListaEditable): ElementoGuardado {
   const elemento: ElementoGuardado = { id: crypto.randomUUID() };
   for (const campo of lista.campos) {
+    if (campo.tipo === "imagen") continue;
     elemento[campo.id] = campo.tipo === "si-no" ? true : campo.porIdioma ? { es: "", en: "" } : "";
   }
   return elemento;
@@ -47,11 +54,17 @@ function Entrada({
 }
 
 /**
- * Editor de una lista del panel (testimonios, talleres): agregar, quitar,
- * ordenar y guardar todo junto. Los textos tienen versión en español y en
- * inglés, una al lado de la otra.
+ * Editor de una lista del panel (testimonios, talleres, preguntas, formación):
+ * agregar, quitar, ordenar y guardar todo junto. Los textos tienen versión en
+ * español y en inglés, una al lado de la otra. La imagen de un elemento (el
+ * certificado de una formación) se guarda aparte, apenas se sube.
  */
-export default function EditorLista({ lista, items: iniciales }: EditorListaProps) {
+export default function EditorLista({
+  lista,
+  items: iniciales,
+  imagenes = {},
+  directo = false,
+}: EditorListaProps) {
   const router = useRouter();
   const [items, setItems] = useState<ElementoGuardado[]>(iniciales);
   const [cambios, setCambios] = useState(false);
@@ -76,7 +89,7 @@ export default function EditorLista({ lista, items: iniciales }: EditorListaProp
   };
 
   const quitar = (indice: number) => {
-    if (!confirm(`¿Quitar este ${lista.elemento}? Desaparece de la web al guardar.`)) return;
+    if (!confirm(`¿Quitar "${lista.elemento} ${indice + 1}"? Desaparece de la web al guardar.`)) return;
     actualizar(items.filter((_, i) => i !== indice));
   };
 
@@ -115,7 +128,7 @@ export default function EditorLista({ lista, items: iniciales }: EditorListaProp
     <div>
       {items.length === 0 && (
         <p className="rounded-2xl border border-dashed border-forest-800/20 bg-white px-6 py-8 text-center text-sm text-forest-800/60">
-          Todavía no hay ningún {lista.elemento}. Mientras la lista esté vacía, la sección no aparece en la web.
+          La lista está vacía. Mientras esté vacía, la sección no aparece en la web.
         </p>
       )}
 
@@ -158,6 +171,20 @@ export default function EditorLista({ lista, items: iniciales }: EditorListaProp
             <div className="mt-4 space-y-4">
               {lista.campos.map((campo) => {
                 const valor = item[campo.id];
+
+                // La única imagen de las listas: el certificado de cada formación
+                if (campo.tipo === "imagen") {
+                  return (
+                    <div key={campo.id} className="max-w-sm">
+                      <SlotCard
+                        slot={slotDeCertificado(item.id)}
+                        url={imagenes[item.id] ?? null}
+                        directo={directo}
+                      />
+                      {campo.ayuda && <p className="mt-1 text-xs text-forest-800/50">{campo.ayuda}</p>}
+                    </div>
+                  );
+                }
 
                 if (campo.tipo === "si-no") {
                   return (

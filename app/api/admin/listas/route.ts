@@ -1,10 +1,14 @@
 import { randomUUID } from "node:crypto";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { NextResponse } from "next/server";
 import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
 import { obtenerLista, type CampoDeLista, type ElementoGuardado } from "@/lib/admin/listas";
 import { publicarCambios } from "@/lib/admin/publicar";
-import { guardarLista } from "@/lib/contenido";
+import { rutaDelCertificado } from "@/lib/admin/slots";
+import { leerMedios, quitarMedio, usaBlob } from "@/lib/almacen";
+import { guardarLista, leerLista } from "@/lib/contenido";
 
 const LARGO_MAXIMO = 2000;
 
@@ -23,7 +27,27 @@ function limpiar(valor: unknown): string | null {
 }
 
 /**
- * Guarda una lista entera (testimonios o talleres). Solo se aceptan los campos
+ * Borra la imagen del certificado de las formaciones que se quitaron de la
+ * lista, si tenían. De a una: cada borrado reescribe el mapa de imágenes.
+ */
+async function quitarCertificados(ids: string[]): Promise<boolean> {
+  let quito = false;
+  const medios = usaBlob ? await leerMedios() : {};
+  for (const id of ids) {
+    const ruta = rutaDelCertificado(id);
+    if (usaBlob) {
+      if (!medios[ruta]?.url) continue;
+      await quitarMedio(ruta);
+    } else {
+      await fs.rm(path.join(process.cwd(), "public", ruta), { force: true });
+    }
+    quito = true;
+  }
+  return quito;
+}
+
+/**
+ * Guarda una lista entera (testimonios, talleres, preguntas o formación). Solo se aceptan los campos
  * declarados en lib/admin/listas.ts, con el formato esperado.
  */
 export async function POST(request: Request) {
@@ -52,6 +76,8 @@ export async function POST(request: Request) {
         elemento[campo.id] = valor !== false;
         continue;
       }
+      // La imagen no viaja con la lista: se sube aparte, con el id del elemento
+      if (campo.tipo === "imagen") continue;
 
       if (campo.porIdioma) {
         const { es, en } = (valor ?? {}) as { es?: unknown; en?: unknown };
@@ -76,6 +102,9 @@ export async function POST(request: Request) {
     limpios.push(elemento);
   }
 
+  const conImagen = lista.campos.some((campo) => campo.tipo === "imagen");
+  const anteriores = conImagen ? await leerLista(lista.id) : [];
+
   try {
     await guardarLista(lista.id, limpios);
   } catch {
@@ -83,5 +112,17 @@ export async function POST(request: Request) {
   }
 
   publicarCambios("contenido");
+
+  // Las formaciones que se quitaron se llevan su certificado. Si falla, la lista
+  // ya quedó guardada: la imagen sobra, pero no se ve en ningún lado.
+  if (conImagen) {
+    const quedan = new Set(limpios.map((elemento) => elemento.id));
+    const quitados = anteriores.map((elemento) => elemento.id).filter((id) => !quedan.has(id));
+    try {
+      if (await quitarCertificados(quitados)) publicarCambios("medios");
+    } catch {
+      /* sin consecuencias en la web */
+    }
+  }
   return NextResponse.json({ ok: true, items: limpios });
 }

@@ -455,7 +455,27 @@ const claveDeLista = (id: IdLista) => `lista:${id}`;
 
 export async function leerLista(id: IdLista): Promise<ElementoGuardado[]> {
   const guardado = (await leerGuardado())[claveDeLista(id)];
-  return Array.isArray(guardado?.items) ? (guardado.items as ElementoGuardado[]) : [];
+  return Array.isArray(guardado?.items) ? (guardado.items as ElementoGuardado[]) : listaInicial(id);
+}
+
+/**
+ * Con qué arranca una lista que nunca se guardó. La formación antes era un
+ * renglón por formación dentro de Sobre Belén: la lista arranca con esos
+ * renglones, así Belén no tiene que volver a escribirlos.
+ */
+async function listaInicial(id: IdLista): Promise<ElementoGuardado[]> {
+  if (id !== "formacion") return [];
+  const [es, en] = await Promise.all([obtenerBelen("es"), obtenerBelen("en")]);
+  // Las versiones en inglés van de a pares solo si las dos listas coinciden;
+  // si no, queda vacía y el sitio en inglés muestra la de español.
+  const conIngles = es.formacion.length === en.formacion.length;
+  return es.formacion.map((nombre, i) => ({
+    // Ids fijos: una imagen subida antes de guardar la lista no queda huérfana
+    id: `formacion-${i + 1}`,
+    nombre: { es: nombre, en: conIngles ? en.formacion[i] : "" },
+    detalle: { es: "", en: "" },
+    enlace: "",
+  }));
 }
 
 export async function guardarLista(id: IdLista, items: ElementoGuardado[]): Promise<void> {
@@ -521,6 +541,27 @@ export async function obtenerTalleres(idioma: Idioma): Promise<Taller[]> {
     }))
     .filter((taller) => taller.titulo && taller.fecha >= hoy)
     .sort((a, b) => `${a.fecha} ${a.hora}`.localeCompare(`${b.fecha} ${b.hora}`));
+}
+
+export type Formacion = {
+  id: string;
+  nombre: string;
+  /** Institución y año. Puede venir vacío. */
+  detalle: string;
+  /** Dónde se verifica el certificado. Puede venir vacío. */
+  enlace: string;
+};
+
+/** La formación de Belén, en el orden que le dio. La imagen del certificado se busca aparte. */
+export async function obtenerFormacion(idioma: Idioma): Promise<Formacion[]> {
+  return (await leerLista("formacion"))
+    .map((item) => ({
+      id: item.id,
+      nombre: textoEn(item.nombre, idioma),
+      detalle: textoEn(item.detalle, idioma),
+      enlace: textoEn(item.enlace, idioma),
+    }))
+    .filter((formacion) => formacion.nombre);
 }
 
 export type Pregunta = { id: string; pregunta: string; respuesta: string };

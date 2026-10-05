@@ -15,6 +15,9 @@ export type Slot = {
   leyenda?: boolean;
 };
 
+/** Hasta cuántas fotos lleva el carrusel de "Mi enfoque", en Sobre Belén. */
+export const FOTOS_ENFOQUE = 8;
+
 const carrusel = (
   prefijo: string,
   seccion: string,
@@ -153,8 +156,9 @@ export const SLOTS: Slot[] = [
     ruta: "/images/belen.jpg",
     tipo: "imagen",
   },
-  // Carrusel de "Mi enfoque": Belén en acción (talleres, círculos, sesiones)
-  ...carrusel("enfoque", "Sobre Belén", 3, "Mi enfoque, foto").map((slot) => ({
+  // Carrusel de "Mi enfoque": Belén en acción (talleres, círculos, sesiones).
+  // Solo se muestran las que estén cargadas.
+  ...carrusel("enfoque", "Sobre Belén", FOTOS_ENFOQUE, "Mi enfoque, foto").map((slot) => ({
     ...slot,
     ayuda:
       "Una foto real de Belén en acción: un taller, un círculo de conversación, una sesión con un equipo. Cuadrada, por ejemplo 1080 × 1080 px.",
@@ -184,8 +188,32 @@ export const SLOTS: Slot[] = [
   },
 ];
 
+/*
+ * Certificados de la formación: no son lugares fijos de la página, hay uno por
+ * cada formación de la lista del panel, con el id de esa formación.
+ */
+const PREFIJO_CERTIFICADO = "certificado-";
+
+export const rutaDelCertificado = (idFormacion: string) =>
+  `/images/certificados/${idFormacion}.jpg`;
+
+export const slotDeCertificado = (idFormacion: string): Slot => ({
+  id: `${PREFIJO_CERTIFICADO}${idFormacion}`,
+  seccion: "Formación",
+  titulo: "Imagen del certificado",
+  ayuda:
+    "Opcional. Una foto o captura del certificado (jpg o png); si lo tenés en PDF, sacale una captura. Antes de subirla, tapá el DNI u otros datos personales.",
+  ruta: rutaDelCertificado(idFormacion),
+  tipo: "imagen",
+});
+
 export function obtenerSlot(id: string): Slot | undefined {
-  return SLOTS.find((slot) => slot.id === id);
+  const fijo = SLOTS.find((slot) => slot.id === id);
+  if (fijo) return fijo;
+
+  // Mismo formato que los ids de las listas: la ruta no puede salirse de su carpeta.
+  const formacion = id.startsWith(PREFIJO_CERTIFICADO) ? id.slice(PREFIJO_CERTIFICADO.length) : "";
+  return /^[\w-]{1,64}$/.test(formacion) ? slotDeCertificado(formacion) : undefined;
 }
 
 export function slotsPorSeccion(): { seccion: string; slots: Slot[] }[] {

@@ -75,7 +75,9 @@ export const belen = {
     href: "https://www.facebook.com/profile.php?id=100063968382795",
   },
 
-  // CONFIRMADO por Belén. Se ve al final de "Mi camino" y se edita desde el panel.
+  // CONFIRMADO por Belén. Se ve al final de "Mi camino". La formación ahora es
+  // una lista del panel (con enlace e imagen del certificado): estos renglones
+  // son con lo que arranca esa lista si nunca se guardó.
   formacionTitulo: "Formación",
   formacion: ["Facilitación en Regeneración Organizacional", "Teoría U"],
 };

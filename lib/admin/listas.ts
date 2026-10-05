@@ -1,5 +1,6 @@
 /**
- * Listas que Belén arma desde el panel: testimonios y próximos talleres.
+ * Listas que Belén arma desde el panel: testimonios, próximos talleres,
+ * preguntas frecuentes y su formación.
  *
  * A diferencia de las secciones (un texto por campo), acá se agregan, quitan y
  * ordenan elementos. Cada lista se guarda una sola vez para los dos idiomas:
@@ -12,16 +13,18 @@ export type CampoDeLista = {
   etiqueta: string;
   /**
    * texto: una línea · parrafo: varias líneas · fecha: AAAA-MM-DD ·
-   * hora: HH:MM · enlace: una dirección · si-no: casilla para tildar
+   * hora: HH:MM · enlace: una dirección · si-no: casilla para tildar ·
+   * imagen: el certificado de una formación, que se sube apenas se elige
+   * (no viaja con la lista: se guarda en el depósito con el id del elemento)
    */
-  tipo: "texto" | "parrafo" | "fecha" | "hora" | "enlace" | "si-no";
+  tipo: "texto" | "parrafo" | "fecha" | "hora" | "enlace" | "si-no" | "imagen";
   /** Tiene versión en español y en inglés. */
   porIdioma?: boolean;
   obligatorio?: boolean;
   ayuda?: string;
 };
 
-export type IdLista = "testimonios" | "talleres" | "preguntas";
+export type IdLista = "testimonios" | "talleres" | "preguntas" | "formacion";
 
 export type ListaEditable = {
   id: IdLista;
@@ -115,6 +118,46 @@ export const LISTAS: ListaEditable[] = [
         porIdioma: true,
         obligatorio: true,
         ayuda: "Corta y clara. Un renglón en blanco separa párrafos.",
+      },
+    ],
+  },
+  {
+    id: "formacion",
+    titulo: "Formación",
+    descripcion:
+      "Las formaciones y certificaciones de Belén, en Sobre Belén. Cada una puede llevar un enlace para verificar el certificado, una imagen del certificado o las dos cosas. Si la lista queda vacía, el bloque no aparece.",
+    elemento: "formación",
+    vistaPrevia: "/sobre-belen#formacion",
+    maximo: 12,
+    campos: [
+      {
+        id: "nombre",
+        etiqueta: "Nombre de la formación",
+        tipo: "texto",
+        porIdioma: true,
+        obligatorio: true,
+        ayuda: "Por ejemplo: Teoría U: Leading for the emerging future.",
+      },
+      {
+        id: "detalle",
+        etiqueta: "Institución y año",
+        tipo: "texto",
+        porIdioma: true,
+        ayuda: "Opcional. Por ejemplo: Presencing Institute · 2024.",
+      },
+      {
+        id: "enlace",
+        etiqueta: "Enlace para verificar el certificado",
+        tipo: "enlace",
+        ayuda:
+          "Opcional. La dirección donde se comprueba el certificado (Credly, Coursera, la página de la institución). En la web se abre en otra pestaña.",
+      },
+      {
+        id: "certificado",
+        etiqueta: "Imagen del certificado",
+        tipo: "imagen",
+        ayuda:
+          "En la web aparece el botón «Ver certificado», que la muestra en grande. La imagen se guarda apenas la subís; el resto de los cambios, con «Guardar cambios».",
       },
     ],
   },

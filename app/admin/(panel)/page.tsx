@@ -97,7 +97,7 @@ export default async function AdminPage() {
       ))}
 
       <section className="mx-auto mt-10 max-w-6xl">
-        <h2 className="font-display text-xl text-forest-950">Testimonios, talleres y preguntas</h2>
+        <h2 className="font-display text-xl text-forest-950">Testimonios, talleres, preguntas y formación</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {LISTAS.map((lista, i) => (
             <Link

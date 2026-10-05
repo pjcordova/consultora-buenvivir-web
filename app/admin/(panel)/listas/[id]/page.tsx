@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import EditorLista from "@/components/admin/EditorLista";
 import { obtenerLista } from "@/lib/admin/listas";
+import { rutaDelCertificado } from "@/lib/admin/slots";
+import { usaBlob } from "@/lib/almacen";
+import { rutaVersionada } from "@/lib/assets";
 import { leerLista } from "@/lib/contenido";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +14,14 @@ export default async function ListaPage({ params }: { params: { id: string } }) 
   if (!lista) notFound();
 
   const items = await leerLista(lista.id);
+  // La imagen ya subida de cada elemento (hoy, el certificado de cada formación)
+  const imagenes = lista.campos.some((campo) => campo.tipo === "imagen")
+    ? Object.fromEntries(
+        await Promise.all(
+          items.map(async (item) => [item.id, await rutaVersionada(rutaDelCertificado(item.id))] as const)
+        )
+      )
+    : {};
 
   return (
     <main className="min-h-screen bg-cream px-[5vw] py-10">
@@ -42,7 +53,7 @@ export default async function ListaPage({ params }: { params: { id: string } }) 
         </p>
 
         <div className="mt-6">
-          <EditorLista lista={lista} items={items} />
+          <EditorLista lista={lista} items={items} imagenes={imagenes} directo={usaBlob} />
         </div>
       </div>
     </main>

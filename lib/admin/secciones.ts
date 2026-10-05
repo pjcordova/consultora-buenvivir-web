@@ -1,5 +1,6 @@
 import { contenidoDe, type Contenido } from "@/content";
 import { correo } from "@/content/site";
+import { FOTOS_ENFOQUE } from "@/lib/admin/slots";
 import {
   CAMPOS_COMPARTIDOS_DEL_PIE,
   incluyeATexto,
@@ -526,12 +527,12 @@ export const SECCIONES: SeccionEditable[] = [
         tipo: "enlace",
         ayuda: "El enlace a la página de Facebook. Sin texto o sin destino, el botón no aparece.",
       },
-      { id: "formacionTitulo", etiqueta: "Título de la formación", tipo: "texto" },
       {
-        id: "formacion",
-        etiqueta: "Formación",
-        tipo: "lista",
-        ayuda: "Una formación o certificación por renglón. Dejalo vacío para ocultar el bloque.",
+        id: "formacionTitulo",
+        etiqueta: "Título de la formación",
+        tipo: "texto",
+        ayuda:
+          "Las formaciones, con el enlace o la imagen de cada certificado, se cargan en la lista «Formación» del panel.",
       },
       { id: "enfoqueTitulo", etiqueta: "Título del enfoque", tipo: "texto" },
       { id: "enfoqueCita", etiqueta: "Frase del enfoque", tipo: "parrafo" },
@@ -540,7 +541,7 @@ export const SECCIONES: SeccionEditable[] = [
     slots: [
       "belen-foto",
       ...Array.from({ length: 8 }, (_, i) => `freyre-${i + 1}`),
-      ...Array.from({ length: 3 }, (_, i) => `enfoque-${i + 1}`),
+      ...Array.from({ length: FOTOS_ENFOQUE }, (_, i) => `enfoque-${i + 1}`),
     ],
     porDefecto: ({ belen }) => ({
       eyebrow: belen.eyebrow,
@@ -556,7 +557,6 @@ export const SECCIONES: SeccionEditable[] = [
       freyreTexto: belen.freyreTexto,
       freyreEnlace: belen.freyreEnlace,
       formacionTitulo: belen.formacionTitulo,
-      formacion: listaATexto(belen.formacion),
       enfoqueTitulo: belen.enfoqueTitulo,
       enfoqueCita: belen.enfoqueCita,
       enfoque: parrafosATexto(belen.enfoque),

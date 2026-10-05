@@ -5,11 +5,17 @@ import Carousel from "@/components/Carousel";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import Parrafos from "@/components/Parrafos";
+import VerCertificado from "@/components/VerCertificado";
+import { FOTOS_ENFOQUE, rutaDelCertificado } from "@/lib/admin/slots";
 import { imagenesCarrusel, rutaVersionada } from "@/lib/assets";
-import { obtenerBelen, obtenerCierre, obtenerLeyendas } from "@/lib/contenido";
+import { obtenerBelen, obtenerCierre, obtenerFormacion, obtenerLeyendas } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
+
+/** Los botones de cada formación: verificar el certificado y verlo en grande. */
+const claseBotonCertificado =
+  "inline-flex items-center gap-1.5 rounded-full border border-forest-800/20 bg-white px-3.5 py-1.5 text-xs font-medium text-forest-800 transition-colors hover:border-leaf hover:text-forest-950";
 
 export function generateMetadata(): Metadata {
   const idioma = obtenerIdioma();
@@ -20,10 +26,11 @@ export function generateMetadata(): Metadata {
 export default async function SobreBelenPage() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma).sobreBelen;
-  const [belen, ctaFinal, leyendas] = await Promise.all([
+  const [belen, ctaFinal, leyendas, listaFormacion] = await Promise.all([
     obtenerBelen(idioma),
     obtenerCierre(idioma),
     obtenerLeyendas(idioma),
+    obtenerFormacion(idioma),
   ]);
   /**
    * Las fotos cargadas de un carrusel, cada una con la leyenda que Belén le puso
@@ -35,10 +42,17 @@ export default async function SobreBelenPage() {
       return slide ? [{ ...slide, alt: leyenda ?? slide.alt, leyenda }] : [];
     });
 
-  const [foto, fotosFreyre, fotosEnfoque] = await Promise.all([
+  const [foto, fotosFreyre, fotosEnfoque, formacion] = await Promise.all([
     rutaVersionada(belen.foto),
     fotosCon("freyre", 8, (n) => textos.fotoFreyre(belen.freyreTitulo, n)),
-    fotosCon("enfoque", 3, textos.fotoEnfoque),
+    fotosCon("enfoque", FOTOS_ENFOQUE, textos.fotoEnfoque),
+    // Cada formación con la imagen de su certificado, si Belén la subió
+    Promise.all(
+      listaFormacion.map(async (item) => ({
+        ...item,
+        certificado: await rutaVersionada(rutaDelCertificado(item.id)),
+      }))
+    ),
   ]);
   // En el sitio publicado, la tarjeta de Freyre y el carrusel de "Mi enfoque"
   // existen solo si Belén subió alguna foto
@@ -180,25 +194,61 @@ export default async function SobreBelenPage() {
             </div>
           )}
 
-          {belen.formacion.length > 0 && (
-            <div className="mt-12">
+          {/* Formación: cada una puede llevar el enlace donde se verifica el
+              certificado y la imagen del certificado (lista "Formación" del panel) */}
+          {formacion.length > 0 && (
+            <div id="formacion" className="mt-12 scroll-mt-28">
               <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
                 {belen.formacionTitulo}
               </h2>
               <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                {belen.formacion.map((item) => (
-                  <li key={item} className="flex items-center gap-4 rounded-2xl bg-cream p-5">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-leaf">
-                      {/* Birrete */}
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M22 9 12 4 2 9l10 5 10-5Z" />
-                        <path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
-                        <path d="M22 9v6" />
-                      </svg>
-                    </span>
-                    <span className="font-display text-lg leading-snug text-forest-950">{item}</span>
-                  </li>
-                ))}
+                {formacion.map((item) => {
+                  const conExtras = Boolean(item.detalle || item.enlace || item.certificado);
+                  return (
+                    <li
+                      key={item.id}
+                      className={`flex gap-4 rounded-2xl bg-cream p-5 ${conExtras ? "items-start" : "items-center"}`}
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-leaf">
+                        {/* Birrete */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M22 9 12 4 2 9l10 5 10-5Z" />
+                          <path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
+                          <path d="M22 9v6" />
+                        </svg>
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-display text-lg leading-snug text-forest-950">{item.nombre}</p>
+                        {item.detalle && (
+                          <p className="mt-1 text-sm text-forest-800/70">{item.detalle}</p>
+                        )}
+                        {(item.enlace || item.certificado) && (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {item.enlace && (
+                              <Boton href={item.enlace} className={claseBotonCertificado}>
+                                {/* Escudo con tilde: se puede comprobar */}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                                  <path d="m9 12 2 2 4-4" />
+                                </svg>
+                                {textos.verificar}
+                              </Boton>
+                            )}
+                            {item.certificado && (
+                              <VerCertificado
+                                src={item.certificado}
+                                titulo={textos.certificadoDe(item.nombre)}
+                                etiqueta={textos.verCertificado}
+                                cerrar={textos.cerrar}
+                                className={claseBotonCertificado}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
@@ -206,13 +256,13 @@ export default async function SobreBelenPage() {
       </section>
 
       {/* Mi enfoque: con la foto de Belén facilitando, el texto a la izquierda y
-          la foto a la derecha (en celular, la foto arriba). Sin foto, una sola
+          la foto a la derecha (en celular y tablet, la foto arriba). Sin foto, una sola
           columna como antes; en la computadora de desarrollo se marca el lugar. */}
       <section className="bg-cream px-[8vw] py-16 sm:py-20">
         <div
           className={
             hayLugarFotoEnfoque
-              ? "mx-auto grid max-w-5xl items-start gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:gap-14"
+              ? "mx-auto grid max-w-5xl items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:gap-14"
               : "mx-auto max-w-2xl"
           }
         >
@@ -237,10 +287,10 @@ export default async function SobreBelenPage() {
           </div>
 
           {hayLugarFotoEnfoque && (
-            <div className="order-first md:sticky md:top-32 md:order-last md:mt-14">
+            <div className="order-first mx-auto w-full max-w-md lg:sticky lg:top-32 lg:order-last lg:mx-0 lg:mt-14 lg:max-w-none">
               <Carousel
                 slides={fotosEnfoque.length ? fotosEnfoque : undefined}
-                total={3}
+                total={FOTOS_ENFOQUE}
                 label={textos.enfoqueCarrusel}
                 idioma={idioma}
               />
