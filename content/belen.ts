@@ -64,7 +64,8 @@ export const belen = {
   ] satisfies Parrafo[],
 
   // Ecoproyectos Freyre: su grupo voluntario de educación ambiental (10 años).
-  // Tarjeta con carrusel dentro de "Mi camino"; las fotos (lugares freyre-1 a
+  // Tarjeta con carrusel dentro de "Mi camino", debajo del párrafo que nombra
+  // Freyre; las fotos (lugares freyre-1 a
   // freyre-8) y sus leyendas las carga Belén desde el panel, en Sobre Belén.
   freyreTitulo: "Ecoproyectos Freyre",
   freyreTexto:

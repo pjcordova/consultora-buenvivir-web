@@ -512,7 +512,12 @@ export const SECCIONES: SeccionEditable[] = [
       { id: "cita", etiqueta: "Frase destacada", tipo: "parrafo" },
       { id: "citaTexto", etiqueta: "Texto bajo la frase", tipo: "parrafo" },
       { id: "caminoTitulo", etiqueta: "Título de su camino", tipo: "texto" },
-      { id: "camino", etiqueta: "Su camino", tipo: "parrafos" },
+      {
+        id: "camino",
+        etiqueta: "Su camino",
+        tipo: "parrafos",
+        ayuda: "La tarjeta de Ecoproyectos Freyre aparece debajo del párrafo que nombra Freyre.",
+      },
       { id: "freyreTitulo", etiqueta: "Ecoproyectos Freyre — título", tipo: "texto" },
       { id: "freyreTexto", etiqueta: "Ecoproyectos Freyre — texto", tipo: "parrafo" },
       {

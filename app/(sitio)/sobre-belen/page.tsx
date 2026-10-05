@@ -40,8 +40,22 @@ export default async function SobreBelenPage() {
     fotosCon("freyre", 8, (n) => textos.fotoFreyre(belen.freyreTitulo, n)),
     fotosCon("enfoque", 3, textos.fotoEnfoque),
   ]);
-  // En el sitio publicado, el carrusel de "Mi enfoque" existe solo si Belén subió alguna foto
+  // En el sitio publicado, la tarjeta de Freyre y el carrusel de "Mi enfoque"
+  // existen solo si Belén subió alguna foto
+  const hayFreyre = fotosFreyre.length > 0 || process.env.NODE_ENV === "development";
   const hayLugarFotoEnfoque = fotosEnfoque.length > 0 || process.env.NODE_ENV === "development";
+
+  // La tarjeta de Ecoproyectos Freyre va justo debajo del párrafo de "Mi camino"
+  // que cuenta lo de Freyre, para reforzarlo (pedido de Belén); el resto del
+  // camino sigue debajo. Si ningún párrafo lo nombra, va al final, como antes.
+  const parrafoFreyre = belen.camino.findIndex((parrafo) =>
+    parrafo.some((fragmento) =>
+      /freyre/i.test(typeof fragmento === "string" ? fragmento : fragmento.fuerte)
+    )
+  );
+  const corte = parrafoFreyre >= 0 ? parrafoFreyre + 1 : belen.camino.length;
+  const caminoAntes = belen.camino.slice(0, corte);
+  const caminoDespues = belen.camino.slice(corte);
 
   return (
     <main>
@@ -117,15 +131,15 @@ export default async function SobreBelenPage() {
             {belen.caminoTitulo}
           </h2>
           <div className="mt-6 text-[0.95rem]">
-            <Parrafos parrafos={belen.camino} />
+            <Parrafos parrafos={caminoAntes} />
           </div>
         </div>
 
         {/* Ecoproyectos Freyre: su trayectoria en fotos, más ancho que el texto.
             Aparece cuando Belén sube al menos una foto (en la computadora de
             desarrollo se ve siempre, con los lugares vacíos marcados). */}
-        {(fotosFreyre.length > 0 || process.env.NODE_ENV === "development") && (
-          <div className="mx-auto mt-12 grid max-w-5xl items-center gap-10 rounded-3xl bg-cream p-6 sm:p-10 md:grid-cols-2 md:gap-12">
+        {hayFreyre && (
+          <div className="mx-auto mt-10 grid max-w-5xl items-center gap-10 rounded-3xl bg-cream p-6 sm:p-10 md:grid-cols-2 md:gap-12">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full border border-leaf/25 bg-white px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-leaf">
                 <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
@@ -158,6 +172,14 @@ export default async function SobreBelenPage() {
         )}
 
         <div className="mx-auto max-w-2xl">
+          {/* El resto de su camino, después de la tarjeta (sin tarjeta, sigue
+              a los párrafos de arriba con el espacio de siempre) */}
+          {caminoDespues.length > 0 && (
+            <div className={`text-[0.95rem] ${hayFreyre ? "mt-10" : "mt-5"}`}>
+              <Parrafos parrafos={caminoDespues} />
+            </div>
+          )}
+
           {belen.formacion.length > 0 && (
             <div className="mt-12">
               <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
