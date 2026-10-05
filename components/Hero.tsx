@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Boton from "@/components/Boton";
+import SemillasFlotantes from "@/components/SemillasFlotantes";
 import { rutaVersionada } from "@/lib/assets";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { textosDe } from "@/lib/textos";
@@ -44,6 +45,10 @@ export default async function Hero({
           className="object-cover"
         />
       )}
+
+      {/* Semillas de diente de león en 3D, entre la foto y el recuadro: las que
+          pasan por detrás del vidrio se ven desenfocadas */}
+      <SemillasFlotantes />
 
       {/* Vidrio oscuro esmerilado (pedido de Belén: más transparente). Deja ver la luz
           y los colores de la foto, muy difuminados para que no compitan con las letras,

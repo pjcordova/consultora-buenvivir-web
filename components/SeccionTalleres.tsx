@@ -35,6 +35,8 @@ export default function SeccionTalleres({ talleres, idioma }: SeccionTalleresPro
           return (
             <li
               key={taller.id}
+              // Tarjeta ancha: se inclina menos
+              data-inclinar="3"
               className="flex flex-col gap-5 rounded-3xl bg-white p-6 shadow-[0_14px_40px_-28px_rgba(18,23,15,0.35)] sm:flex-row sm:items-center sm:p-7"
             >
               <time

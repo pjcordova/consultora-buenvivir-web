@@ -28,7 +28,7 @@ export default function SeccionTestimonios({ testimonios, idioma }: SeccionTesti
       >
         {testimonios.map((testimonio) => (
           <li key={testimonio.id}>
-            <figure className="flex h-full flex-col rounded-3xl bg-cream p-7">
+            <figure data-inclinar className="flex h-full flex-col rounded-3xl bg-cream p-7">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="text-leaf/60" aria-hidden="true">
                 <path d="M9.5 6C6.5 6.8 4.5 9.4 4.5 12.6V18h5.5v-5.5H7.3c.1-2 1.2-3.5 3-4.1L9.5 6Zm9 0c-3 .8-5 3.4-5 6.6V18H19v-5.5h-2.7c.1-2 1.2-3.5 3-4.1L18.5 6Z" />
               </svg>

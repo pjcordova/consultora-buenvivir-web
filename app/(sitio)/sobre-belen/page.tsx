@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import ArbolDelCamino from "@/components/ArbolDelCamino";
 import Boton from "@/components/Boton";
 import Carousel from "@/components/Carousel";
 import CtaSection from "@/components/CtaSection";
@@ -140,118 +141,137 @@ export default async function SobreBelenPage() {
       </section>
 
       <section className="bg-white px-[8vw] py-16 sm:py-20">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
-            {belen.caminoTitulo}
-          </h2>
-          <div className="mt-6 text-[0.95rem]">
-            <Parrafos parrafos={caminoAntes} />
-          </div>
-        </div>
-
-        {/* Ecoproyectos Freyre: su trayectoria en fotos, más ancho que el texto.
-            Aparece cuando Belén sube al menos una foto (en la computadora de
-            desarrollo se ve siempre, con los lugares vacíos marcados). */}
-        {hayFreyre && (
-          <div className="mx-auto mt-10 grid max-w-5xl items-center gap-10 rounded-3xl bg-cream p-6 sm:p-10 md:grid-cols-2 md:gap-12">
-            <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-leaf/25 bg-white px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-leaf">
-                <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
-                {textos.trayectoria}
-              </p>
-              <h2 className="mt-5 font-display text-2xl text-forest-950 sm:text-3xl">
-                {belen.freyreTitulo}
-              </h2>
-              <p className="mt-4 text-[0.95rem] leading-relaxed text-forest-800/80">{belen.freyreTexto}</p>
-              {belen.freyreEnlace?.label && belen.freyreEnlace.href && (
-                <Boton
-                  href={belen.freyreEnlace.href}
-                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-forest-800/20 bg-white px-5 py-2.5 text-sm font-medium text-forest-800 transition-colors hover:border-leaf hover:text-forest-950"
-                >
-                  {belen.freyreEnlace.label}
-                  {/* Flecha hacia afuera: se abre en otra pestaña */}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M7 17 17 7M8 7h9v9" />
-                  </svg>
-                </Boton>
-              )}
+        {/* En pantallas anchas, una semilla se vuelve árbol al costado de "Mi
+            camino" mientras se lee; en las angostas, crece al final del texto. */}
+        <div className="mx-auto max-w-6xl xl:grid xl:grid-cols-[15rem_minmax(0,1fr)] xl:gap-12">
+          <aside className="hidden xl:block" aria-hidden="true">
+            <div className="sticky top-32 h-[min(70vh,36rem)]">
+              <ArbolDelCamino modo="pegado" sigue="mi-camino" />
             </div>
-            <Carousel
-              slides={fotosFreyre.length ? fotosFreyre : undefined}
-              total={8}
-              label={belen.freyreTitulo}
-              idioma={idioma}
-            />
-          </div>
-        )}
+          </aside>
 
-        <div className="mx-auto max-w-2xl">
-          {/* El resto de su camino, después de la tarjeta (sin tarjeta, sigue
-              a los párrafos de arriba con el espacio de siempre) */}
-          {caminoDespues.length > 0 && (
-            <div className={`text-[0.95rem] ${hayFreyre ? "mt-10" : "mt-5"}`}>
-              <Parrafos parrafos={caminoDespues} />
-            </div>
-          )}
+          <div className="min-w-0">
+            <div id="mi-camino">
+              <div className="mx-auto max-w-2xl">
+                <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
+                  {belen.caminoTitulo}
+                </h2>
+                <div className="mt-6 text-[0.95rem]">
+                  <Parrafos parrafos={caminoAntes} />
+                </div>
+              </div>
 
-          {/* Formación: cada una puede llevar el enlace donde se verifica el
-              certificado y la imagen del certificado (lista "Formación" del panel) */}
-          {formacion.length > 0 && (
-            <div id="formacion" className="mt-12 scroll-mt-28">
-              <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
-                {belen.formacionTitulo}
-              </h2>
-              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                {formacion.map((item) => {
-                  const conExtras = Boolean(item.detalle || item.enlace || item.certificado);
-                  return (
-                    <li
-                      key={item.id}
-                      className={`flex gap-4 rounded-2xl bg-cream p-5 ${conExtras ? "items-start" : "items-center"}`}
-                    >
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-leaf">
-                        {/* Birrete */}
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M22 9 12 4 2 9l10 5 10-5Z" />
-                          <path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
-                          <path d="M22 9v6" />
+              {/* Ecoproyectos Freyre: su trayectoria en fotos, más ancho que el texto.
+                  Aparece cuando Belén sube al menos una foto (en la computadora de
+                  desarrollo se ve siempre, con los lugares vacíos marcados). */}
+              {hayFreyre && (
+                <div className="mx-auto mt-10 grid max-w-5xl items-center gap-10 rounded-3xl bg-cream p-6 sm:p-10 md:grid-cols-2 md:gap-12">
+                  <div>
+                    <p className="inline-flex items-center gap-2 rounded-full border border-leaf/25 bg-white px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-leaf">
+                      <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
+                      {textos.trayectoria}
+                    </p>
+                    <h2 className="mt-5 font-display text-2xl text-forest-950 sm:text-3xl">
+                      {belen.freyreTitulo}
+                    </h2>
+                    <p className="mt-4 text-[0.95rem] leading-relaxed text-forest-800/80">{belen.freyreTexto}</p>
+                    {belen.freyreEnlace?.label && belen.freyreEnlace.href && (
+                      <Boton
+                        href={belen.freyreEnlace.href}
+                        className="mt-6 inline-flex items-center gap-2 rounded-full border border-forest-800/20 bg-white px-5 py-2.5 text-sm font-medium text-forest-800 transition-colors hover:border-leaf hover:text-forest-950"
+                      >
+                        {belen.freyreEnlace.label}
+                        {/* Flecha hacia afuera: se abre en otra pestaña */}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M7 17 17 7M8 7h9v9" />
                         </svg>
-                      </span>
-                      <div className="min-w-0">
-                        <p className="font-display text-lg leading-snug text-forest-950">{item.nombre}</p>
-                        {item.detalle && (
-                          <p className="mt-1 text-sm text-forest-800/70">{item.detalle}</p>
-                        )}
-                        {(item.enlace || item.certificado) && (
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {item.enlace && (
-                              <Boton href={item.enlace} className={claseBotonCertificado}>
-                                {/* Escudo con tilde: se puede comprobar */}
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-                                  <path d="m9 12 2 2 4-4" />
-                                </svg>
-                                {textos.verificar}
-                              </Boton>
+                      </Boton>
+                    )}
+                  </div>
+                  <Carousel
+                    slides={fotosFreyre.length ? fotosFreyre : undefined}
+                    total={8}
+                    label={belen.freyreTitulo}
+                    idioma={idioma}
+                  />
+                </div>
+              )}
+
+              {/* El resto de su camino, después de la tarjeta (sin tarjeta, sigue
+                  a los párrafos de arriba con el espacio de siempre) */}
+              {caminoDespues.length > 0 && (
+                <div className={`mx-auto max-w-2xl text-[0.95rem] ${hayFreyre ? "mt-10" : "mt-5"}`}>
+                  <Parrafos parrafos={caminoDespues} />
+                </div>
+              )}
+
+              <div className="mx-auto mt-10 h-80 max-w-xs xl:hidden" aria-hidden="true">
+                <ArbolDelCamino modo="final" />
+              </div>
+            </div>
+
+            <div className="mx-auto max-w-2xl">
+              {/* Formación: cada una puede llevar el enlace donde se verifica el
+                  certificado y la imagen del certificado (lista "Formación" del panel) */}
+              {formacion.length > 0 && (
+                <div id="formacion" className="mt-12 scroll-mt-28">
+                  <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
+                    {belen.formacionTitulo}
+                  </h2>
+                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {formacion.map((item) => {
+                      const conExtras = Boolean(item.detalle || item.enlace || item.certificado);
+                      return (
+                        <li
+                          key={item.id}
+                          data-inclinar
+                          className={`flex gap-4 rounded-2xl bg-cream p-5 ${conExtras ? "items-start" : "items-center"}`}
+                        >
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-leaf">
+                            {/* Birrete */}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <path d="M22 9 12 4 2 9l10 5 10-5Z" />
+                              <path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
+                              <path d="M22 9v6" />
+                            </svg>
+                          </span>
+                          <div className="min-w-0">
+                            <p className="font-display text-lg leading-snug text-forest-950">{item.nombre}</p>
+                            {item.detalle && (
+                              <p className="mt-1 text-sm text-forest-800/70">{item.detalle}</p>
                             )}
-                            {item.certificado && (
-                              <VerCertificado
-                                src={item.certificado}
-                                titulo={textos.certificadoDe(item.nombre)}
-                                etiqueta={textos.verCertificado}
-                                cerrar={textos.cerrar}
-                                className={claseBotonCertificado}
-                              />
+                            {(item.enlace || item.certificado) && (
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                {item.enlace && (
+                                  <Boton href={item.enlace} className={claseBotonCertificado}>
+                                    {/* Escudo con tilde: se puede comprobar */}
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                                      <path d="m9 12 2 2 4-4" />
+                                    </svg>
+                                    {textos.verificar}
+                                  </Boton>
+                                )}
+                                {item.certificado && (
+                                  <VerCertificado
+                                    src={item.certificado}
+                                    titulo={textos.certificadoDe(item.nombre)}
+                                    etiqueta={textos.verCertificado}
+                                    cerrar={textos.cerrar}
+                                    className={claseBotonCertificado}
+                                  />
+                                )}
+                              </div>
                             )}
                           </div>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </section>
 

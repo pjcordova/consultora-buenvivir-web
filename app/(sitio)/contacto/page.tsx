@@ -105,6 +105,7 @@ export default async function ContactoPage() {
           {vias.map((via) => (
             <li
               key={via.id}
+              data-inclinar
               className={`flex flex-col rounded-3xl p-7 ${
                 via.destacada ? "bg-cream ring-1 ring-leaf/25" : "bg-cream"
               }`}

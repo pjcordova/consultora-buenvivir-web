@@ -93,7 +93,8 @@ export default async function ServiciosPage() {
                   id={oferta.slug}
                   className="grid items-center gap-8 md:grid-cols-2 md:gap-12"
                 >
-                  <div className={imagenALaDerecha ? "md:order-2" : ""}>
+                  {/* El folleto se inclina al pasar el mouse, como una tarjeta de verdad */}
+                  <div data-inclinar="6" className={`rounded-3xl ${imagenALaDerecha ? "md:order-2" : ""}`}>
                     {imagen ? (
                       <Image
                         src={imagen}

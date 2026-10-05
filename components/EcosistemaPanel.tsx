@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Boton from "@/components/Boton";
+import RaicesEcosistema from "@/components/RaicesEcosistema";
 import { rutaVersionada } from "@/lib/assets";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { textosDe } from "@/lib/textos";
@@ -57,9 +58,15 @@ export default async function EcosistemaPanel({
         <div className="absolute inset-0 bg-gradient-to-b from-forest-800 to-forest-950" aria-hidden="true" />
       )}
 
+      {/* Raíces que crecen desde el logo y unen los espacios (detrás de todo lo demás) */}
+      <RaicesEcosistema />
+
       <div className="relative flex flex-col items-center gap-10 px-6 py-12 sm:gap-14 sm:py-16">
-        {/* Placa con el logo del ecosistema */}
-        <div className="w-full max-w-[36rem] rounded-2xl border border-white/15 bg-forest-950/35 px-6 py-3 backdrop-blur-md sm:px-10 sm:py-4">
+        {/* Placa con el logo del ecosistema: de acá salen las raíces */}
+        <div
+          data-raiz="origen"
+          className="w-full max-w-[36rem] rounded-2xl border border-white/15 bg-forest-950/35 px-6 py-3 backdrop-blur-md sm:px-10 sm:py-4"
+        >
           {logoSrc ? (
             <Image
               src={logoSrc}
@@ -100,6 +107,7 @@ export default async function EcosistemaPanel({
                     </p>
                   )}
                   <div
+                    data-raiz="espacio"
                     className={`relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-full p-6 text-center sm:h-56 sm:w-56 ${
                       hayImagen
                         ? esSello

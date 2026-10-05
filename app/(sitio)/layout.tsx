@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/Footer";
+import InclinarTarjetas from "@/components/InclinarTarjetas";
 import MedirClics from "@/components/MedirClics";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
@@ -25,6 +26,8 @@ export default function SitioLayout({ children }: { children: React.ReactNode })
       <Analytics />
       {/* Y qué botones se tocan: WhatsApp, agenda, formularios, correo, redes */}
       <MedirClics />
+      {/* Las tarjetas con data-inclinar se inclinan en 3D al pasar el mouse */}
+      <InclinarTarjetas />
     </>
   );
 }
