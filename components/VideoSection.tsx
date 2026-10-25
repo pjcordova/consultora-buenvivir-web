@@ -33,14 +33,18 @@ export default async function VideoSection({
   return (
     // En celular el texto va arriba y abajo queda agua libre (la ballena nada por
     // el centro y la parte de abajo del video); en computadora, a la izquierda.
-    <section id={id} className="relative isolate overflow-hidden bg-gradient-to-b from-[#0e4c55] via-[#2b6f76] to-[#116f71] px-[6vw] pb-96 pt-16 sm:pb-[28rem] sm:pt-20 lg:py-32">
+    // En computadora la franja tiene al menos la proporción del video (16:9): así
+    // no se recorta arriba ni abajo y se ve entero, con el logo que Belén puso en
+    // su esquina superior derecha (si el texto la estira, se recorta del lado
+    // izquierdo, nunca de ese).
+    <section id={id} className="relative isolate overflow-hidden bg-gradient-to-b from-[#0e4c55] via-[#2b6f76] to-[#116f71] px-[6vw] pb-96 pt-28 sm:pb-[28rem] sm:pt-32 lg:flex lg:min-h-[56.25vw] lg:flex-col lg:justify-center lg:py-16">
       {hayPoster && (
-        <Image src={posterSrc!} alt="" fill sizes="100vw" className="object-cover" />
+        <Image src={posterSrc!} alt="" fill sizes="100vw" className="object-cover lg:object-right" />
       )}
       {hayVideo && (
         // motion-reduce: si el sistema pide menos animación queda solo la foto
         <video
-          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden lg:object-right"
           autoPlay
           muted
           loop
@@ -57,8 +61,21 @@ export default async function VideoSection({
         aria-hidden="true"
       />
 
+      {/* El logo arriba a la derecha (pedido de Belén). En computadora ya se ve el
+          que trae el video; en celular y tablet el recorte lo deja afuera, así
+          que va este, en blanco como el del video. Nunca se ven los dos. */}
+      <Image
+        src="/images/logo-buen-vivir-blanco.png"
+        alt=""
+        width={480}
+        height={331}
+        sizes="96px"
+        className="pointer-events-none absolute right-[6vw] top-6 h-auto w-24 opacity-90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.25)] lg:hidden"
+      />
+
+      {/* A la izquierda: la esquina derecha es del logo */}
       {tieneTexto(credito) && (
-        <p className="absolute right-[6vw] top-6 z-10 inline-flex items-center gap-2 rounded-full border border-white/15 bg-forest-950/45 px-4 py-1.5 text-[11px] text-white/85 backdrop-blur-sm">
+        <p className="absolute left-[6vw] top-6 z-10 inline-flex items-center gap-2 rounded-full border border-white/15 bg-forest-950/45 px-4 py-1.5 text-[11px] text-white/85 backdrop-blur-sm">
           <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
           {credito}
           {!hayVideo && !hayPoster && " — pendiente"}
