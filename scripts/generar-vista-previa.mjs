@@ -3,13 +3,14 @@
  * (WhatsApp, LinkedIn, Facebook…), a partir del logo y las fotos de public/images.
  *
  * Uso:   node scripts/generar-vista-previa.mjs
+ *        node scripts/generar-vista-previa.mjs --iconos   (solo los íconos)
  *
  * Hay que volver a correrlo si cambian el logo, la foto de portada, la de Belén o
  * la del bosque. El ícono va a app/ (Next.js lo toma por su nombre) y las
  * imágenes para compartir a public/compartir/ (cada página dice cuál usa en
  * lib/metadatos.ts).
  */
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -73,6 +74,35 @@ async function iconos() {
   // En iPhone el ícono no puede ser transparente: va sobre blanco y con aire.
   await (await cuadrado(180, 0.14, { r: 255, g: 255, b: 255, alpha: 1 })).toFile(destino("apple-icon.png"));
   console.log("app/apple-icon.png  180×180");
+
+  // El favicon.ico clásico: algunos buscadores y navegadores lo piden en la raíz
+  // aunque la página indique otro ícono. Lleva adentro tres tamaños en PNG.
+  const tamanos = [16, 32, 48];
+  const pngs = await Promise.all(
+    tamanos.map(async (lado) => (await cuadrado(lado, 0.04, { r: 0, g: 0, b: 0, alpha: 0 })).toBuffer())
+  );
+  await writeFile(destino("favicon.ico"), armarIco(tamanos, pngs));
+  console.log(`app/favicon.ico  ${tamanos.map((lado) => `${lado}×${lado}`).join(", ")}`);
+}
+
+/** Arma un .ico (formato de Windows) con imágenes PNG adentro, una por tamaño. */
+function armarIco(tamanos, pngs) {
+  const cabecera = Buffer.alloc(6 + 16 * pngs.length);
+  cabecera.writeUInt16LE(0, 0); // reservado
+  cabecera.writeUInt16LE(1, 2); // 1 = ícono
+  cabecera.writeUInt16LE(pngs.length, 4);
+  let desde = cabecera.length;
+  pngs.forEach((png, i) => {
+    const entrada = 6 + 16 * i;
+    cabecera.writeUInt8(tamanos[i] % 256, entrada); // ancho (0 = 256)
+    cabecera.writeUInt8(tamanos[i] % 256, entrada + 1); // alto
+    cabecera.writeUInt16LE(1, entrada + 4); // planos
+    cabecera.writeUInt16LE(32, entrada + 6); // bits por píxel
+    cabecera.writeUInt32LE(png.length, entrada + 8);
+    cabecera.writeUInt32LE(desde, entrada + 12);
+    desde += png.length;
+  });
+  return Buffer.concat([cabecera, ...pngs]);
 }
 
 /* --- Imágenes para compartir (1200 × 630) --- */
@@ -144,8 +174,10 @@ async function compartirEcosistema() {
   );
 }
 
-await mkdir(path.join(raiz, "public", "compartir"), { recursive: true });
 await iconos();
-await compartirInicio();
-await compartirBelen();
-await compartirEcosistema();
+if (!process.argv.includes("--iconos")) {
+  await mkdir(path.join(raiz, "public", "compartir"), { recursive: true });
+  await compartirInicio();
+  await compartirBelen();
+  await compartirEcosistema();
+}

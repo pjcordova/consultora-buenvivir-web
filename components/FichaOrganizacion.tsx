@@ -1,12 +1,12 @@
 import { obtenerCorreo, obtenerPie, obtenerWhatsapp } from "@/lib/contenido";
 import { enlaceEnIdioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
-import { URL_DEL_SITIO } from "@/lib/metadatos";
+import { NOMBRE_DEL_SITIO, URL_DEL_SITIO } from "@/lib/metadatos";
 import { textosDe } from "@/lib/textos";
 
 /**
- * Ficha invisible para Google (datos estructurados de schema.org): qué es Buen
- * Vivir, quién la dirige y dónde encontrarla.
+ * Ficha invisible para Google (datos estructurados de schema.org): cómo se
+ * llama el sitio, qué es Buen Vivir, quién la dirige y dónde encontrarla.
  *
  * Solo lleva datos confirmados. La ubicación y los horarios se suman cuando
  * Belén los confirme. Las redes, el WhatsApp y el correo salen del panel, así
@@ -26,10 +26,20 @@ export default async function FichaOrganizacion() {
   const redesDeLaConsultora = ["instagram", "tiktok", "youtube"].map(enlace).filter(Boolean);
   const redesDeBelen = ["linkedin", "substack"].map(enlace).filter(Boolean);
 
+  // Cómo se llama el sitio en los resultados de Google (arriba de cada resultado).
+  // Sin esto Google muestra solo el dominio.
+  const sitioWeb = {
+    "@type": "WebSite",
+    name: NOMBRE_DEL_SITIO,
+    alternateName: ["Consultora Buen Vivir", sitio.titulo],
+    url: `${URL_DEL_SITIO}/`,
+    inLanguage: ["es", "en"],
+  };
+
   const ficha = {
-    "@context": "https://schema.org",
     "@type": "Organization",
-    name: sitio.titulo,
+    name: NOMBRE_DEL_SITIO,
+    alternateName: ["Consultora Buen Vivir", sitio.titulo],
     description: sitio.descripcion,
     url: idioma === "es" ? URL_DEL_SITIO : `${URL_DEL_SITIO}${enlaceEnIdioma("/", idioma)}`,
     logo: `${URL_DEL_SITIO}/images/logo-buen-vivir.png`,
@@ -54,7 +64,12 @@ export default async function FichaOrganizacion() {
     <script
       type="application/ld+json"
       // Los "<" se escapan para que un texto cargado en el panel no pueda cerrar la etiqueta
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(ficha).replace(/</g, "\\u003c") }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({ "@context": "https://schema.org", "@graph": [sitioWeb, ficha] }).replace(
+          /</g,
+          "\\u003c"
+        ),
+      }}
     />
   );
 }
