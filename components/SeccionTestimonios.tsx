@@ -15,7 +15,7 @@ export default function SeccionTestimonios({ testimonios, idioma }: SeccionTesti
   const textos = textosDe(idioma).testimonios;
 
   return (
-    <section id="testimonios" className="bg-white px-[8vw] py-20 sm:py-24">
+    <section id="testimonios" className="bg-white px-[8vw] py-20 sm:py-24 bajo:py-14">
       <SectionHeader eyebrow={textos.etiqueta} title={textos.titulo} />
 
       {/* Uno solo va centrado y angosto; dos, en dos columnas; tres o más, en tres */}

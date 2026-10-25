@@ -15,7 +15,7 @@ type SeccionNovedadesProps = { textos: Contenido["novedades"] };
  */
 export default function SeccionNovedades({ textos }: SeccionNovedadesProps) {
   return (
-    <section id="novedades" className="bg-leaf-deep px-[8vw] py-16 sm:py-20">
+    <section id="novedades" className="bg-leaf-deep px-[8vw] py-16 sm:py-20 bajo:py-12">
       <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white">

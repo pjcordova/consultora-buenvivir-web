@@ -57,7 +57,7 @@ export default async function ServiciosPage() {
     <main>
       <Header />
 
-      <section className="bg-leaf-deep px-[8vw] py-16 sm:py-20">
+      <section className="bg-leaf-deep px-[8vw] py-16 sm:py-20 bajo:py-12">
         <SectionHeader
           eyebrow={paginaServicios.eyebrow}
           title={paginaServicios.titulo}
@@ -70,7 +70,7 @@ export default async function ServiciosPage() {
         <section
           key={camino.titulo}
           id={`camino-${indiceCamino + 1}`}
-          className={`px-[8vw] py-16 sm:py-20 ${indiceCamino % 2 === 0 ? "bg-white" : "bg-cream"}`}
+          className={`px-[8vw] py-16 sm:py-20 bajo:py-12 ${indiceCamino % 2 === 0 ? "bg-white" : "bg-cream"}`}
         >
           <header className="mx-auto max-w-5xl">
             <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
@@ -94,7 +94,7 @@ export default async function ServiciosPage() {
                   className="grid items-center gap-8 md:grid-cols-2 md:gap-12"
                 >
                   {/* El folleto se inclina al pasar el mouse, como una tarjeta de verdad */}
-                  <div data-inclinar="6" className={`rounded-3xl ${imagenALaDerecha ? "md:order-2" : ""}`}>
+                  <div data-inclinar="6" className={`rounded-3xl bajo:mx-auto bajo:w-full bajo:max-w-[calc((100vh-7rem)*0.8)] ${imagenALaDerecha ? "md:order-2" : ""}`}>
                     {imagen ? (
                       <Image
                         src={imagen}

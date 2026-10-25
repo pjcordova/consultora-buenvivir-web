@@ -22,7 +22,7 @@ export default function CtaSection({
     // Línea superior: marca dónde empieza el llamado a la acción
     <section
       id="conversemos"
-      className={`border-t border-leaf/30 px-[8vw] py-20 text-center sm:py-24 ${
+      className={`border-t border-leaf/30 px-[8vw] py-20 text-center sm:py-24 bajo:py-14 ${
         fondo === "blanco" ? "bg-white" : "bg-cream"
       }`}
     >
@@ -37,7 +37,7 @@ export default function CtaSection({
         </svg>
       </span>
 
-      <h2 className="mx-auto mt-7 max-w-2xl text-pretty text-3xl leading-tight text-forest-950 sm:text-[2.4rem]">
+      <h2 className="mx-auto mt-7 max-w-2xl text-pretty text-3xl leading-tight text-forest-950 sm:text-[2.4rem] bajo:mt-5 bajo:text-[2.1rem]">
         {title}
       </h2>
 

@@ -48,7 +48,7 @@ export default async function EcosistemaPanel({
   ]);
 
   return (
-    <div className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-3xl bg-forest-800">
+    <div className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-3xl bg-forest-800 bajo:mt-8">
       {fotoFondo ? (
         <>
           <Image src={fotoFondo} alt="" fill sizes="(min-width: 1024px) 64rem, 100vw" className="object-cover" />
@@ -61,7 +61,7 @@ export default async function EcosistemaPanel({
       {/* Raíces que crecen desde el logo y unen los espacios (detrás de todo lo demás) */}
       <RaicesEcosistema />
 
-      <div className="relative flex flex-col items-center gap-10 px-6 py-12 sm:gap-14 sm:py-16">
+      <div className="relative flex flex-col items-center gap-10 px-6 py-12 sm:gap-14 sm:py-16 bajo:gap-6 bajo:py-8">
         {/* Placa con el logo del ecosistema: de acá salen las raíces */}
         <div
           data-raiz="origen"
@@ -74,7 +74,7 @@ export default async function EcosistemaPanel({
               width={540}
               height={165}
               // Se mide por el ancho para que se vea más largo, manteniendo la proporción
-              className="h-auto w-64 sm:w-96 md:w-[32rem]"
+              className="h-auto w-64 sm:w-96 md:w-[32rem] bajo:w-[22rem]"
             />
           ) : (
             <p className="text-center font-display text-lg tracking-[0.12em] text-white sm:text-2xl">
@@ -108,7 +108,7 @@ export default async function EcosistemaPanel({
                   )}
                   <div
                     data-raiz="espacio"
-                    className={`relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-full p-6 text-center sm:h-56 sm:w-56 ${
+                    className={`relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-full p-6 text-center sm:h-56 sm:w-56 bajo:h-40 bajo:w-40 ${
                       hayImagen
                         ? esSello
                           ? ""
@@ -166,7 +166,7 @@ export default async function EcosistemaPanel({
                       alt=""
                       width={399}
                       height={501}
-                      className="absolute -bottom-5 -right-10 w-16 rotate-6 rounded shadow-lg sm:-bottom-8 sm:-right-5 sm:w-[4.5rem]"
+                      className="absolute -bottom-5 -right-10 w-16 rotate-6 rounded shadow-lg sm:-bottom-8 sm:-right-5 sm:w-[4.5rem] bajo:-bottom-7 bajo:-right-11 bajo:w-14"
                     />
                   )}
                 </div>

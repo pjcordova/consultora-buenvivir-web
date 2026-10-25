@@ -46,7 +46,7 @@ export default function SeccionPreguntas({
   return (
     <section
       id="preguntas"
-      className={`px-[8vw] py-16 sm:py-20 ${fondo === "crema" ? "bg-cream" : "bg-white"}`}
+      className={`px-[8vw] py-16 sm:py-20 bajo:py-12 ${fondo === "crema" ? "bg-cream" : "bg-white"}`}
     >
       <SectionHeader eyebrow={textos.etiqueta} title={textos.titulo} subtitle={textos.bajada} />
 

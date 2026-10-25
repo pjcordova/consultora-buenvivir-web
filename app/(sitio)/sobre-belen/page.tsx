@@ -76,8 +76,8 @@ export default async function SobreBelenPage() {
     <main>
       <Header />
 
-      <section className="bg-leaf-deep px-[8vw] py-14 sm:py-20">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[minmax(0,22rem)_1fr] md:gap-14">
+      <section className="bg-leaf-deep px-[8vw] py-14 sm:py-20 bajo:py-12">
+        <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[minmax(0,22rem)_1fr] md:gap-14 bajo:grid-cols-[minmax(0,16rem)_1fr] bajo:gap-10">
           {foto ? (
             <Image
               src={foto}
@@ -100,7 +100,7 @@ export default async function SobreBelenPage() {
               {belen.eyebrow}
             </p>
 
-            <h1 className="mt-5 text-3xl leading-tight text-white sm:text-[2.6rem]">
+            <h1 className="mt-5 text-3xl leading-tight text-white sm:text-[2.6rem] bajo:mt-4 bajo:text-[2.2rem]">
               {belen.saludo}
             </h1>
             {/* Crema sobre verde: el dorado no contrasta lo suficiente */}
@@ -124,7 +124,7 @@ export default async function SobreBelenPage() {
         </div>
       </section>
 
-      <section className="bg-cream px-[8vw] py-14 sm:py-16">
+      <section className="bg-cream px-[8vw] py-14 sm:py-16 bajo:py-10">
         <figure className="mx-auto max-w-3xl text-center">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-leaf" aria-hidden="true">
             <path d="M11 20A7 7 0 0 1 4 13c0-5 5-9 12-9 0 7-3 12-8 13.5M4 21c1-4 4-7 8-8.5" />
@@ -140,7 +140,7 @@ export default async function SobreBelenPage() {
         </figure>
       </section>
 
-      <section className="bg-white px-[8vw] py-16 sm:py-20">
+      <section className="bg-white px-[8vw] py-16 sm:py-20 bajo:py-12">
         {/* En pantallas anchas, una semilla se vuelve árbol al costado de "Mi
             camino" mientras se lee; en las angostas, crece al final del texto. */}
         <div className="mx-auto max-w-6xl xl:grid xl:grid-cols-[15rem_minmax(0,1fr)] xl:gap-12">
@@ -278,7 +278,7 @@ export default async function SobreBelenPage() {
       {/* Mi enfoque: con la foto de Belén facilitando, el texto a la izquierda y
           la foto a la derecha (en celular y tablet, la foto arriba). Sin foto, una sola
           columna como antes; en la computadora de desarrollo se marca el lugar. */}
-      <section className="bg-cream px-[8vw] py-16 sm:py-20">
+      <section className="bg-cream px-[8vw] py-16 sm:py-20 bajo:py-12">
         <div
           className={
             hayLugarFotoEnfoque
@@ -307,7 +307,7 @@ export default async function SobreBelenPage() {
           </div>
 
           {hayLugarFotoEnfoque && (
-            <div className="order-first mx-auto w-full max-w-md lg:sticky lg:top-32 lg:order-last lg:mx-0 lg:mt-14 lg:max-w-none">
+            <div className="order-first mx-auto w-full max-w-md lg:sticky lg:top-32 lg:order-last lg:mx-0 lg:mt-14 lg:max-w-none bajo:top-20">
               <Carousel
                 slides={fotosEnfoque.length ? fotosEnfoque : undefined}
                 total={FOTOS_ENFOQUE}

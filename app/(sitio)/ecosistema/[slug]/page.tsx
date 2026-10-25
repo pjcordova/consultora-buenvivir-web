@@ -44,7 +44,7 @@ export default async function EspacioPage({ params }: Props) {
     <main>
       <Header />
 
-      <section className="bg-cream px-[8vw] py-14 sm:py-20">
+      <section className="bg-cream px-[8vw] py-14 sm:py-20 bajo:py-12">
         <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
           <div>
             <Link
@@ -92,7 +92,7 @@ export default async function EspacioPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="bg-white px-[8vw] py-16 sm:py-20">
+      <section className="bg-white px-[8vw] py-16 sm:py-20 bajo:py-12">
         {/* Con video: el texto a la izquierda y el video a la derecha, mitad y
             mitad para que se vea grande, acompañando la lectura. En celular el
             video va debajo del texto. */}

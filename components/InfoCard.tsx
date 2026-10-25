@@ -28,12 +28,12 @@ export default function InfoCard({
   tag,
 }: InfoCardProps) {
   return (
-    <article className="rounded-3xl bg-cream p-7 sm:p-9">
+    <article className="rounded-3xl bg-cream p-7 sm:p-9 bajo:p-7">
       <div className="flex gap-3">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mt-1 shrink-0 text-leaf" aria-hidden="true">
           {ICONOS[icon]}
         </svg>
-        <p className="font-display text-xl italic leading-snug text-forest-950 sm:text-[1.4rem]">
+        <p className="font-display text-xl italic leading-snug text-forest-950 sm:text-[1.4rem] bajo:text-[1.25rem]">
           &ldquo;{quote}&rdquo;
         </p>
       </div>

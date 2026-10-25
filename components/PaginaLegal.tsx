@@ -47,7 +47,7 @@ export default async function PaginaLegal({ texto, idioma }: PaginaLegalProps) {
     <main>
       <Header />
 
-      <section className="bg-cream px-[8vw] py-16 text-center sm:py-20">
+      <section className="bg-cream px-[8vw] py-16 text-center sm:py-20 bajo:py-12">
         <SectionHeader
           eyebrow={texto.eyebrow}
           title={texto.titulo}
@@ -57,7 +57,7 @@ export default async function PaginaLegal({ texto, idioma }: PaginaLegalProps) {
         <p className="mt-5 text-xs text-forest-800/60">{texto.actualizado}</p>
       </section>
 
-      <section className="bg-white px-[8vw] py-16 sm:py-20">
+      <section className="bg-white px-[8vw] py-16 sm:py-20 bajo:py-12">
         <div className="mx-auto max-w-2xl space-y-12">
           {texto.bloques.map((bloque) => (
             <div key={bloque.titulo}>

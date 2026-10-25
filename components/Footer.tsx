@@ -62,8 +62,8 @@ export default async function Footer() {
   const hayPreguntas = preguntas.length > 0 && !deEjemplo;
 
   return (
-    <footer data-zona="pie" className="bg-forest-900 px-[8vw] py-16 text-sm">
-      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer data-zona="pie" className="bg-forest-900 px-[8vw] py-16 text-sm bajo:py-10">
+      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4 bajo:gap-8">
         <div>
           <Image
             src="/images/logo-buen-vivir-claro.png"
@@ -152,7 +152,7 @@ export default async function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-cream/15 pt-6 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-cream/15 pt-6 bajo:mt-8 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
         {/* La titular del sitio es Belén Vera (ver Privacidad y Términos) */}
         <p className="text-pretty">
           © {new Date().getFullYear()} Belén Vera · Buen Vivir · {textos.pie.derechos} ·{" "}

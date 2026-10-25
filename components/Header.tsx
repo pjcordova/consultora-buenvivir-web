@@ -6,7 +6,8 @@ import { enlaceEnIdioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { textosDe } from "@/lib/textos";
 
-// Alto fijo (h-20 / md:h-24): el Hero lo descuenta para ocupar el resto de la pantalla.
+// Alto fijo (h-20 / md:h-24, y 4.5rem en pantallas bajas): el Hero lo descuenta
+// para ocupar el resto de la pantalla.
 export default function Header() {
   const idioma = obtenerIdioma();
 
@@ -19,7 +20,7 @@ export default function Header() {
           width={480}
           height={331}
           priority
-          className="h-12 w-auto md:h-16"
+          className="h-12 w-auto md:h-16 bajo:h-12"
         />
       </Link>
       <Navigation idioma={idioma} />

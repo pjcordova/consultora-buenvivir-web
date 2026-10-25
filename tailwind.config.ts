@@ -7,6 +7,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        // Pantallas anchas pero bajas: la mayoría de las laptops (1366×768, o
+        // 1920×1080 con Windows al 125-150%, que el navegador ve como ~1280×600).
+        // Ahí se compactan el encabezado y la portada para que entren enteros.
+        bajo: { raw: "(min-width: 768px) and (max-height: 760px)" },
+      },
       colors: {
         forest: {
           950: "#12170f",

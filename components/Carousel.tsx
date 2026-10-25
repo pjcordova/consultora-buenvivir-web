@@ -26,7 +26,8 @@ export default function Carousel({ slides = [], total, label, idioma }: Carousel
 
   return (
     <div
-      className="flex flex-col gap-5"
+      // En pantallas bajas la foto se ajusta al alto: foto, leyenda y flechas a la vista
+      className="flex flex-col gap-5 bajo:mx-auto bajo:w-full bajo:max-w-[calc(100vh-14rem)] bajo:gap-3"
       role="group"
       aria-roledescription={textos.tipo}
       aria-label={label}

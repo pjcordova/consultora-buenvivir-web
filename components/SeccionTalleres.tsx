@@ -25,7 +25,7 @@ export default function SeccionTalleres({ talleres, idioma }: SeccionTalleresPro
   const completa = formato({ weekday: "long", day: "numeric", month: "long" });
 
   return (
-    <section id="talleres" className="bg-cream px-[8vw] pb-20 pt-6 sm:pb-24">
+    <section id="talleres" className="bg-cream px-[8vw] pb-20 pt-6 sm:pb-24 bajo:pb-14">
       <SectionHeader eyebrow={textos.etiqueta} title={textos.titulo} subtitle={textos.bajada} />
 
       <ul className="mx-auto mt-12 max-w-4xl space-y-4">

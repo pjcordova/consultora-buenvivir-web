@@ -71,14 +71,14 @@ export default async function HomePage() {
       <Header />
       <Hero {...hero} />
 
-      <section id="regeneracion" className="bg-white px-[8vw] py-20 sm:py-24">
+      <section id="regeneracion" className="bg-white px-[8vw] py-20 sm:py-24 bajo:py-14">
         <SectionHeader
           eyebrow={regeneracionOrganizacional.eyebrow}
           title={regeneracionOrganizacional.titulo}
           subtitle={regeneracionOrganizacional.bajada}
         />
 
-        <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14">
+        <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14 bajo:mt-10">
           <Carousel
             slides={await imagenesCarrusel(
               regeneracionOrganizacional.carrusel.prefijo,
@@ -99,7 +99,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="servicios" className="bg-cream px-[8vw] py-20 sm:py-24">
+      <section id="servicios" className="bg-cream px-[8vw] py-20 sm:py-24 bajo:py-14">
         <SectionHeader
           eyebrow={ecosistema.eyebrow}
           title={ecosistema.titulo}
@@ -116,14 +116,14 @@ export default async function HomePage() {
       {/* Solo aparecen cuando Belén cargó algo en el panel */}
       <SeccionTalleres talleres={talleres} idioma={idioma} />
 
-      <section id="cosmovision" className="bg-white px-[8vw] py-20 sm:py-24">
+      <section id="cosmovision" className="bg-white px-[8vw] py-20 sm:py-24 bajo:py-14">
         <SectionHeader
           eyebrow={cosmovision.eyebrow}
           title={cosmovision.titulo}
           subtitle={cosmovision.bajada}
         />
 
-        <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14">
+        <div className="mx-auto mt-14 grid max-w-5xl items-start gap-10 md:grid-cols-2 md:gap-14 bajo:mt-10">
           <Carousel
             slides={await imagenesCarrusel(
               cosmovision.carrusel.prefijo,

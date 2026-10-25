@@ -69,7 +69,7 @@ export default async function ContactoPage() {
     <main>
       <Header />
 
-      <section className="bg-leaf-deep px-[8vw] py-16 sm:py-20">
+      <section className="bg-leaf-deep px-[8vw] py-16 sm:py-20 bajo:py-12">
         <SectionHeader
           eyebrow={contacto.eyebrow}
           title={contacto.titulo}
@@ -100,7 +100,7 @@ export default async function ContactoPage() {
         )}
       </section>
 
-      <section className="bg-white px-[8vw] py-16 sm:py-20">
+      <section className="bg-white px-[8vw] py-16 sm:py-20 bajo:py-12">
         <ul className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
           {vias.map((via) => (
             <li
@@ -150,7 +150,7 @@ export default async function ContactoPage() {
           Alterna el fondo con la franja de arriba (crema si no hay preguntas). */}
       <section
         id="agenda"
-        className={`px-[8vw] py-16 sm:py-20 ${preguntas.length ? "bg-white" : "bg-cream"}`}
+        className={`px-[8vw] py-16 sm:py-20 bajo:py-12 ${preguntas.length ? "bg-white" : "bg-cream"}`}
       >
         <div className="mx-auto max-w-5xl">
           <h2 className="font-display text-2xl text-forest-950 sm:text-3xl">
@@ -184,7 +184,7 @@ export default async function ContactoPage() {
         </div>
       </section>
 
-      <section className="border-t border-forest-800/10 bg-white px-[8vw] py-16 sm:py-20">
+      <section className="border-t border-forest-800/10 bg-white px-[8vw] py-16 sm:py-20 bajo:py-12">
         <div className="mx-auto flex max-w-5xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="font-display text-2xl text-forest-950">{contacto.redesTitulo}</h2>

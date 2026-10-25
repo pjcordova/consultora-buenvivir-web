@@ -14,6 +14,13 @@ html {
   }
 }
 
+/* Pantallas bajas (laptops): el encabezado es más bajo (ver "bajo" en tailwind.config.ts) */
+@media (min-width: 768px) and (max-height: 760px) {
+  html {
+    scroll-padding-top: 4.5rem;
+  }
+}
+
 h1, h2, h3, .font-display {
   font-family: "Fraunces", serif;
 }

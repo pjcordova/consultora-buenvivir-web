@@ -86,22 +86,22 @@ export default async function VideoSection({
           translúcido y apenas difuminado, con el texto alineado a la izquierda
           (en una columna angosta el justificado deja huecos entre palabras).
           Las letras llevan una sombra suave que las despega del agua clara. */}
-      <div className="relative mx-auto max-w-xl rounded-3xl border border-white/15 bg-forest-950/25 px-6 py-9 text-left backdrop-blur-sm sm:px-10 sm:py-11 lg:mx-0 lg:ml-[2vw] lg:max-w-[31rem]">
+      <div className="relative mx-auto max-w-xl rounded-3xl border border-white/15 bg-forest-950/25 px-6 py-9 text-left backdrop-blur-sm bajo:py-6 sm:px-10 sm:py-11 lg:mx-0 lg:ml-[2vw] lg:max-w-[31rem]">
         <p className="inline-flex items-center gap-2 text-balance rounded-2xl border border-white/25 px-4 py-1.5 text-[10px] font-medium uppercase leading-relaxed tracking-[0.14em] text-white/90 sm:rounded-full sm:text-[11px] sm:tracking-[0.16em]">
           <span className="h-1.5 w-1.5 rounded-full bg-leaf" aria-hidden="true" />
           {eyebrow}
         </p>
 
         {/* Más chica que un título: Belén escribe acá un párrafo entero */}
-        <p className="mt-6 text-pretty font-display text-lg leading-[1.5] text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.35)] sm:text-xl lg:text-[1.35rem]">
+        <p className="mt-6 text-pretty font-display text-lg leading-[1.5] text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.35)] sm:text-xl lg:text-[1.35rem] bajo:mt-4 bajo:text-[1.1rem] bajo:leading-[1.45]">
           {statement}
         </p>
 
         {/* Sin corchetes: Belén escribe acá su texto definitivo */}
         {tieneTexto(note) && (
           <>
-            <span className="mt-7 block h-px w-16 bg-white/35" aria-hidden="true" />
-            <p className="mt-6 text-sm leading-relaxed text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)] sm:text-[15px]">
+            <span className="mt-7 block h-px w-16 bg-white/35 bajo:mt-5" aria-hidden="true" />
+            <p className="mt-6 text-sm leading-relaxed text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)] sm:text-[15px] bajo:mt-4">
               {note}
             </p>
           </>

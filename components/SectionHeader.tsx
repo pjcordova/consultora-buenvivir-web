@@ -37,7 +37,7 @@ export default function SectionHeader({
       </p>
 
       <Titulo
-        className={`mt-5 text-3xl leading-tight sm:text-[2.5rem] ${
+        className={`mt-5 text-3xl leading-tight sm:text-[2.5rem] bajo:mt-4 bajo:text-[2.1rem] ${
           sobreVerde ? "text-white" : "text-forest-950"
         }`}
       >
