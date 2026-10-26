@@ -75,7 +75,7 @@ const ESPANOL = {
     bajada:
       "Personas que participan de los espacios del Ecosistema y lo que hacen. Conocé sus proyectos, contactalas y apoyá lo que ofrecen.",
     ejemplo:
-      "Vista de ejemplo: estos integrantes son inventados y solo se ven en tu computadora. Los reales los carga Belén desde el panel, con la autorización de cada persona.",
+      "Vista de ejemplo: estos integrantes son inventados y nunca se ven en el sitio publicado. Los reales los carga Belén desde el panel, con la autorización de cada persona.",
     todos: "Todos",
     filtroEspacio: "Filtrar por espacio",
     todosLosPaises: "Todos los países",
@@ -227,7 +227,7 @@ const INGLES: Textos = {
     bajada:
       "People who take part in the Ecosystem spaces and what they do. Discover their projects, get in touch and support what they offer.",
     ejemplo:
-      "Sample view: these members are made up and only visible on your computer. Belén adds the real ones from the panel, with each person's permission.",
+      "Sample view: these members are made up and never appear on the live site. Belén adds the real ones from the panel, with each person's permission.",
     todos: "All",
     filtroEspacio: "Filter by space",
     todosLosPaises: "All countries",

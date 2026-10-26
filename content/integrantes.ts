@@ -1,9 +1,10 @@
 import type { Idioma } from "@/lib/idioma";
 
 /**
- * Integrantes INVENTADOS para revisar el diseño del directorio en la
- * computadora de desarrollo mientras la lista del panel está vacía. Nunca se
- * ven en el sitio publicado (ver obtenerIntegrantes en lib/contenido.ts).
+ * Integrantes INVENTADOS para revisar el diseño del directorio mientras la
+ * lista del panel está vacía: en la computadora de desarrollo y en las vistas
+ * previas de Vercel. Nunca se ven en el sitio publicado (ver obtenerIntegrantes
+ * en lib/contenido.ts).
  * Los reales los carga Belén desde el panel, con su autorización.
  */
 type IntegranteDeEjemplo = {

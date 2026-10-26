@@ -583,8 +583,9 @@ export type Integrante = {
 /**
  * Los integrantes de la comunidad que Belén marcó para mostrar (con su
  * autorización), en el orden que les dio. La foto se busca aparte.
- * Mientras la lista está vacía, en la computadora de desarrollo se ven
- * integrantes de ejemplo (marcados como tales); en el sitio publicado, ninguno.
+ * Mientras la lista está vacía, en la computadora de desarrollo y en las vistas
+ * previas de Vercel (las de las ramas, para mostrarle el diseño a Belén) se ven
+ * integrantes de ejemplo, marcados como tales; en el sitio publicado, nunca.
  */
 export async function obtenerIntegrantes(
   idioma: Idioma
@@ -605,7 +606,8 @@ export async function obtenerIntegrantes(
     }))
     .filter((integrante) => integrante.nombre && integrante.especialidad);
 
-  if (integrantes.length || process.env.NODE_ENV !== "development") {
+  const conEjemplos = process.env.NODE_ENV === "development" || process.env.VERCEL_ENV === "preview";
+  if (integrantes.length || !conEjemplos) {
     return { integrantes, deEjemplo: false };
   }
   return {
