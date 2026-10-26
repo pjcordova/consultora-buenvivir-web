@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { EnlaceFooter } from "@/content/site";
 import RedesSociales from "@/components/RedesSociales";
-import { obtenerPie, obtenerPreguntas } from "@/lib/contenido";
+import { obtenerIntegrantes, obtenerPie, obtenerPreguntas } from "@/lib/contenido";
 import { enlaceEnIdioma, type Idioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { textosDe } from "@/lib/textos";
@@ -57,9 +57,12 @@ function Enlace({ enlace, idioma, className = "" }: EnlaceProps) {
 export default async function Footer() {
   const idioma = obtenerIdioma();
   const textos = textosDe(idioma);
-  const [{ descripcion, ubicacion, columnas, contacto, redes, lema, legales }, { preguntas, deEjemplo }] =
-    await Promise.all([obtenerPie(idioma), obtenerPreguntas(idioma)]);
+  const [{ descripcion, ubicacion, columnas, contacto, redes, lema, legales }, { preguntas, deEjemplo }, comunidad] =
+    await Promise.all([obtenerPie(idioma), obtenerPreguntas(idioma), obtenerIntegrantes(idioma)]);
   const hayPreguntas = preguntas.length > 0 && !deEjemplo;
+  // El directorio de la comunidad se enlaza recién cuando tiene integrantes publicados
+  // (en la computadora de desarrollo, también con los de ejemplo)
+  const hayComunidad = comunidad.integrantes.length > 0;
 
   return (
     <footer data-zona="pie" className="bg-forest-900 px-[8vw] py-16 text-sm bajo:py-10">
@@ -86,7 +89,7 @@ export default async function Footer() {
           <nav key={columna.titulo} aria-label={columna.titulo}>
             <h2 className="font-display text-lg text-cream">{columna.titulo}</h2>
             <ul className="mt-5 space-y-3">
-              {columna.enlaces.map((enlace) => (
+              {columna.enlaces.filter((enlace) => hayComunidad || enlace.href !== "/comunidad").map((enlace) => (
                 <li key={enlace.label} className="flex gap-2">
                   <span className="text-leaf-lime" aria-hidden="true">
                     →

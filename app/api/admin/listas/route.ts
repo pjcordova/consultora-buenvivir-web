@@ -6,7 +6,7 @@ import { sesionActiva } from "@/lib/admin/auth";
 import { MENSAJE_SOLO_LECTURA, soloLectura } from "@/lib/admin/entorno";
 import { obtenerLista, type CampoDeLista, type ElementoGuardado } from "@/lib/admin/listas";
 import { publicarCambios } from "@/lib/admin/publicar";
-import { rutaDelCertificado } from "@/lib/admin/slots";
+import { rutaDeImagenDeLista, tieneImagenes, type ListaConImagen } from "@/lib/admin/slots";
 import { leerMedios, quitarMedio, usaBlob } from "@/lib/almacen";
 import { guardarLista, leerLista } from "@/lib/contenido";
 
@@ -27,14 +27,15 @@ function limpiar(valor: unknown): string | null {
 }
 
 /**
- * Borra la imagen del certificado de las formaciones que se quitaron de la
- * lista, si tenían. De a una: cada borrado reescribe el mapa de imágenes.
+ * Borra la imagen de los elementos que se quitaron de la lista (el certificado
+ * de una formación, la foto de un integrante), si tenían. De a una: cada
+ * borrado reescribe el mapa de imágenes.
  */
-async function quitarCertificados(ids: string[]): Promise<boolean> {
+async function quitarImagenes(lista: ListaConImagen, ids: string[]): Promise<boolean> {
   let quito = false;
   const medios = usaBlob ? await leerMedios() : {};
   for (const id of ids) {
-    const ruta = rutaDelCertificado(id);
+    const ruta = rutaDeImagenDeLista(lista, id);
     if (usaBlob) {
       if (!medios[ruta]?.url) continue;
       await quitarMedio(ruta);
@@ -73,7 +74,16 @@ export async function POST(request: Request) {
       const valor = item[campo.id];
 
       if (campo.tipo === "si-no") {
-        elemento[campo.id] = valor !== false;
+        elemento[campo.id] = typeof valor === "boolean" ? valor : (campo.porDefecto ?? true);
+        continue;
+      }
+      if (campo.tipo === "opcion") {
+        const elegida = typeof valor === "string" ? valor : "";
+        if (campo.obligatorio && !elegida) return error(`Falta elegir "${campo.etiqueta}" en ${cual}.`);
+        if (elegida && !campo.opciones?.some((opcion) => opcion.valor === elegida)) {
+          return error(`"${campo.etiqueta}" en ${cual} no es una opción válida.`);
+        }
+        elemento[campo.id] = elegida;
         continue;
       }
       // La imagen no viaja con la lista: se sube aparte, con el id del elemento
@@ -102,8 +112,8 @@ export async function POST(request: Request) {
     limpios.push(elemento);
   }
 
-  const conImagen = lista.campos.some((campo) => campo.tipo === "imagen");
-  const anteriores = conImagen ? await leerLista(lista.id) : [];
+  const listaConImagen = tieneImagenes(lista.id) ? lista.id : null;
+  const anteriores = listaConImagen ? await leerLista(lista.id) : [];
 
   try {
     await guardarLista(lista.id, limpios);
@@ -113,13 +123,13 @@ export async function POST(request: Request) {
 
   publicarCambios("contenido");
 
-  // Las formaciones que se quitaron se llevan su certificado. Si falla, la lista
-  // ya quedó guardada: la imagen sobra, pero no se ve en ningún lado.
-  if (conImagen) {
+  // Los elementos que se quitaron se llevan su imagen. Si falla, la lista ya
+  // quedó guardada: la imagen sobra, pero no se ve en ningún lado.
+  if (listaConImagen) {
     const quedan = new Set(limpios.map((elemento) => elemento.id));
     const quitados = anteriores.map((elemento) => elemento.id).filter((id) => !quedan.has(id));
     try {
-      if (await quitarCertificados(quitados)) publicarCambios("medios");
+      if (await quitarImagenes(listaConImagen, quitados)) publicarCambios("medios");
     } catch {
       /* sin consecuencias en la web */
     }

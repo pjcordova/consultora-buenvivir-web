@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SlotCard from "@/components/admin/SlotCard";
 import type { CampoDeLista, ElementoGuardado, ListaEditable, TextoBilingue } from "@/lib/admin/listas";
-import { slotDeCertificado } from "@/lib/admin/slots";
+import { slotDeImagenDeLista, tieneImagenes } from "@/lib/admin/slots";
 
 type EditorListaProps = {
   lista: ListaEditable;
@@ -23,7 +23,8 @@ function elementoNuevo(lista: ListaEditable): ElementoGuardado {
   const elemento: ElementoGuardado = { id: crypto.randomUUID() };
   for (const campo of lista.campos) {
     if (campo.tipo === "imagen") continue;
-    elemento[campo.id] = campo.tipo === "si-no" ? true : campo.porIdioma ? { es: "", en: "" } : "";
+    elemento[campo.id] =
+      campo.tipo === "si-no" ? (campo.porDefecto ?? true) : campo.porIdioma ? { es: "", en: "" } : "";
   }
   return elemento;
 }
@@ -40,6 +41,18 @@ function Entrada({
 }) {
   if (campo.tipo === "parrafo") {
     return <textarea rows={4} value={valor} onChange={(e) => alCambiar(e.target.value)} className={claseInput} />;
+  }
+  if (campo.tipo === "opcion") {
+    return (
+      <select value={valor} onChange={(e) => alCambiar(e.target.value)} className={claseInput}>
+        <option value="">Elegí una opción…</option>
+        {campo.opciones?.map((opcion) => (
+          <option key={opcion.valor} value={opcion.valor}>
+            {opcion.etiqueta}
+          </option>
+        ))}
+      </select>
+    );
   }
   const tipo = campo.tipo === "fecha" ? "date" : campo.tipo === "hora" ? "time" : "text";
   return (
@@ -172,12 +185,13 @@ export default function EditorLista({
               {lista.campos.map((campo) => {
                 const valor = item[campo.id];
 
-                // La única imagen de las listas: el certificado de cada formación
+                // La imagen de cada elemento: el certificado de una formación, la foto de un integrante
                 if (campo.tipo === "imagen") {
+                  if (!tieneImagenes(lista.id)) return null;
                   return (
                     <div key={campo.id} className="max-w-sm">
                       <SlotCard
-                        slot={slotDeCertificado(item.id)}
+                        slot={slotDeImagenDeLista(lista.id, item.id)}
                         url={imagenes[item.id] ?? null}
                         directo={directo}
                       />
@@ -191,7 +205,7 @@ export default function EditorLista({
                     <label key={campo.id} className="flex items-center gap-2 text-sm text-forest-950">
                       <input
                         type="checkbox"
-                        checked={valor !== false}
+                        checked={valor === undefined ? (campo.porDefecto ?? true) : valor !== false}
                         onChange={(e) => cambiarCampo(indice, campo.id, e.target.checked)}
                         className="h-4 w-4 accent-[#27a47e]"
                       />

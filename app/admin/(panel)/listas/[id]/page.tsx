@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import EditorLista from "@/components/admin/EditorLista";
 import { obtenerLista } from "@/lib/admin/listas";
-import { rutaDelCertificado } from "@/lib/admin/slots";
+import { rutaDeImagenDeLista, tieneImagenes } from "@/lib/admin/slots";
 import { usaBlob } from "@/lib/almacen";
 import { rutaVersionada } from "@/lib/assets";
 import { leerLista } from "@/lib/contenido";
@@ -14,11 +14,14 @@ export default async function ListaPage({ params }: { params: { id: string } }) 
   if (!lista) notFound();
 
   const items = await leerLista(lista.id);
-  // La imagen ya subida de cada elemento (hoy, el certificado de cada formación)
-  const imagenes = lista.campos.some((campo) => campo.tipo === "imagen")
+  // La imagen ya subida de cada elemento (el certificado de una formación, la foto de un integrante)
+  const conImagen = tieneImagenes(lista.id) ? lista.id : null;
+  const imagenes = conImagen
     ? Object.fromEntries(
         await Promise.all(
-          items.map(async (item) => [item.id, await rutaVersionada(rutaDelCertificado(item.id))] as const)
+          items.map(
+            async (item) => [item.id, await rutaVersionada(rutaDeImagenDeLista(conImagen, item.id))] as const
+          )
         )
       )
     : {};

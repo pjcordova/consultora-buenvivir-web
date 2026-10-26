@@ -82,6 +82,7 @@ export const config = {
     "/servicios",
     "/sobre-belen",
     "/contacto",
+    "/comunidad",
     "/privacidad",
     "/terminos",
     "/ecosistema/:path*",

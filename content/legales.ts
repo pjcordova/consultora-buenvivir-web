@@ -26,7 +26,7 @@ export const privacidad: TextoLegal = {
   titulo: "Política de privacidad",
   bajada:
     "Cómo se cuidan los datos de quienes visitan este sitio y se ponen en contacto con Buen Vivir.",
-  actualizado: "Última actualización: 4 de octubre de 2026",
+  actualizado: "Última actualización: 25 de octubre de 2026",
   bloques: [
     {
       titulo: "Quién es responsable de tus datos",
@@ -51,6 +51,13 @@ export const privacidad: TextoLegal = {
       parrafos: [
         "Para responder tus consultas, coordinar y llevar adelante las sesiones o encuentros que acuerdes, y mandarte novedades si te suscribiste o te sumaste a la comunidad.",
         "Tus datos no se venden ni se ceden a terceros, y no se usan para publicidad.",
+      ],
+    },
+    {
+      titulo: "Directorio de la comunidad",
+      parrafos: [
+        "En la página Comunidad aparecen personas que participan de los espacios del Ecosistema, para darles visibilidad: su nombre, su país, su especialidad, su proyecto y los enlaces que cada una elige compartir, y su foto si la envió. Solo se publican con su autorización por escrito.",
+        "Quien aparece puede pedir en cualquier momento que se corrijan o se quiten sus datos escribiendo a {correo}.",
       ],
     },
     {

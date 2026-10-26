@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import CtaSection from "@/components/CtaSection";
 import Header from "@/components/Header";
 import { LOGOS_REDES } from "@/components/RedesSociales";
-import { obtenerEspacioPagina } from "@/lib/contenido";
+import { obtenerEspacioPagina, obtenerIntegrantes } from "@/lib/contenido";
 import { rutaVersionada } from "@/lib/assets";
 import { enlaceEnIdioma } from "@/lib/idioma";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
@@ -35,8 +35,12 @@ export default async function EspacioPage({ params }: Props) {
   const espacio = await obtenerEspacioPagina(params.slug, idioma);
   if (!espacio) notFound();
 
-  const imagen = await rutaVersionada(espacio.imagen);
+  const [imagen, { integrantes }] = await Promise.all([
+    rutaVersionada(espacio.imagen),
+    obtenerIntegrantes(idioma),
+  ]);
   const hayImagen = Boolean(imagen);
+  const participantes = integrantes.filter((integrante) => integrante.espacio === espacio.slug).length;
   const video = videoDeYoutube(espacio.video);
   const incluye = espacio.incluye ?? [];
 
@@ -66,6 +70,22 @@ export default async function EspacioPage({ params }: Props) {
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest-800/80">
               {espacio.resumen}
             </p>
+
+            {/* Al directorio, ya filtrado por este espacio (solo si tiene integrantes publicados) */}
+            {participantes > 0 && (
+              <Link
+                href={`${enlaceEnIdioma("/comunidad", idioma)}?espacio=${espacio.slug}`}
+                className="mt-6 inline-flex items-center gap-2 rounded-full border border-forest-800/20 bg-white px-5 py-2.5 text-sm font-medium text-forest-800 transition-colors hover:border-leaf hover:text-forest-950"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="9" cy="8" r="3.5" />
+                  <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+                  <path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6" />
+                </svg>
+                {textos.comunidad.conocer} ({participantes})
+                <span aria-hidden="true">→</span>
+              </Link>
+            )}
           </div>
 
           {/* Imagen del espacio (la misma del círculo de la Home) */}

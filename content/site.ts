@@ -46,6 +46,7 @@ export const footer = {
         { label: "Casita del Árbol", href: "/ecosistema/casita-del-arbol" },
         { label: "Grupo de Regeneración Personal", href: "/ecosistema/regeneracion-personal" },
         { label: "Grupo de Regeneración y Creatividad", href: "/ecosistema/regeneracion-creatividad" },
+        { label: "Comunidad Buen Vivir", href: "/comunidad" },
         { label: "Cosmovisión del Buen Vivir", href: "/#cosmovision" },
         { label: "Sobre Belén Vera", href: "/sobre-belen" },
       ] satisfies EnlaceFooter[],

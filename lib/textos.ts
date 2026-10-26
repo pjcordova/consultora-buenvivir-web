@@ -66,6 +66,33 @@ const ESPANOL = {
     certificadoDe: (formacion: string) => `Certificado: ${formacion}`,
     cerrar: "Cerrar",
   },
+  comunidad: {
+    titulo: "Comunidad | Buen Vivir",
+    descripcion:
+      "Quienes participan de los espacios del Ecosistema Buen Vivir y lo que hacen: profesionales y proyectos para conocer y apoyar.",
+    eyebrow: "Comunidad · Ecosistema Buen Vivir",
+    encabezado: "La comunidad del Buen Vivir",
+    bajada:
+      "Personas que participan de los espacios del Ecosistema y lo que hacen. Conocé sus proyectos, contactalas y apoyá lo que ofrecen.",
+    ejemplo:
+      "Vista de ejemplo: estos integrantes son inventados y solo se ven en tu computadora. Los reales los carga Belén desde el panel, con la autorización de cada persona.",
+    todos: "Todos",
+    filtroEspacio: "Filtrar por espacio",
+    todosLosPaises: "Todos los países",
+    buscar: "Buscar por nombre, especialidad, proyecto o país",
+    resultados: (n: number) => (n === 1 ? "1 integrante" : `${n} integrantes`),
+    sinResultados: "No hay integrantes con esos filtros.",
+    verTodos: "Ver todos",
+    vacio: "Muy pronto vas a conocer acá a quienes participan de los espacios del Ecosistema.",
+    web: "Sitio web",
+    cierreTitulo: "¿Participás de un espacio y querés aparecer?",
+    cierreTexto: "Escribile a Belén y contale a qué te dedicás: te pasa el formulario para sumarte al directorio.",
+    cierreBoton: "Quiero aparecer",
+    mensajeSumarme:
+      "Hola Belén, participo de un espacio del Ecosistema y me gustaría aparecer en el directorio de la comunidad.",
+    verEcosistema: "Ver los espacios del Ecosistema",
+    conocer: "Conocé a quienes participan",
+  },
   espacio: {
     volver: "Volver a los espacios",
     queSeLleva: "Qué se lleva quien participa",
@@ -190,6 +217,33 @@ const INGLES: Textos = {
     verCertificado: "View certificate",
     certificadoDe: (formacion: string) => `Certificate: ${formacion}`,
     cerrar: "Close",
+  },
+  comunidad: {
+    titulo: "Community | Buen Vivir",
+    descripcion:
+      "The people who take part in the Buen Vivir Ecosystem spaces and what they do: professionals and projects to discover and support.",
+    eyebrow: "Community · Buen Vivir Ecosystem",
+    encabezado: "The Buen Vivir community",
+    bajada:
+      "People who take part in the Ecosystem spaces and what they do. Discover their projects, get in touch and support what they offer.",
+    ejemplo:
+      "Sample view: these members are made up and only visible on your computer. Belén adds the real ones from the panel, with each person's permission.",
+    todos: "All",
+    filtroEspacio: "Filter by space",
+    todosLosPaises: "All countries",
+    buscar: "Search by name, specialty, project or country",
+    resultados: (n: number) => (n === 1 ? "1 member" : `${n} members`),
+    sinResultados: "No members match those filters.",
+    verTodos: "Show all",
+    vacio: "Soon you'll meet here the people who take part in the Ecosystem spaces.",
+    web: "Website",
+    cierreTitulo: "Do you take part in a space and want to be listed?",
+    cierreTexto: "Message Belén and tell her what you do: she'll send you the form to join the directory.",
+    cierreBoton: "I want to be listed",
+    mensajeSumarme:
+      "Hi Belén, I take part in one of the Ecosystem spaces and I'd like to be listed in the community directory.",
+    verEcosistema: "See the Ecosystem spaces",
+    conocer: "Meet the people who take part",
   },
   espacio: {
     volver: "Back to the spaces",

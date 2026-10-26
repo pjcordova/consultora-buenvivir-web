@@ -224,6 +224,13 @@ export default function RaicesEcosistema() {
     let pulsos: Pulso[] = [];
     let proximoPulso = 0.6;
 
+    // Pega la red ya crecida. Si el panel midió 0 (oculto o cambiando de tamaño),
+    // la copia está vacía y el navegador no deja dibujarla: se espera al próximo tamaño.
+    function mostrarCopia() {
+      if (!copia.width || !copia.height) return;
+      ctx!.drawImage(copia, 0, 0, ancho, alto);
+    }
+
     function armar() {
       const caja = panel!.getBoundingClientRect();
       ancho = caja.width;
@@ -320,7 +327,7 @@ export default function RaicesEcosistema() {
 
       if (crecida) {
         ctx!.clearRect(0, 0, ancho, alto);
-        ctx!.drawImage(copia, 0, 0, ancho, alto);
+        mostrarCopia();
 
         // Pulsos de luz por las conexiones, de a pocos
         proximoPulso -= dt;
@@ -353,7 +360,7 @@ export default function RaicesEcosistema() {
         crecida = true;
         guardarCopia();
         ctx!.clearRect(0, 0, ancho, alto);
-        ctx!.drawImage(copia, 0, 0, ancho, alto);
+        mostrarCopia();
         return;
       }
       if (visible) cuadro = requestAnimationFrame(cuadroSiguiente);
@@ -376,7 +383,7 @@ export default function RaicesEcosistema() {
       armar();
       if (crecida) {
         ctx!.clearRect(0, 0, ancho, alto);
-        ctx!.drawImage(copia, 0, 0, ancho, alto);
+        mostrarCopia();
       }
     });
     alCambiarTamano.observe(panel);

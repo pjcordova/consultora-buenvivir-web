@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { contenidoDe, type Contenido } from "@/content";
 import type { Espacio } from "@/content/ecosistema";
+import { INTEGRANTES_DE_EJEMPLO } from "@/content/integrantes";
 import { PREGUNTAS_DE_EJEMPLO } from "@/content/preguntas";
 import type { Oferta } from "@/content/servicios";
 import { correo as correoPorDefecto } from "@/content/site";
@@ -562,6 +563,55 @@ export async function obtenerFormacion(idioma: Idioma): Promise<Formacion[]> {
       enlace: textoEn(item.enlace, idioma),
     }))
     .filter((formacion) => formacion.nombre);
+}
+
+export type Integrante = {
+  id: string;
+  nombre: string;
+  pais: string;
+  /** Slug del espacio del Ecosistema donde participa. */
+  espacio: string;
+  especialidad: string;
+  /** Empresa, proyecto o producto. Puede venir vacío. */
+  proyecto: string;
+  descripcion: string;
+  web: string;
+  instagram: string;
+  linkedin: string;
+};
+
+/**
+ * Los integrantes de la comunidad que Belén marcó para mostrar (con su
+ * autorización), en el orden que les dio. La foto se busca aparte.
+ * Mientras la lista está vacía, en la computadora de desarrollo se ven
+ * integrantes de ejemplo (marcados como tales); en el sitio publicado, ninguno.
+ */
+export async function obtenerIntegrantes(
+  idioma: Idioma
+): Promise<{ integrantes: Integrante[]; deEjemplo: boolean }> {
+  const integrantes = (await leerLista("integrantes"))
+    .filter((item) => item.visible === true)
+    .map((item) => ({
+      id: item.id,
+      nombre: textoEn(item.nombre, idioma),
+      pais: textoEn(item.pais, idioma),
+      espacio: textoEn(item.espacio, idioma),
+      especialidad: textoEn(item.especialidad, idioma),
+      proyecto: textoEn(item.proyecto, idioma),
+      descripcion: textoEn(item.descripcion, idioma),
+      web: textoEn(item.web, idioma),
+      instagram: textoEn(item.instagram, idioma),
+      linkedin: textoEn(item.linkedin, idioma),
+    }))
+    .filter((integrante) => integrante.nombre && integrante.especialidad);
+
+  if (integrantes.length || process.env.NODE_ENV !== "development") {
+    return { integrantes, deEjemplo: false };
+  }
+  return {
+    integrantes: INTEGRANTES_DE_EJEMPLO[idioma].map((item, i) => ({ id: `ejemplo-${i}`, ...item })),
+    deEjemplo: true,
+  };
 }
 
 export type Pregunta = { id: string; pregunta: string; respuesta: string };

@@ -10,7 +10,7 @@ export const privacidad: TextoLegal = {
   titulo: "Privacy policy",
   bajada:
     "How the data of people who visit this site and get in touch with Buen Vivir is looked after.",
-  actualizado: "Last updated: October 4, 2026",
+  actualizado: "Last updated: October 25, 2026",
   bloques: [
     {
       titulo: "Who is responsible for your data",
@@ -35,6 +35,13 @@ export const privacidad: TextoLegal = {
       parrafos: [
         "To answer your questions, arrange and carry out the sessions or gatherings you agree on, and send you news if you subscribed or joined the community.",
         "Your data is not sold or passed on to third parties, and it is not used for advertising.",
+      ],
+    },
+    {
+      titulo: "Community directory",
+      parrafos: [
+        "The Community page lists people who take part in the Ecosystem spaces, to give them visibility: their name, country, specialty, project and the links each person chooses to share, plus their photo if they sent one. They are only published with their written permission.",
+        "Anyone listed can ask at any time for their data to be corrected or removed by writing to {correo}.",
       ],
     },
     {

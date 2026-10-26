@@ -1,6 +1,6 @@
 /**
  * Listas que Belén arma desde el panel: testimonios, próximos talleres,
- * preguntas frecuentes y su formación.
+ * preguntas frecuentes, su formación y los integrantes de la comunidad.
  *
  * A diferencia de las secciones (un texto por campo), acá se agregan, quitan y
  * ordenan elementos. Cada lista se guarda una sola vez para los dos idiomas:
@@ -14,17 +14,30 @@ export type CampoDeLista = {
   /**
    * texto: una línea · parrafo: varias líneas · fecha: AAAA-MM-DD ·
    * hora: HH:MM · enlace: una dirección · si-no: casilla para tildar ·
-   * imagen: el certificado de una formación, que se sube apenas se elige
-   * (no viaja con la lista: se guarda en el depósito con el id del elemento)
+   * opcion: una de una lista cerrada (`opciones`) ·
+   * imagen: una por elemento (el certificado de una formación, la foto de un
+   * integrante), que se sube apenas se elige: no viaja con la lista, se guarda
+   * en el depósito con el id del elemento (lib/admin/slots.ts)
    */
-  tipo: "texto" | "parrafo" | "fecha" | "hora" | "enlace" | "si-no" | "imagen";
+  tipo: "texto" | "parrafo" | "fecha" | "hora" | "enlace" | "si-no" | "opcion" | "imagen";
+  /** Para "opcion": los valores posibles y cómo se ven en el panel. */
+  opciones?: { valor: string; etiqueta: string }[];
+  /** Para "si-no": cómo arranca en un elemento nuevo (sin indicar, tildada). */
+  porDefecto?: boolean;
   /** Tiene versión en español y en inglés. */
   porIdioma?: boolean;
   obligatorio?: boolean;
   ayuda?: string;
 };
 
-export type IdLista = "testimonios" | "talleres" | "preguntas" | "formacion";
+export type IdLista = "testimonios" | "talleres" | "preguntas" | "formacion" | "integrantes";
+
+/** Los espacios del Ecosistema donde puede participar un integrante (los slugs de content/ecosistema.ts). */
+export const ESPACIOS_DE_INTEGRANTES = [
+  { valor: "casita-del-arbol", etiqueta: "Casita del Árbol" },
+  { valor: "regeneracion-personal", etiqueta: "Grupo de Regeneración Personal" },
+  { valor: "regeneracion-creatividad", etiqueta: "Grupo de Regeneración y Creatividad" },
+];
 
 export type ListaEditable = {
   id: IdLista;
@@ -158,6 +171,65 @@ export const LISTAS: ListaEditable[] = [
         tipo: "imagen",
         ayuda:
           "En la web aparece el botón «Ver certificado», que la muestra en grande. La imagen se guarda apenas la subís; el resto de los cambios, con «Guardar cambios».",
+      },
+    ],
+  },
+  {
+    id: "integrantes",
+    titulo: "Integrantes de la comunidad",
+    descripcion:
+      "El directorio de la comunidad: quienes participan de los espacios del Ecosistema y lo que hacen, para darles visibilidad. Se ven en la página Comunidad. Mostrá solo a quienes autorizaron por escrito publicar sus datos.",
+    elemento: "integrante",
+    vistaPrevia: "/comunidad",
+    maximo: 200,
+    campos: [
+      { id: "nombre", etiqueta: "Nombre y apellido", tipo: "texto", obligatorio: true },
+      {
+        id: "pais",
+        etiqueta: "País",
+        tipo: "texto",
+        obligatorio: true,
+        ayuda: "Escrito siempre igual (por ejemplo «Argentina»): la web arma el filtro por país con este texto.",
+      },
+      {
+        id: "espacio",
+        etiqueta: "Espacio donde participa",
+        tipo: "opcion",
+        obligatorio: true,
+        opciones: ESPACIOS_DE_INTEGRANTES,
+      },
+      {
+        id: "especialidad",
+        etiqueta: "Especialidad o profesión",
+        tipo: "texto",
+        porIdioma: true,
+        obligatorio: true,
+        ayuda: "Por ejemplo: Psicóloga social · Diseñador gráfico · Docente de yoga.",
+      },
+      {
+        id: "proyecto",
+        etiqueta: "Empresa, proyecto o producto",
+        tipo: "texto",
+        porIdioma: true,
+        ayuda: "Opcional. El nombre de lo que ofrece.",
+      },
+      {
+        id: "descripcion",
+        etiqueta: "Qué ofrece",
+        tipo: "parrafo",
+        porIdioma: true,
+        ayuda: "Opcional. Dos o tres líneas, en sus palabras si es posible.",
+      },
+      { id: "web", etiqueta: "Sitio web", tipo: "enlace", ayuda: "Opcional." },
+      { id: "instagram", etiqueta: "Instagram", tipo: "enlace", ayuda: "Opcional. La dirección completa del perfil." },
+      { id: "linkedin", etiqueta: "LinkedIn", tipo: "enlace", ayuda: "Opcional. La dirección completa del perfil." },
+      { id: "foto", etiqueta: "Foto", tipo: "imagen" },
+      {
+        id: "visible",
+        etiqueta: "Autorizó por escrito publicar sus datos: mostrar en la web",
+        tipo: "si-no",
+        // Nadie aparece en la web sin que Belén lo tilde a propósito
+        porDefecto: false,
       },
     ],
   },

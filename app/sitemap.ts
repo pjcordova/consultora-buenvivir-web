@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/servicios",
     "/sobre-belen",
     "/contacto",
+    "/comunidad",
     ...espacios.map((espacio) => `/ecosistema/${espacio.slug}`),
     ...LEGALES,
   ];

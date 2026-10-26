@@ -189,31 +189,63 @@ export const SLOTS: Slot[] = [
 ];
 
 /*
- * Certificados de la formación: no son lugares fijos de la página, hay uno por
- * cada formación de la lista del panel, con el id de esa formación.
+ * Imágenes de los elementos de una lista del panel (el certificado de cada
+ * formación, la foto de cada integrante). No son lugares fijos de la página: hay
+ * una por elemento, con el id de ese elemento.
  */
-const PREFIJO_CERTIFICADO = "certificado-";
+const IMAGENES_DE_LISTAS = {
+  formacion: {
+    prefijo: "certificado-",
+    carpeta: "/images/certificados",
+    seccion: "Formación",
+    titulo: "Imagen del certificado",
+    ayuda:
+      "Opcional. Una foto o captura del certificado (jpg o png); si lo tenés en PDF, sacale una captura. Antes de subirla, tapá el DNI u otros datos personales.",
+  },
+  integrantes: {
+    prefijo: "integrante-",
+    carpeta: "/images/integrantes",
+    seccion: "Integrantes",
+    titulo: "Foto",
+    ayuda:
+      "Opcional, y solo con su permiso. Cuadrada, de la cara o de medio cuerpo, con buena luz. Sin foto se muestran sus iniciales.",
+  },
+} as const;
 
-export const rutaDelCertificado = (idFormacion: string) =>
-  `/images/certificados/${idFormacion}.jpg`;
+export type ListaConImagen = keyof typeof IMAGENES_DE_LISTAS;
 
-export const slotDeCertificado = (idFormacion: string): Slot => ({
-  id: `${PREFIJO_CERTIFICADO}${idFormacion}`,
-  seccion: "Formación",
-  titulo: "Imagen del certificado",
-  ayuda:
-    "Opcional. Una foto o captura del certificado (jpg o png); si lo tenés en PDF, sacale una captura. Antes de subirla, tapá el DNI u otros datos personales.",
-  ruta: rutaDelCertificado(idFormacion),
-  tipo: "imagen",
-});
+export const tieneImagenes = (lista: string): lista is ListaConImagen => lista in IMAGENES_DE_LISTAS;
+
+export const rutaDeImagenDeLista = (lista: ListaConImagen, idElemento: string) =>
+  `${IMAGENES_DE_LISTAS[lista].carpeta}/${idElemento}.jpg`;
+
+export const slotDeImagenDeLista = (lista: ListaConImagen, idElemento: string): Slot => {
+  const { prefijo, seccion, titulo, ayuda } = IMAGENES_DE_LISTAS[lista];
+  return {
+    id: `${prefijo}${idElemento}`,
+    seccion,
+    titulo,
+    ayuda,
+    ruta: rutaDeImagenDeLista(lista, idElemento),
+    tipo: "imagen",
+  };
+};
+
+/** El certificado de una formación (Sobre Belén). */
+export const rutaDelCertificado = (idFormacion: string) => rutaDeImagenDeLista("formacion", idFormacion);
 
 export function obtenerSlot(id: string): Slot | undefined {
   const fijo = SLOTS.find((slot) => slot.id === id);
   if (fijo) return fijo;
 
-  // Mismo formato que los ids de las listas: la ruta no puede salirse de su carpeta.
-  const formacion = id.startsWith(PREFIJO_CERTIFICADO) ? id.slice(PREFIJO_CERTIFICADO.length) : "";
-  return /^[\w-]{1,64}$/.test(formacion) ? slotDeCertificado(formacion) : undefined;
+  for (const lista of Object.keys(IMAGENES_DE_LISTAS) as ListaConImagen[]) {
+    const { prefijo } = IMAGENES_DE_LISTAS[lista];
+    if (!id.startsWith(prefijo)) continue;
+    // Mismo formato que los ids de las listas: la ruta no puede salirse de su carpeta.
+    const elemento = id.slice(prefijo.length);
+    return /^[\w-]{1,64}$/.test(elemento) ? slotDeImagenDeLista(lista, elemento) : undefined;
+  }
+  return undefined;
 }
 
 export function slotsPorSeccion(): { seccion: string; slots: Slot[] }[] {

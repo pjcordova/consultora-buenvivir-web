@@ -36,6 +36,7 @@ export const footer: typeof es.footer = {
         { label: "Casita del Árbol", href: "/ecosistema/casita-del-arbol" },
         { label: "Personal Regeneration Group", href: "/ecosistema/regeneracion-personal" },
         { label: "Regeneration and Creativity Group", href: "/ecosistema/regeneracion-creatividad" },
+        { label: "Buen Vivir Community", href: "/comunidad" },
         { label: "The Buen Vivir Worldview", href: "/#cosmovision" },
         { label: "About Belén Vera", href: "/sobre-belen" },
       ],
