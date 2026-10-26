@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import RedComunidad from "@/components/RedComunidad";
 import { LOGOS_REDES } from "@/components/RedesSociales";
 import type { Integrante } from "@/lib/contenido";
 import type { Idioma } from "@/lib/idioma";
@@ -12,6 +13,8 @@ export type IntegranteConFoto = Integrante & {
   foto: string | null;
   /** Nombre actual del espacio donde participa. */
   espacioNombre: string;
+  /** Bandera del país (imagen SVG), o null si el nombre del país no se reconoce. */
+  bandera: string | null;
 };
 
 type DirectorioComunidadProps = {
@@ -168,11 +171,15 @@ export default function DirectorioComunidad({
           {textos.sinResultados}
         </p>
       ) : (
-        <ul className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        // La red de raíces de la comunidad corre por detrás, entre las tarjetas
+        <div className="relative mt-6">
+          <RedComunidad />
+          <ul className="relative grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
           {visibles.map((integrante) => (
             <li
               key={integrante.id}
               data-inclinar="4"
+              data-nodo
               className="flex flex-col rounded-3xl bg-white p-6 shadow-[0_14px_40px_-28px_rgba(18,23,15,0.35)] ring-1 ring-forest-800/5"
             >
               <div className="flex items-center gap-4">
@@ -200,11 +207,24 @@ export default function DirectorioComunidad({
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2 text-xs text-forest-800">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 font-medium">
+                  {/* La bandera del país (pedido de Belén); si el nombre no se reconoce, un pin */}
+                  {integrante.bandera ? (
+                    // SVG chiquito ya armado en el servidor: no hace falta optimizarlo
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={integrante.bandera}
+                      alt=""
+                      width={18}
+                      height={12}
+                      className="h-3 w-[18px] rounded-[2px] object-cover shadow-[0_0_0_1px_rgba(18,23,15,0.12)]"
+                    />
+                  ) : (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  )}
                   {integrante.pais}
                 </span>
                 {integrante.espacioNombre && (
@@ -246,7 +266,8 @@ export default function DirectorioComunidad({
               )}
             </li>
           ))}
-        </ul>
+          </ul>
+        </div>
       )}
     </div>
   );

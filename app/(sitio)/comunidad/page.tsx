@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import CtaSection from "@/components/CtaSection";
+import HojasCayendo from "@/components/HojasCayendo";
 import DirectorioComunidad, { type IntegranteConFoto } from "@/components/DirectorioComunidad";
 import Header from "@/components/Header";
 import SectionHeader from "@/components/SectionHeader";
@@ -8,6 +10,7 @@ import { rutaVersionada } from "@/lib/assets";
 import { obtenerIntegrantes, obtenerServicios, obtenerWhatsapp } from "@/lib/contenido";
 import { obtenerIdioma } from "@/lib/idioma-servidor";
 import { metadatosDePagina } from "@/lib/metadatos";
+import { banderaDePais } from "@/lib/paises";
 import { textosDe } from "@/lib/textos";
 
 export function generateMetadata(): Metadata {
@@ -37,6 +40,7 @@ export default async function ComunidadPage({ searchParams }: { searchParams: { 
       ...integrante,
       foto: deEjemplo ? null : await rutaVersionada(rutaDeImagenDeLista("integrantes", integrante.id)),
       espacioNombre: nombreDe.get(integrante.espacio) ?? "",
+      bandera: banderaDePais(integrante.pais),
     }))
   );
   // Para filtrar, solo los espacios que tienen a alguien, en el orden del Ecosistema
@@ -47,23 +51,38 @@ export default async function ComunidadPage({ searchParams }: { searchParams: { 
     ? searchParams.espacio
     : undefined;
 
-  const quieroAparecer = `https://wa.me/${whatsapp.numero}?text=${encodeURIComponent(textos.mensajeSumarme)}`;
+  const fotoBosque = await rutaVersionada(ecosistema.panel.foto);
+  const quieroAparecer =`https://wa.me/${whatsapp.numero}?text=${encodeURIComponent(textos.mensajeSumarme)}`;
 
   return (
     <main>
       <Header />
 
-      <section className="bg-leaf-deep px-[8vw] py-16 sm:py-20 bajo:py-12">
-        <SectionHeader
-          eyebrow={textos.eyebrow}
-          title={textos.encabezado}
-          subtitle={textos.bajada}
-          tono="verde"
-          nivel="h1"
+      {/* Un bosque (pedido de Belén: la comunidad es un bosque donde todos se
+          ayudan): la foto del bosque del Ecosistema, oscurecida para leer bien,
+          con hojas que caen. */}
+      <section className="relative isolate overflow-hidden bg-forest-950 px-[8vw] py-20 sm:py-28 bajo:py-14">
+        {fotoBosque && (
+          <Image src={fotoBosque} alt="" fill priority sizes="100vw" className="object-cover" />
+        )}
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-forest-950/75 via-forest-950/55 to-forest-950/80"
+          aria-hidden="true"
         />
+        <HojasCayendo />
+        <div className="relative">
+          <SectionHeader
+            eyebrow={textos.eyebrow}
+            title={textos.encabezado}
+            subtitle={textos.bajada}
+            tono="verde"
+            nivel="h1"
+          />
+        </div>
       </section>
 
-      <section className="bg-cream px-[8vw] py-12 sm:py-16 bajo:py-10">
+      {/* overflow-x-clip: las raíces de los costados no agregan desplazamiento lateral en celular */}
+      <section className="overflow-x-clip bg-cream px-[8vw] py-12 sm:py-16 bajo:py-10">
         {deEjemplo && (
           <p className="mx-auto mb-6 max-w-6xl rounded-xl border border-dashed border-honey/60 bg-butter/60 px-4 py-3 text-center text-xs text-forest-800">
             {textos.ejemplo}
