@@ -94,6 +94,16 @@ export const novedades: typeof es.novedades = {
   boton: "Subscribe",
 };
 
+// The show keeps its Spanish name
+export const podcast: typeof es.podcast = {
+  eyebrow: "Podcast",
+  titulo: "¿Desde dónde estamos operando?",
+  bajada:
+    "The podcast of the Ecosistema Buen Vivir's Regenerative Conversations Club. Watch or listen to it here, or follow it on Spotify to hear when a new episode is out.",
+  enlace: es.podcast.enlace,
+  boton: "Follow on Spotify",
+};
+
 export const ctaFinal: typeof es.ctaFinal = {
   texto: "Book your session and we'll arrange an initial conversation.",
   titulo: "Start a conversation about your organizational or personal moment",

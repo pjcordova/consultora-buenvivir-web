@@ -217,6 +217,30 @@ export const SECCIONES: SeccionEditable[] = [
     }),
   },
   {
+    id: "podcast",
+    grupo: "Inicio",
+    titulo: "Podcast en Spotify",
+    descripcion:
+      "El reproductor de Spotify antes de las novedades por correo, para mirar o escuchar el podcast sin salir de la web.",
+    vistaPrevia: "/#podcast",
+    campos: [
+      { id: "eyebrow", etiqueta: "Etiqueta", tipo: "texto" },
+      { id: "titulo", etiqueta: "Título", tipo: "texto" },
+      { id: "bajada", etiqueta: "Bajada", tipo: "parrafo" },
+      {
+        id: "enlace",
+        etiqueta: "Enlace de Spotify",
+        tipo: "texto",
+        compartido: true,
+        ayuda:
+          "El que da Spotify en «Compartir»: el podcast, un episodio o una lista. Vale para los dos idiomas. Vacío, la sección no aparece.",
+      },
+      { id: "boton", etiqueta: "Botón para seguirlo en Spotify", tipo: "texto", ayuda: "Vacío, el botón no aparece." },
+    ],
+    slots: [],
+    porDefecto: ({ podcast }) => ({ ...podcast }),
+  },
+  {
     id: "novedades",
     grupo: "Inicio",
     titulo: "Novedades por correo",
@@ -334,6 +358,12 @@ export const SECCIONES: SeccionEditable[] = [
           tipo: "texto",
           ayuda: "Vacío deja el ícono apagado.",
         },
+        {
+          id: "spotify",
+          etiqueta: "Spotify (enlace)",
+          tipo: "texto",
+          ayuda: "Vacío deja el ícono apagado. El reproductor de la Home se carga aparte, en «Podcast en Spotify».",
+        },
       ] satisfies Campo[]
     ).map((campo): Campo => ({ ...campo, compartido: CAMPOS_COMPARTIDOS_DEL_PIE.includes(campo.id) })),
     slots: [],
@@ -354,6 +384,7 @@ export const SECCIONES: SeccionEditable[] = [
       tiktok: footer.redes.find((r) => r.id === "tiktok")?.href ?? "",
       youtube: footer.redes.find((r) => r.id === "youtube")?.href ?? "",
       substack: footer.redes.find((r) => r.id === "substack")?.href ?? "",
+      spotify: footer.redes.find((r) => r.id === "spotify")?.href ?? "",
     }),
   },
   {

@@ -23,7 +23,7 @@ export default async function FichaOrganizacion() {
   const enlace = (id: string) => pie.redes.find((red) => red.id === id)?.href || undefined;
 
   // LinkedIn y Substack son perfiles personales de Belén: van en su ficha, no en la de la consultora.
-  const redesDeLaConsultora = ["instagram", "tiktok", "youtube"].map(enlace).filter(Boolean);
+  const redesDeLaConsultora = ["instagram", "tiktok", "youtube", "spotify"].map(enlace).filter(Boolean);
   const redesDeBelen = ["linkedin", "substack"].map(enlace).filter(Boolean);
 
   // Cómo se llama el sitio en los resultados de Google (arriba de cada resultado).

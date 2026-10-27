@@ -149,6 +149,18 @@ export const novedades = {
   boton: "Suscribirme",
 };
 
+// Podcast del Ecosistema en Spotify ("Club de Conversaciones Regenerativas"),
+// antes de las novedades por correo. Editable desde el panel ("Podcast en
+// Spotify"); el enlace vale para los dos idiomas y sin él la sección no aparece.
+export const podcast = {
+  eyebrow: "Podcast",
+  titulo: "¿Desde dónde estamos operando?",
+  bajada:
+    "El podcast del Club de Conversaciones Regenerativas del Ecosistema Buen Vivir. Miralo o escuchalo acá, o seguilo en Spotify para enterarte cuando sale un episodio nuevo.",
+  enlace: "https://open.spotify.com/show/6YEjZVaSJv5jeadD0FvTyr",
+  boton: "Seguir en Spotify",
+};
+
 export const ctaFinal = {
   // CONFIRMADO — CTA real y consistente en publicaciones de servicios
   texto: "Reserva tu sesión y coordinamos una conversación inicial.",

@@ -150,6 +150,7 @@ export const CAMPOS_COMPARTIDOS_DEL_PIE = [
   "tiktok",
   "youtube",
   "substack",
+  "spotify",
 ];
 
 /* --- Lectores por sección --------------------------------------------------- */
@@ -199,6 +200,14 @@ export async function obtenerCosmovision(idioma: Idioma): Promise<Contenido["cos
 export async function obtenerLinajes(idioma: Idioma): Promise<Contenido["linajes"]> {
   const { linajes } = contenidoDe(idioma);
   return { ...linajes, ...(await editado("linajes", idioma)) } as typeof linajes;
+}
+
+/** Podcast en Spotify: los textos de cada idioma, con el enlace (compartido) cargado en español. */
+export async function obtenerPodcast(idioma: Idioma): Promise<Contenido["podcast"]> {
+  const { podcast } = contenidoDe(idioma);
+  const [propio, enEspanol] = await Promise.all([editado("podcast", idioma), editado("podcast", IDIOMA_DE_BASE)]);
+  const enlace = typeof enEspanol.enlace === "string" ? enEspanol.enlace : podcast.enlace;
+  return { ...podcast, ...propio, enlace } as typeof podcast;
 }
 
 export async function obtenerNovedades(idioma: Idioma): Promise<Contenido["novedades"]> {

@@ -4,7 +4,8 @@
  * CONFIRMADO por Belén: la responsable es ella como persona (Belén Vera) y el
  * correo de contacto es el del pie. Describen cómo funciona el sitio hoy (no
  * guarda datos personales, estadísticas sin cookies, agenda y formularios de
- * Google, videos de YouTube, WhatsApp, novedades por correo con Substack). Si se
+ * Google, videos de YouTube, el podcast en Spotify, WhatsApp, novedades por
+ * correo con Substack). Si se
  * suma un formulario que guarde datos en el sitio o pagos, hay que actualizarlas.
  *
  * En los textos, {correo} se reemplaza por el correo de contacto (con enlace) y
@@ -26,7 +27,7 @@ export const privacidad: TextoLegal = {
   titulo: "Política de privacidad",
   bajada:
     "Cómo se cuidan los datos de quienes visitan este sitio y se ponen en contacto con Buen Vivir.",
-  actualizado: "Última actualización: 25 de octubre de 2026",
+  actualizado: "Última actualización: 27 de octubre de 2026",
   bloques: [
     {
       titulo: "Quién es responsable de tus datos",
@@ -70,6 +71,7 @@ export const privacidad: TextoLegal = {
         "Google provee la agenda de reservas, los formularios de inscripción y los videos de YouTube que se ven en algunas páginas.",
         "WhatsApp (Meta) recibe los mensajes que se envían desde el botón de WhatsApp.",
         "Substack (Estados Unidos) guarda la lista de suscripción a las novedades y envía esos correos.",
+        "Spotify (Suecia) provee el reproductor del podcast que se ve en la página de inicio.",
       ],
     },
     {
@@ -78,6 +80,7 @@ export const privacidad: TextoLegal = {
         "Para saber cuántas personas visitan el sitio, qué páginas leen y qué botones tocan (por ejemplo, el de WhatsApp, el de la agenda o el de suscribirse) se usa Vercel Web Analytics, que lo cuenta de forma agregada y anónima, sin cookies y sin identificar a nadie. Nunca registra lo que escribís, como el correo con el que te suscribís.",
         "El sitio usa solo dos cookies propias: una recuerda el idioma que elegiste (dura un año) y la otra mantiene abierta la sesión del panel de administración, que solo usa quien administra el sitio.",
         "La agenda de Google y los videos de YouTube pueden guardar sus propias cookies cuando interactuás con ellos. Los videos se muestran en el modo de privacidad mejorada de YouTube.",
+        "El reproductor de Spotify de la página de inicio puede guardar sus propias cookies desde que aparece en pantalla, según la política de privacidad de Spotify.",
       ],
     },
     {
@@ -107,7 +110,7 @@ export const terminos: TextoLegal = {
   eyebrow: "Legales · Términos",
   titulo: "Términos y condiciones",
   bajada: "Las condiciones para usar este sitio y para contratar los servicios de Buen Vivir.",
-  actualizado: "Última actualización: 3 de octubre de 2026",
+  actualizado: "Última actualización: 27 de octubre de 2026",
   bloques: [
     {
       titulo: "Quién está detrás del sitio",
@@ -143,7 +146,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "Enlaces y contenidos de otros sitios",
       parrafos: [
-        "El sitio incluye enlaces y contenidos de servicios de otras empresas, como Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok, Substack y Facebook. Buen Vivir no es responsable por sus contenidos ni por sus políticas.",
+        "El sitio incluye enlaces y contenidos de servicios de otras empresas, como Google, YouTube, Spotify, WhatsApp, Instagram, LinkedIn, TikTok, Substack y Facebook. Buen Vivir no es responsable por sus contenidos ni por sus políticas.",
       ],
     },
     {

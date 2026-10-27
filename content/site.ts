@@ -81,6 +81,8 @@ export const footer = {
     },
     // Perfil personal de Belén, donde publica sus escritos
     { id: "substack" as const, label: "Substack", href: "https://substack.com/@belenvera82" },
+    // Podcast del Ecosistema ("¿Desde dónde estamos operando?")
+    { id: "spotify" as const, label: "Spotify", href: "https://open.spotify.com/show/6YEjZVaSJv5jeadD0FvTyr" },
   ],
   lema: "Espacio de cultivo, pausa y transformación guiado por Belén Vera.",
   legales: [

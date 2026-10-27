@@ -28,6 +28,7 @@ const REDES: [RegExp, string][] = [
   [/tiktok\.com/i, "TikTok"],
   [/youtube\.com|youtu\.be/i, "YouTube"],
   [/substack\.com/i, "Substack"],
+  [/spotify\.com/i, "Spotify"],
   [/facebook\.com|fb\.com/i, "Facebook"],
 ];
 

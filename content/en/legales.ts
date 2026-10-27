@@ -10,7 +10,7 @@ export const privacidad: TextoLegal = {
   titulo: "Privacy policy",
   bajada:
     "How the data of people who visit this site and get in touch with Buen Vivir is looked after.",
-  actualizado: "Last updated: October 25, 2026",
+  actualizado: "Last updated: October 27, 2026",
   bloques: [
     {
       titulo: "Who is responsible for your data",
@@ -54,6 +54,7 @@ export const privacidad: TextoLegal = {
         "Google provides the booking calendar, the sign-up forms and the YouTube videos shown on some pages.",
         "WhatsApp (Meta) receives the messages sent from the WhatsApp button.",
         "Substack (United States) keeps the news subscriber list and sends those emails.",
+        "Spotify (Sweden) provides the podcast player shown on the home page.",
       ],
     },
     {
@@ -62,6 +63,7 @@ export const privacidad: TextoLegal = {
         "To know how many people visit the site, which pages they read and which buttons they tap (for example WhatsApp, the calendar or subscribe), it uses Vercel Web Analytics, which counts this in an aggregated and anonymous way, without cookies and without identifying anyone. It never records what you type, such as the email address you subscribe with.",
         "The site uses only two cookies of its own: one remembers the language you chose (it lasts one year) and the other keeps the admin panel session open, used only by whoever manages the site.",
         "The Google calendar and the YouTube videos may store their own cookies when you interact with them. Videos are shown in YouTube's privacy-enhanced mode.",
+        "The Spotify player on the home page may store its own cookies as soon as it appears on screen, under Spotify's privacy policy.",
       ],
     },
     {
@@ -91,7 +93,7 @@ export const terminos: TextoLegal = {
   eyebrow: "Legal · Terms",
   titulo: "Terms and conditions",
   bajada: "The conditions for using this site and for hiring Buen Vivir's services.",
-  actualizado: "Last updated: October 3, 2026",
+  actualizado: "Last updated: October 27, 2026",
   bloques: [
     {
       titulo: "Who is behind the site",
@@ -127,7 +129,7 @@ export const terminos: TextoLegal = {
     {
       titulo: "Links and content from other sites",
       parrafos: [
-        "The site includes links and content from services of other companies, such as Google, YouTube, WhatsApp, Instagram, LinkedIn, TikTok, Substack and Facebook. Buen Vivir is not responsible for their content or their policies.",
+        "The site includes links and content from services of other companies, such as Google, YouTube, Spotify, WhatsApp, Instagram, LinkedIn, TikTok, Substack and Facebook. Buen Vivir is not responsible for their content or their policies.",
       ],
     },
     {

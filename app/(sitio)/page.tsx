@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import InfoCard from "@/components/InfoCard";
 import SeccionNovedades from "@/components/SeccionNovedades";
+import SeccionPodcast from "@/components/SeccionPodcast";
 import SeccionPreguntas from "@/components/SeccionPreguntas";
 import SeccionTalleres from "@/components/SeccionTalleres";
 import SeccionTestimonios from "@/components/SeccionTestimonios";
@@ -19,6 +20,7 @@ import {
   obtenerLinajes,
   obtenerNovedades,
   obtenerParadigma,
+  obtenerPodcast,
   obtenerPortada,
   obtenerPreguntas,
   obtenerServicios,
@@ -51,6 +53,7 @@ export default async function HomePage() {
     { preguntas, deEjemplo },
     enlaceWhatsapp,
     novedades,
+    podcast,
   ] = await Promise.all([
     obtenerPortada(idioma),
     obtenerParadigma(idioma),
@@ -63,6 +66,7 @@ export default async function HomePage() {
     obtenerPreguntas(idioma),
     urlWhatsapp(idioma),
     obtenerNovedades(idioma),
+    obtenerPodcast(idioma),
   ]);
 
   return (
@@ -163,6 +167,9 @@ export default async function HomePage() {
         idioma={idioma}
         whatsapp={enlaceWhatsapp}
       />
+
+      {/* El podcast del Ecosistema, para mirarlo o escucharlo sin salir de la web */}
+      <SeccionPodcast textos={podcast} />
 
       {/* Para quien todavía no quiere escribir: dejar el correo y recibir novedades */}
       <SeccionNovedades textos={novedades} />
