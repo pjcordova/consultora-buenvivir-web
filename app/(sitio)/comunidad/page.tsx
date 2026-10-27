@@ -70,6 +70,8 @@ export default async function ComunidadPage({ searchParams }: { searchParams: { 
           aria-hidden="true"
         />
         <HojasCayendo />
+        {/* Abajo se funde con el bosque oscuro del directorio */}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-forest-950 sm:h-24" aria-hidden="true" />
         <div className="relative">
           <SectionHeader
             eyebrow={textos.eyebrow}
@@ -81,10 +83,26 @@ export default async function ComunidadPage({ searchParams }: { searchParams: { 
         </div>
       </section>
 
-      {/* overflow-x-clip: las raíces de los costados no agregan desplazamiento lateral en celular */}
-      <section className="overflow-x-clip bg-cream px-[8vw] py-12 sm:py-16 bajo:py-10">
+      {/* El directorio sigue dentro del bosque: fondo oscuro con luces suaves,
+          hojas que caen y luciérnagas por detrás de las tarjetas (en una capa
+          del alto de la pantalla que acompaña al bajar, así no pesa aunque
+          haya muchos integrantes). overflow-x-clip: las raíces de los costados
+          no agregan desplazamiento lateral en celular. */}
+      <section className="relative isolate overflow-x-clip bg-forest-950 px-[8vw] py-12 sm:py-16 bajo:py-10">
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_30%_at_50%_0%,rgba(39,164,126,0.14),transparent),radial-gradient(40%_25%_at_10%_60%,rgba(130,173,69,0.07),transparent),radial-gradient(40%_25%_at_90%_35%,rgba(201,162,74,0.06),transparent)]"
+          aria-hidden="true"
+        />
+        {/* overflow-clip y no hidden: con hidden la capa dejaría de acompañar al bajar */}
+        <div className="pointer-events-none absolute inset-0 overflow-clip" aria-hidden="true">
+          <div className="sticky top-0 h-screen">
+            <HojasCayendo densidad={0.55} luciernagas />
+          </div>
+        </div>
+
+        <div className="relative">
         {deEjemplo && (
-          <p className="mx-auto mb-6 max-w-6xl rounded-xl border border-dashed border-honey/60 bg-butter/60 px-4 py-3 text-center text-xs text-forest-800">
+          <p className="mx-auto mb-6 max-w-6xl rounded-xl border border-dashed border-honey/50 bg-honey/10 px-4 py-3 text-center text-xs text-butter/90">
             {textos.ejemplo}
           </p>
         )}
@@ -101,6 +119,7 @@ export default async function ComunidadPage({ searchParams }: { searchParams: { 
             {textos.vacio}
           </p>
         )}
+        </div>
       </section>
 
       <CtaSection

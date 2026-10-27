@@ -63,3 +63,62 @@ h1, h2, h3, .font-display {
     opacity: 1;
   }
 }
+
+/*
+ * Enredaderas de las tarjetas de la Comunidad (components/EnredaderaTarjeta.tsx):
+ * escondidas hasta que la red de raíces llega a la tarjeta y le pone
+ * data-brotada; ahí crece el tallo desde donde llega la raíz y cada hoja se abre
+ * cuando el tallo pasa por su lugar. El trazo oculto termina antes de empezar
+ * el tallo (1.05), así la punta redondeada no deja un puntito.
+ */
+.enredadera {
+  filter: drop-shadow(0 1px 1.2px rgba(10, 20, 8, 0.35));
+}
+
+.enr-tallo {
+  stroke-dasharray: 1 1.1;
+  stroke-dashoffset: 1.05;
+}
+
+.enr-hoja {
+  transform: scale(0);
+  transform-origin: 0 0;
+}
+
+[data-brotada] .enr-tallo {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur, 0.3s) linear var(--retraso, 0s);
+}
+
+[data-brotada] .enr-hoja {
+  transform: scale(1);
+  transition: transform 0.55s cubic-bezier(0.34, 1.4, 0.5, 1) var(--retraso, 0s);
+}
+
+/* Con el mouse encima, las hojas se mecen */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  [data-brotada]:hover .enr-hoja {
+    animation: enr-mecer 2.6s ease-in-out infinite;
+    animation-delay: calc(var(--retraso, 0s) * -1.7);
+  }
+}
+
+@keyframes enr-mecer {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enr-tallo {
+    stroke-dashoffset: 0;
+  }
+
+  .enr-hoja {
+    transform: none;
+  }
+}

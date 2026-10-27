@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import EnredaderaTarjeta, { DefinicionesEnredaderas, broteDe } from "@/components/EnredaderaTarjeta";
 import RedComunidad from "@/components/RedComunidad";
 import { LOGOS_REDES } from "@/components/RedesSociales";
 import type { Integrante } from "@/lib/contenido";
@@ -157,10 +158,10 @@ export default function DirectorioComunidad({
         </div>
       </div>
 
-      <p className="mt-6 text-sm text-forest-800/70" aria-live="polite">
+      <p className="mt-6 text-sm text-cream/70" aria-live="polite">
         {textos.resultados(visibles.length)}
         {hayFiltros && (
-          <button type="button" onClick={limpiar} className="ml-3 font-medium text-leaf-deep underline underline-offset-4">
+          <button type="button" onClick={limpiar} className="ml-3 font-medium text-leaf-lime underline underline-offset-4">
             {textos.verTodos}
           </button>
         )}
@@ -171,17 +172,21 @@ export default function DirectorioComunidad({
           {textos.sinResultados}
         </p>
       ) : (
-        // La red de raíces de la comunidad corre por detrás, entre las tarjetas
+        // La red de raíces de la comunidad corre por detrás: los pasillos entre
+        // filas son más altos para que se vea cómo une a cada tarjeta con las demás
         <div className="relative mt-6">
+          <DefinicionesEnredaderas />
           <RedComunidad />
-          <ul className="relative grid gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+          <ul className="relative grid gap-x-7 gap-y-12 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-14 lg:grid-cols-3">
           {visibles.map((integrante) => (
             <li
               key={integrante.id}
               data-inclinar="4"
               data-nodo
-              className="flex flex-col rounded-3xl bg-white p-6 shadow-[0_14px_40px_-28px_rgba(18,23,15,0.35)] ring-1 ring-forest-800/5"
+              data-brote={broteDe(integrante.id)}
+              className="relative flex flex-col rounded-3xl bg-white p-6 shadow-[0_22px_50px_-24px_rgba(0,0,0,0.65)] ring-1 ring-white/10"
             >
+              <EnredaderaTarjeta id={integrante.id} />
               <div className="flex items-center gap-4">
                 {integrante.foto ? (
                   <Image

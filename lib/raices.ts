@@ -1,6 +1,7 @@
 /**
  * Piezas de dibujo para las raíces y el micelio que crecen en un canvas (las del
- * panel del Ecosistema y las que unen a los integrantes de la Comunidad).
+ * panel del Ecosistema y las que unen a los integrantes de la Comunidad), y las
+ * hojas del bosque de la Comunidad.
  * Solo para el navegador: crearHalo usa document.
  */
 
@@ -23,6 +24,11 @@ export function largosDe(puntos: Punto[]): number[] {
 export function curva(a: Punto, b: Punto, desvio: Punto, amplitud: number): Punto[] {
   const c1: Punto = [a[0] + (b[0] - a[0]) / 3 + desvio[0], a[1] + (b[1] - a[1]) / 3 + desvio[1]];
   const c2: Punto = [a[0] + (2 * (b[0] - a[0])) / 3 + desvio[0], a[1] + (2 * (b[1] - a[1])) / 3 + desvio[1]];
+  return bezier(a, c1, c2, b, amplitud);
+}
+
+/** Como curva, pero con los dos puntos de control elegidos (para dar la forma: un arco, una S). */
+export function bezier(a: Punto, c1: Punto, c2: Punto, b: Punto, amplitud: number): Punto[] {
   const pasos = Math.max(8, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 6));
   const [f1, f2, k1, k2] = [azar(0, 6.3), azar(0, 6.3), azar(1.5, 3.5), azar(5, 9)];
 
@@ -82,4 +88,12 @@ export function crearHalo(color = "232,189,95", centro = "255,244,214"): HTMLCan
   ctx.fillStyle = degradado;
   ctx.fillRect(0, 0, 48, 48);
   return halo;
+}
+
+/** Contorno de una hoja con la punta hacia arriba, centrada en el origen (para rellenar). */
+export function trazarHoja(ctx: CanvasRenderingContext2D, largo: number, ancho: number) {
+  ctx.beginPath();
+  ctx.moveTo(0, -largo / 2);
+  ctx.bezierCurveTo(ancho, -largo / 4, ancho * 0.8, largo / 3, 0, largo / 2);
+  ctx.bezierCurveTo(-ancho * 0.8, largo / 3, -ancho, -largo / 4, 0, -largo / 2);
 }
