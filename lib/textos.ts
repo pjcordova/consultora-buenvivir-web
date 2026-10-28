@@ -15,6 +15,7 @@ const ESPANOL = {
     logoAlt: "Buen Vivir — consultora regenerativa",
   },
   menu: {
+    directorio: "Directorio",
     servicios: "Servicios",
     sobreBelen: "Sobre Belén",
     contacto: "Contacto",
@@ -167,6 +168,7 @@ const INGLES: Textos = {
     logoAlt: "Buen Vivir — regenerative consultancy",
   },
   menu: {
+    directorio: "Directory",
     servicios: "Services",
     sobreBelen: "About Belén",
     contacto: "Contact",

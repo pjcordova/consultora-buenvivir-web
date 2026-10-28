@@ -24,6 +24,8 @@ export default function Navigation({ idioma }: { idioma: Idioma }) {
   const enlaces = [
     { href: "/servicios", label: menu.servicios },
     { href: "/sobre-belen", label: menu.sobreBelen },
+    // El directorio de la comunidad (pedido de Belén: entre Sobre Belén y Contacto)
+    { href: "/comunidad", label: menu.directorio },
     { href: "/contacto", label: menu.contacto },
   ];
 
@@ -50,13 +52,14 @@ export default function Navigation({ idioma }: { idioma: Idioma }) {
   return (
     <>
       {/* Escritorio */}
-      <nav className="hidden items-center gap-8 font-redonda text-[1.05rem] font-semibold md:flex lg:gap-10 lg:text-[1.15rem]">
+      {/* Más apretado en tablets: con cuatro secciones, en 768 px "Sobre Belén" se partía en dos renglones */}
+      <nav className="hidden items-center gap-5 whitespace-nowrap font-redonda text-base font-semibold md:flex lg:gap-10 lg:text-[1.15rem]">
         {enlaces.map((link) => (
           <Link key={link.href} href={enlaceEnIdioma(link.href, idioma)} className={linkClass(link.href)}>
             {link.label}
           </Link>
         ))}
-        <div className="flex items-center gap-3 border-l border-forest-800/15 pl-6 lg:pl-8">
+        <div className="flex items-center gap-3 border-l border-forest-800/15 pl-5 lg:pl-8">
           <SelectorIdioma idioma={idioma} etiqueta={menu.idioma} className="text-sm" />
           {/* Acceso al panel de Belén: si ya inició sesión entra directo; si no, le pide la clave.
               Enlace común: el panel no tiene versión en inglés ni conviene precargarlo. */}
